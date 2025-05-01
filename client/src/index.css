@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --font-source-serif: 'Source Serif 4', serif;
+    }
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.font-source-serif {
+    font-family: 'Source Serif 4', serif !important;
+}
+
+.font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.font-parisienne {
+    font-family: 'Parisienne', cursive;
+}
+
+.font-cormorant {
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.cardo-regular {
+    font-family: "Cardo", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.cardo-bold {
+    font-family: "Cardo", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.cardo-regular-italic {
+    font-family: "Cardo", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.gloock-regular {
+    font-family: "Gloock", serif;
+
+}
+
+
+
+
+
+@font-face {
+    font-family: 'MagnoliaNormal';
+    src: url('./assets/fonts/MagnoliaRegular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* @font-face {
+    font-family: 'MyFont';
+    src: url('/src/assets/fonts/MyFont-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MyFont';
+    src: url('/src/assets/fonts/MyFont-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+} */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUpSlow {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes textChange {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    60% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    80% {
+        opacity: 0.3;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes subtitleChange {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    60% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    80% {
+        opacity: 0.3;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add initial states for animated elements */
+[style*="animation: fadeInUpSlow"] {
+    opacity: 0;
+    transform: translateY(30px);
+    will-change: transform, opacity;
+}
+
+/* Performance optimizations for animated elements */
+.animate-text {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0);
+}
