@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -130,11 +131,12 @@ const Hero = () => {
                             {textContent[textIndex].subtitle}
                         </p>
                     </div>
-                    <button
+                    <Link
+                        to="/properties"
                         className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 sm:px-8 py-3 sm:py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-normal tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
                     >
                         Explore Properties
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Navigation Arrows */}

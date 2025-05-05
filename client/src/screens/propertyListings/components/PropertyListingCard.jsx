@@ -91,7 +91,7 @@ import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaRupeeSign, FaStar } f
 const PropertyCard = ({ property, handleImageError }) => {
     return (
         <div className="h-full flex flex-col transition-all duration-500 overflow-hidden bg-[#F4EBD0] border-4 border-[#D6AD60] rounded-2xl hover:shadow-lg">
-            <div className="relative h-60 sm:h-72 md:h-80 overflow-hidden group">
+            <div className="relative h-64 sm:h-72 md:h-[22rem] overflow-hidden group">
                 <img
                     src={property.image}
                     alt={property.title}
@@ -124,25 +124,30 @@ const PropertyCard = ({ property, handleImageError }) => {
             </div>
 
             <div className="p-4 sm:p-6 md:p-8 flex-grow flex flex-col">
-                <h3 className="text-xl sm:text-2xl font-source-serif text-[#122620] mb-3 border-b border-[#122620]/20 pb-2">
+                <h3 className="text-xl sm:text-3xl font-medium font-source-serif text-[#122620] mb-3 border-b border-[#122620]/20 pb-2">
                     {property.title}
                 </h3>
-
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
-                    <div className="flex flex-col items-center p-2 bg-[#122620]/10 rounded-sm hover:bg-[#122620]/20 transition-colors duration-300">
-                        <FaBed className="text-[#122620] text-lg mb-1" />
-                        <span className="text-[#122620] font-montserrat text-sm sm:text-base font-semibold">{property.specs.beds}</span>
-                        <span className="text-[#122620] font-montserrat text-xs sm:text-sm">Beds</span>
+                    <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-evenly p-2 md:p-6 bg-[#122620]/10 rounded-sm hover:bg-[#122620]/20 transition-colors duration-300 sm:gap-3">
+                        <FaBed className="text-[#122620] text-lg lg:text-3xl mb-1 sm:mb-0" />
+                        <div className="flex flex-col items-center">
+                            <span className="text-[#122620] font-montserrat text-sm sm:text-xl font-semibold">{property.specs.beds}</span>
+                            <span className="text-[#122620] font-montserrat font-medium text-xs lg:text-base">Beds</span>
+                        </div>
                     </div>
-                    <div className="flex flex-col items-center p-2 bg-[#122620]/10 rounded-sm hover:bg-[#122620]/20 transition-colors duration-300">
-                        <FaBath className="text-[#122620] text-lg mb-1" />
-                        <span className="text-[#122620] font-montserrat text-sm sm:text-base font-semibold">{property.specs.baths}</span>
-                        <span className="text-[#122620] font-montserrat text-xs sm:text-sm">Baths</span>
+                    <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-evenly p-2 md:p-6 bg-[#122620]/10 rounded-sm hover:bg-[#122620]/20 transition-colors duration-300 sm:gap-3">
+                        <FaBath className="text-[#122620] text-lg lg:text-3xl mb-1 sm:mb-0" />
+                        <div className="flex flex-col items-center">
+                            <span className="text-[#122620] font-montserrat text-sm sm:text-xl font-semibold">{property.specs.baths}</span>
+                            <span className="text-[#122620] font-montserrat font-medium text-xs lg:text-base">Baths</span>
+                        </div>
                     </div>
-                    <div className="flex flex-col items-center p-2 bg-[#122620]/10 rounded-sm hover:bg-[#122620]/20 transition-colors duration-300">
-                        <FaRulerCombined className="text-[#122620] text-lg mb-1" />
-                        <span className="text-[#122620] font-montserrat text-sm sm:text-base font-semibold">{property.specs.sqft.toLocaleString()}</span>
-                        <span className="text-[#122620] font-montserrat text-xs sm:text-sm">Sq.Ft</span>
+                    <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-evenly p-2 md:p-6 bg-[#122620]/10 rounded-sm hover:bg-[#122620]/20 transition-colors duration-300 sm:gap-3">
+                        <FaRulerCombined className="text-[#122620] text-lg lg:text-3xl mb-1 sm:mb-0" />
+                        <div className="flex flex-col items-center">
+                            <span className="text-[#122620] font-montserrat text-sm sm:text-xl font-semibold">{property.specs.sqft.toLocaleString()}</span>
+                            <span className="text-[#122620] font-montserrat font-medium text-xs lg:text-base">Sq.Ft</span>
+                        </div>
                     </div>
                 </div>
 

@@ -1,0 +1,34 @@
+Font Classes .font-source-serif {
+    font-family: 'Source Serif 4', serif;
+}
+
+.font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.heading-primary {
+    font-family: 'Cardo', serif;
+    letter-spacing: -0.01em;
+}
+
+.heading-secondary {
+    font-family: 'Source Serif 4', serif;
+    letter-spacing: -0.01em;
+}
+
+.body-text {
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.01em;
+}
+
+.accent-text {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    letter-spacing: 0.02em;
+}
+
+.price-text {
+    font-family: 'Source Serif 4', serif;
+    letter-spacing: 0.02em;
+}
