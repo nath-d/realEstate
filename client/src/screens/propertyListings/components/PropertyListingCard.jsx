@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     FaMapMarkerAlt,
 } from 'react-icons/fa';
 import { IndianRupee, Search, MapPin, Home, DollarSign, ArrowRight, Filter, Star, Waves, Mountain, Hotel, LandPlot, Bed, Bath, Ruler, MapPinIcon } from 'lucide-react'
 
-const PropertyListingCard = ({ property, handleImageError }) => {
+const PropertyListingCard = ({ property, handleImageError, isActive }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+    useEffect(() => {
+        // Check if it's a touch device
+        const checkTouch = () => {
+            setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        };
+        checkTouch();
+    }, []);
+
+    // On touch devices, use isActive prop, on desktop use hover state
+    const isCardActive = isTouchDevice ? isActive : isHovered;
 
     return (
         <motion.div
-            className="border-2 border-[#D6AD60] h-full block bg-[#F4EBD0] rounded-2xl overflow-hidden shadow-lg"
+            className="border-2 border-[#D6AD60] h-full block bg-[#F4EBD0] rounded-2xl overflow-hidden shadow-lg cursor-pointer"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{
@@ -32,7 +44,7 @@ const PropertyListingCard = ({ property, handleImageError }) => {
                     alt={property.title}
                     className="w-full h-full object-cover"
                     onError={handleImageError}
-                    animate={{ scale: isHovered ? 1.1 : 1 }}
+                    animate={{ scale: isCardActive ? 1.1 : 1 }}
                     transition={{
                         type: "spring",
                         stiffness: 200,
@@ -43,40 +55,43 @@ const PropertyListingCard = ({ property, handleImageError }) => {
                 {/* Default gradient overlay */}
                 <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#122620]/90 via-[#122620]/30 to-transparent"
-                    animate={{ opacity: isHovered ? 0 : 1 }}
+                    animate={{ opacity: isCardActive ? 0 : 1 }}
                     transition={{ duration: 0.3 }}
                 />
 
-                {/* Hover gradient overlay */}
+                {/* Active/Hover gradient overlay */}
                 <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-[#122620] via-[#122620]/70 to-[#122620]/60"
-                    animate={{ opacity: isHovered ? 1 : 0 }}
+                    animate={{ opacity: isCardActive ? 1 : 0 }}
                     transition={{ duration: 0.3 }}
                 >
                     <motion.div
                         className="absolute bottom-6 left-6 w-1/2"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{
-                            opacity: isHovered ? 1 : 0,
-                            x: isHovered ? 0 : -20
+                            opacity: isCardActive ? 1 : 0,
+                            x: isCardActive ? 0 : -20
                         }}
                         transition={{
                             type: "spring",
                             stiffness: 200,
                             damping: 25,
-                            delay: isHovered ? 0.1 : 0
+                            delay: isCardActive ? 0.1 : 0
                         }}
                     >
                         <motion.button
                             className="flex items-center text-start w-full py-2 text-[#D6AD60] border-b-2 border-[#D6AD60] text-sm sm:text-lg font-medium"
-                            whileHover={{ x: 10 }}
                             whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                // Add your navigation logic here
+                            }}
                         >
                             <span className="relative flex items-center">
-                                Details
+                                View Property
                                 <motion.span
                                     className="inline-block ml-2"
-                                    animate={{ x: isHovered ? 5 : 0 }}
+                                    animate={{ x: isCardActive ? 5 : 0 }}
                                     transition={{ duration: 0.2 }}
                                 >
                                     <ArrowRight className="h-4 w-4" />

@@ -85,6 +85,16 @@ const properties = [
         featured: true,
         type: "land",
         specs: { beds: 1, baths: 1, sqft: 2800 }
+    },
+    {
+        id: 9,
+        title: "Premium Development Land 24",
+        image: "/propertyTwo.jpg",
+        price: "1,70,00,000",
+        location: "Kolkata, WB",
+        featured: false,
+        type: "land",
+        specs: { beds: 3, baths: 3, sqft: 2800 }
     }
 ]
 
@@ -144,6 +154,7 @@ const PropertyListings = () => {
     const [filteredListings, setFilteredListings] = useState([])
     const [showFilters, setShowFilters] = useState(false)
     const [activeType, setActiveType] = useState('all')
+    const [activeCardId, setActiveCardId] = useState(null)
     const [filters, setFilters] = useState({
         search: '',
         location: '',
@@ -494,7 +505,7 @@ const PropertyListings = () => {
             </motion.div>
 
             {/* Property Listings Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+            <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8">
                     <motion.h2
                         className="text-2xl sm:text-3xl md:text-4xl font-cardo font-bold text-[#D6AD60] mb-4 sm:mb-0"
@@ -522,6 +533,7 @@ const PropertyListings = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.4 }}
+                        onClick={() => setActiveCardId(null)}
                     >
                         {/* Decorative background elements */}
                         <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#D6AD60]/5 rounded-full mix-blend-overlay filter blur-3xl opacity-70 animate-float"></div>
@@ -531,10 +543,15 @@ const PropertyListings = () => {
                             <div
                                 key={property.id}
                                 className="relative"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveCardId(activeCardId === property.id ? null : property.id);
+                                }}
                             >
                                 <PropertyListingCard
                                     property={property}
                                     handleImageError={handleImageError}
+                                    isActive={activeCardId === property.id}
                                 />
                             </div>
                         ))}
