@@ -169,3 +169,35 @@ body {
     perspective: 1000px;
     transform: translateZ(0);
 }
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes float-delay {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(15px);
+    }
+}
+
+.animate-float {
+    animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delay {
+    animation: float-delay 10s ease-in-out infinite;
+}
