@@ -9,6 +9,7 @@ import CoreStrengths from './components/CoreStrengths'
 import FutureVision from './components/FutureVision'
 import WhyChooseUs from './components/WhyChooseUs'
 import PropertyListingCard from '../propertyListings/components/PropertyListingCard'
+import Portfolio from './components/Portfolio'
 
 const Homepage = () => {
     return (
@@ -16,6 +17,7 @@ const Homepage = () => {
             <Navbar />
             <Hero />
             <FeaturedProperties />
+            <Portfolio />
             <AboutUs
                 image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80"
                 alt="Luxury real estate team in a modern office"
@@ -30,7 +32,10 @@ const Homepage = () => {
                 alt="Modern real estate office with technology"
             />
             <FutureVision />
-            <WhyChooseUs />
+            <WhyChooseUs
+                image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop"
+                alt="Luxury real estate showcase"
+            />
         </div>
     )
 }
