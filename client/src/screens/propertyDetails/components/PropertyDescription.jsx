@@ -39,14 +39,14 @@ const PropertyDescription = ({ description }) => {
     };
 
     return (
-        <section className="py-20 relative overflow-hidden">
+        <section className="py-10 relative overflow-hidden">
             {/* Enhanced Decorative Elements */}
-            <div className="absolute inset-0">
+            {/* <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
                 <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-r from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
-            </div>
+            </div> */}
 
             <div className="container mx-auto px-6 relative">
                 <motion.div
@@ -106,7 +106,7 @@ const PropertyDescription = ({ description }) => {
                         <div className="inline-block p-6 mb-8">
                             <BsQuote className="text-7xl text-[#E5BE90]" />
                         </div>
-                        <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed italic font-cormorant">
+                        <p className="tracking-wider text-xl md:text-3xl text-gray-300 font-light leading-relaxed italic font-cormorant">
                             {description}
                         </p>
                         <div className="flex items-center justify-center gap-4 mt-12">

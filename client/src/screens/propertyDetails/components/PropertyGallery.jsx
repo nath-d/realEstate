@@ -64,7 +64,7 @@ const PropertyGallery = ({ images }) => {
                             <FaCamera className="text-[#E5BE90] text-3xl" />
                         </div>
                     </div>
-                    <h2 className="text-6xl font-bold mb-4 text-white font-cardo">Property Gallery</h2>
+                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Property Gallery</h2>
                     <div className="flex justify-center items-center gap-4">
                         <div className="flex justify-center items-center gap-4">
                             <motion.span
@@ -73,7 +73,7 @@ const PropertyGallery = ({ images }) => {
                                 transition={{ duration: 0.8 }}
                                 className="h-0.5 bg-[#E5BE90]"
                             ></motion.span>
-                            <p className="text-gray-400">Explore every corner of this luxurious property</p>
+                            <p className="text-gray-400 tracking-wider">Explore every corner of this luxurious property</p>
                             <motion.span
                                 initial={{ width: 0 }}
                                 whileInView={{ width: 120 }}
@@ -89,7 +89,7 @@ const PropertyGallery = ({ images }) => {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
                     {images.map((image, index) => (
                         <motion.div
@@ -98,7 +98,7 @@ const PropertyGallery = ({ images }) => {
                             className={`relative ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
                         >
                             <div
-                                className="relative group cursor-pointer overflow-hidden rounded-3xl shadow-xl border border-[#E5BE90]/10"
+                                className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
                                 onClick={() => openLightbox(index)}
                             >
                                 <img
@@ -125,7 +125,7 @@ const PropertyGallery = ({ images }) => {
                         className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center backdrop-blur-sm"
                         onClick={closeLightbox}
                     >
-                        <div className="relative max-w-7xl mx-auto px-4" onClick={e => e.stopPropagation()}>
+                        <div className="relative w-full mx-auto px-4" onClick={e => e.stopPropagation()}>
                             <motion.img
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -134,14 +134,14 @@ const PropertyGallery = ({ images }) => {
                                 key={lightboxIndex}
                                 src={selectedImage}
                                 alt="Selected property view"
-                                className="max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl"
+                                className="border-4 border-[#E5BE90] object-cover max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl"
                             />
 
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={closeLightbox}
-                                className="absolute top-4 right-4 p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-all duration-300"
+                                className="border-4 border-[#E5BE90] absolute top-4 right-4 p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
                                 <FaTimes size={20} />
                             </motion.button>
@@ -150,7 +150,7 @@ const PropertyGallery = ({ images }) => {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={prevImage}
-                                className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-all duration-300"
+                                className="border-4 border-[#E5BE90] absolute left-6 top-1/2 p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
                                 <FaChevronLeft size={20} />
                             </motion.button>
@@ -159,7 +159,7 @@ const PropertyGallery = ({ images }) => {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={nextImage}
-                                className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-all duration-300"
+                                className="border-4 border-[#E5BE90] absolute right-6 top-1/2 p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
                                 <FaChevronRight size={20} />
                             </motion.button>

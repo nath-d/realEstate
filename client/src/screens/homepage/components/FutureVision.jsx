@@ -415,16 +415,36 @@ const FutureVision = () => {
                         }
                     }}
                 >
-                    <div className="inline-block mb-4">
-                        <span className="inline-block w-16 h-1 bg-[#D6AD60] mb-2"></span>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-source-serif text-[#F4EBD0] mb-4">
-                            Future Vision & Goals
-                        </h2>
-                        <span className="inline-block w-16 h-1 bg-[#D6AD60]"></span>
-                    </div>
-                    <p className="text-[#F4EBD0]/80 font-montserrat text-lg max-w-2xl mx-auto">
-                        Our commitment to growth, innovation, and excellence in real estate.
-                    </p>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <div className="flex justify-center mb-6">
+                            {/* <div className="w-20 h-20 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                <FaHome className="text-[#E5BE90] text-4xl" />
+                            </div> */}
+                        </div>
+                        <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Our Future Vision</h2>
+                        <div className="flex justify-center items-center gap-4">
+                            <div className="flex justify-center items-center gap-4">
+                                <motion.span
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: 120 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="h-0.5 bg-[#D6AD60]"
+                                ></motion.span>
+                                <p className="text-gray-400">Our vision for the future</p>
+                                <motion.span
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: 120 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="h-0.5 bg-[#D6AD60]"
+                                ></motion.span>
+                            </div>
+                        </div>
+                    </motion.div>
                 </motion.div>
 
                 {/* Vision Statement */}

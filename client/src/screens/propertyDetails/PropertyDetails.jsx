@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { FaHeart, FaShare, FaCalculator, FaCalendarAlt, FaMapMarkerAlt, FaHistory, FaBuilding, FaBed, FaBath, FaRuler, FaCar, FaTree, FaSun } from 'react-icons/fa';
+import { FaHeart, FaShare, FaCalculator, FaCalendarAlt, FaMapMarkerAlt, FaHistory, FaBuilding, FaBed, FaBath, FaRuler, FaCar, FaTree, FaSun, FaPhone } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import PropertyHero from './components/PropertyHero';
 import PropertyStats from './components/PropertyStats';
@@ -15,6 +15,8 @@ import SimilarProperties from './components/SimilarProperties';
 import ScheduleVisit from './components/ScheduleVisit';
 import PropertyHistory from './components/PropertyHistory';
 import NeighborhoodInsights from './components/NeighborhoodInsights';
+import MaterialCertifications from './components/MaterialCertifications';
+import Navbar from '../homepage/components/Navbar';
 
 const PropertyDetails = () => {
     const { id } = useParams();
@@ -61,7 +63,10 @@ const PropertyDetails = () => {
         images: [
             "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
             "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80"
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
         ],
         amenities: {
             interior: [
@@ -157,30 +162,45 @@ const PropertyDetails = () => {
                             <span className="text-3xl font-bold text-[#D6AD60]">{property.price}</span>
                             <div className="flex items-center space-x-3">
                                 <motion.button
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
                                     whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    whileTap={{ scale: 0.9 }}
                                     onClick={() => setIsFavorite(!isFavorite)}
                                     className={`p-3 rounded-full ${isFavorite ? 'bg-red-500 text-white' : 'bg-gray-800 text-gray-400'
-                                        } hover:bg-red-600 transition-all duration-300`}
+                                        } hover:bg-red-600 transition-colors duration-300`}
                                 >
                                     <FaHeart className="text-xl" />
                                 </motion.button>
+
                                 <motion.button
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.95 }}
-                                    onClick={handleShare}
-                                    className="p-3 rounded-full bg-gray-800 text-gray-400 hover:bg-gray-700 transition-all duration-300"
+                                    onClick={setShowMortgageCalculator}
+                                    className="p-3 rounded-full bg-[#D6AD60] text-[#122620] hover:text-[#F4EBD0] transition-colors duration-300"
                                 >
-                                    <FaShare className="text-xl" />
+                                    <FaCalculator className="text-xl" />
                                 </motion.button>
+                                <motion.button
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={setShowScheduleVisit}
+                                    className="p-3 rounded-full bg-[#D6AD60] text-[#122620] hover:text-[#F4EBD0] transition-colors duration-300"
+                                >
+                                    <FaPhone className="text-xl" />
+                                </motion.button>
+
                             </div>
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </motion.div >
 
             {/* Main Content */}
-            <div className="pt-24">
+            <div div className="pt-24" >
+
                 <PropertyHero property={property} />
                 <PropertyStats details={property.details} />
 
@@ -235,7 +255,7 @@ const PropertyDetails = () => {
                 </div> */}
 
                 {/* Action Buttons */}
-                <div className="container mx-auto px-6 py-8">
+                {/* <div className="container mx-auto px-6 py-8">
                     <div className="flex flex-wrap gap-4 justify-center">
                         <motion.button
                             whileHover={{ scale: 1.02 }}
@@ -244,7 +264,7 @@ const PropertyDetails = () => {
                             className="flex items-center space-x-3 px-8 py-4 bg-[#D4AF37] text-[#122620] rounded-lg hover:bg-[#C19B2E] transition-all duration-300 shadow-lg"
                         >
                             <FaCalendarAlt className="text-xl" />
-                            <span className="font-semibold">Schedule Private Viewing</span>
+                            <span className="font-normal tracking-wider">Schedule Private Viewing</span>
                         </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.02 }}
@@ -253,16 +273,18 @@ const PropertyDetails = () => {
                             className="flex items-center space-x-3 px-8 py-4 bg-[#1A332C] text-white rounded-lg hover:bg-[#234439] transition-all duration-300 shadow-lg border border-[#D4AF37]/30"
                         >
                             <FaCalculator className="text-xl" />
-                            <span className="font-semibold">Calculate Mortgage</span>
+                            <span className="font-normal tracking-wider">Calculate Mortgage</span>
                         </motion.button>
+
                     </div>
-                </div>
+                </div> */}
 
                 {/* Rest of the content sections */}
                 <div className="container mx-auto px-6 space-y-16">
                     {/* <VirtualTour url={property.virtualTour} /> */}
                     <PropertyDescription description={property.description} />
                     <PropertyGallery images={property.images} />
+                    <MaterialCertifications />
                     <PropertyAmenities amenities={property.amenities} />
                     <PropertyHistory history={property.history} />
                     {/* <NeighborhoodInsights neighborhood={property.neighborhood} /> */}
@@ -270,7 +292,7 @@ const PropertyDetails = () => {
                     <SimilarProperties properties={property.similarProperties} />
                     <PropertyAgent agent={property.agent} />
                 </div>
-            </div>
+            </div >
 
             {/* Enhanced Floating Contact Button */}
             <motion.button
@@ -278,26 +300,34 @@ const PropertyDetails = () => {
                 animate={{ scale: 1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
+                onClick={() => setShowMortgageCalculator(true)}
                 className="fixed bottom-6 right-6 bg-[#D4AF37] text-[#122620] p-6 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
             >
-                <FaBuilding className="text-3xl" />
-            </motion.button>
+                <FaCalculator className="text-3xl" />
+            </motion.button >
+
+
+
 
             {/* Modals */}
-            {showMortgageCalculator && (
-                <MortgageCalculator
-                    price={property.price}
-                    onClose={() => setShowMortgageCalculator(false)}
-                />
-            )}
+            {
+                showMortgageCalculator && (
+                    <MortgageCalculator
+                        price={property.price}
+                        onClose={() => setShowMortgageCalculator(false)}
+                    />
+                )
+            }
 
-            {showScheduleVisit && (
-                <ScheduleVisit
-                    property={property}
-                    onClose={() => setShowScheduleVisit(false)}
-                />
-            )}
-        </div>
+            {
+                showScheduleVisit && (
+                    <ScheduleVisit
+                        property={property}
+                        onClose={() => setShowScheduleVisit(false)}
+                    />
+                )
+            }
+        </div >
     );
 };
 

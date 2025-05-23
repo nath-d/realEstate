@@ -1,192 +1,212 @@
-import React, { useRef } from 'react';
-import { motion, useAnimation, useInView } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaCertificate, FaCheckCircle, FaShieldAlt, FaAward, FaMedal, FaStar, FaTrophy, FaRibbon } from 'react-icons/fa';
 
-const Achievements = ({ image, alt }) => {
-    const sectionRef = useRef(null);
-    const controls = useAnimation();
-    const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
-
-    React.useEffect(() => {
-        if (isInView) {
-            controls.start('visible');
-        }
-    }, [isInView, controls]);
-
+const Achievements = () => {
     const achievements = [
         {
-            id: 1,
-            number: "500+",
-            title: "Properties Sold",
-            description: "Successfully closed transactions across diverse property types"
+            title: "Premium Cement Certification",
+            description: "ISO 9001:2015 certified cement from leading manufacturers",
+            icon: FaCertificate,
+            category: "Materials",
+            year: "2024",
+            stats: "Grade 53 OPC"
         },
         {
-            id: 2,
-            number: "98%",
-            title: "Client Satisfaction",
-            description: "Consistently high ratings from our valued clients"
+            title: "Steel Quality Assurance",
+            description: "TMT bars certified by Bureau of Indian Standards (BIS)",
+            icon: FaShieldAlt,
+            category: "Structural",
+            year: "2024",
+            stats: "Fe 500D Grade"
         },
         {
-            id: 3,
-            number: "15+",
-            title: "Years Experience",
-            description: "Decades of expertise in the real estate market"
+            title: "Sand Quality Control",
+            description: "IS 383 certified river sand and M-sand",
+            icon: FaCheckCircle,
+            category: "Materials",
+            year: "2024",
+            stats: "Zone II"
         },
         {
-            id: 4,
-            number: "25+",
-            title: "Industry Awards",
-            description: "Recognition for excellence in real estate services"
+            title: "Brick Standards",
+            description: "IS 12894 certified fly ash bricks",
+            icon: FaMedal,
+            category: "Materials",
+            year: "2024",
+            stats: "Class 1"
+        },
+        {
+            title: "Paint Certification",
+            description: "ISI marked premium quality paints",
+            icon: FaStar,
+            category: "Finishing",
+            year: "2024",
+            stats: "IS 15489"
+        },
+        {
+            title: "Electrical Standards",
+            description: "ISI certified electrical fittings and wires",
+            icon: FaAward,
+            category: "Electrical",
+            year: "2024",
+            stats: "IS 694"
         }
     ];
 
-    const containerVariants = {
+    const container = {
         hidden: { opacity: 0 },
-        visible: {
+        show: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.15,
-                delayChildren: 0.1
+                staggerChildren: 0.1
             }
         }
     };
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.7,
-                ease: [0.22, 1, 0.36, 1]
-            }
-        }
+    const item = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 }
     };
 
     return (
-        <section
-            ref={sectionRef}
-            className="py-20 bg-[#122620] relative overflow-hidden"
-        >
-            {/* Background Elements */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNMzAgMzBoMXYxaC0xeiIgZmlsbD0iI0Q2QUQ2MCIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9nPjwvc3ZnPg==')] opacity-10"></div>
-            <div className="absolute top-0 left-0 w-full h-1 bg-[#D6AD60]"></div>
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-[#D6AD60]"></div>
-            <div className="absolute top-1/4 -left-20 w-40 h-40 rounded-full bg-[#D6AD60]/5"></div>
-            <div className="absolute bottom-1/4 -right-20 w-40 h-40 rounded-full bg-[#D6AD60]/5"></div>
+        <section className="py-20 relative overflow-hidden bg-[#122620]">
+            {/* Decorative Elements */}
+            <div className="absolute inset-0">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
+            </div>
 
-            <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                {/* Header */}
+            <div className="container mx-auto px-6 relative">
                 <motion.div
-                    className="text-center mb-32"
                     initial={{ opacity: 0, y: 20 }}
-                    animate={controls}
-                    variants={{
-                        visible: {
-                            opacity: 1,
-                            y: 0,
-                            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
-                        }
-                    }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
                 >
-                    <div className="inline-block mb-4">
-                        <span className="inline-block w-16 h-1 bg-[#D6AD60] mb-2"></span>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-source-serif text-[#F4EBD0] mb-4">
-                            Our Achievements
-                        </h2>
-                        <span className="inline-block w-16 h-1 bg-[#D6AD60]"></span>
+                    <div className="flex justify-center mb-6">
+                        {/* <div className="w-20 h-20 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                            <FaCertificate className="text-[#E5BE90] text-4xl" />
+                        </div> */}
                     </div>
-                    <p className="text-[#F4EBD0]/80 font-montserrat text-lg max-w-2xl mx-auto">
-                        Milestones that define our success and commitment to excellence
-                    </p>
+                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Certifications</h2>
+                    <div className="flex justify-center items-center gap-4">
+                        <div className="flex justify-center items-center gap-4">
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                            <p className="text-gray-400 tracking-wider">Quality Assured Materials</p>
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                        </div>
+                    </div>
                 </motion.div>
 
-                {/* Image and Achievements Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
-                    {/* Image */}
-                    <motion.div
-                        className="relative h-full order-2 lg:order-1"
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={controls}
-                        variants={{
-                            visible: {
-                                opacity: 1,
-                                x: 0,
-                                transition: { duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }
-                            }
-                        }}
-                    >
-                        <div className="absolute inset-0 overflow-hidden rounded-lg shadow-xl">
-                            <img
-                                src={image}
-                                alt={alt}
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#122620]/80 to-transparent"></div>
+                <motion.div
+                    variants={container}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 pt-20"
+                >
+                    {achievements.map((achievement, index) => (
+                        <motion.div
+                            key={index}
+                            variants={item}
+                            className="group relative h-[350px]"
+                        >
+                            <div className="relative h-full flex flex-col border-b border-[#E5BE90]/20 pb-6">
+                                {/* Large Background Icon */}
+                                <div className="absolute -right-4 -top-4 w-32 h-32 text-[#E5BE90]/5 transform group-hover:scale-110 transition-transform duration-500">
+                                    <achievement.icon className="w-full h-full" />
+                                </div>
+
+                                <div className="relative flex-grow">
+                                    {/* Main Icon */}
+                                    <div className="w-24 h-24 bg-[#E5BE90]/10 rounded-2xl flex items-center justify-center mb-8 transform group-hover:scale-105 transition-all duration-500">
+                                        <achievement.icon className="text-[#E5BE90] text-5xl" />
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-3xl font-bold text-white group-hover:text-[#E5BE90] transition-colors duration-500 font-source-serif tracking-wide">
+                                                {achievement.title}
+                                            </h3>
+                                            <span className="text-[#E5BE90] text-sm font-medium">
+                                                {achievement.year}
+                                            </span>
+                                        </div>
+
+                                        <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-500">
+                                            {achievement.description}
+                                        </p>
+
+                                        <div className="flex items-center justify-between pt-2">
+                                            <span className="text-[#E5BE90] text-sm font-medium">
+                                                {achievement.category}
+                                            </span>
+                                            <span className="text-2xl font-bold text-[#E5BE90] font-source-serif tracking-wide">
+                                                {achievement.stats}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
+
+                {/* Additional Recognition Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-20"
+                >
+                    <div className="relative">
+                        {/* Large Background Icon */}
+                        <div className="absolute -right-8 -top-8 w-48 h-48 text-[#E5BE90]/5">
+                            <FaRibbon className="w-full h-full" />
                         </div>
-                        <div className="absolute top-0 left-0 right-0 p-8">
-                            <div className="bg-[#D6AD60] text-[#122620] font-montserrat font-medium px-6 py-3 rounded-md inline-block">
-                                Excellence Recognized
+
+                        <div className="relative">
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+                                <div className="flex items-center gap-8">
+                                    <div className="w-24 h-24 bg-[#E5BE90]/10 rounded-2xl flex items-center justify-center">
+                                        <FaRibbon className="text-[#E5BE90] text-5xl" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-3xl font-bold text-white mb-4">Quality Assured Construction</h3>
+                                        <p className="text-gray-400 max-w-xl">
+                                            Every material used in our construction meets or exceeds industry standards,
+                                            ensuring the highest quality and safety for your dream home.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-12">
+                                    <div className="text-center">
+                                        <div className="text-5xl font-bold text-[#E5BE90] mb-2">100%</div>
+                                        <div className="text-gray-400">Certified Materials</div>
+                                    </div>
+                                    <div className="h-16 w-px bg-[#E5BE90]/20"></div>
+                                    <div className="text-center">
+                                        <div className="text-5xl font-bold text-[#E5BE90] mb-2">ISO</div>
+                                        <div className="text-gray-400">Certified</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </motion.div>
-
-                    {/* Achievements Grid */}
-                    <motion.div
-                        className="order-1 lg:order-2"
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={controls}
-                        variants={{
-                            visible: {
-                                opacity: 1,
-                                x: 0,
-                                transition: { duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }
-                            }
-                        }}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {achievements.map((achievement) => (
-                                <motion.div
-                                    key={achievement.id}
-                                    className="group"
-                                    variants={itemVariants}
-                                    whileHover={{
-                                        y: -10,
-                                        transition: {
-                                            duration: 0.4,
-                                            ease: [0.22, 1, 0.36, 1]
-                                        }
-                                    }}
-                                >
-                                    <div className="flex flex-col items-center text-center p-8 bg-[#F4EBD0]/5 border border-[#D6AD60]/20 rounded-lg hover:bg-[#F4EBD0]/10 transition-all duration-300 h-full">
-                                        <h3 className="text-4xl font-source-serif text-[#D6AD60] mb-2 group-hover:text-[#F4EBD0] transition-colors duration-300">{achievement.number}</h3>
-                                        <h4 className="text-xl font-source-serif text-[#F4EBD0] mb-4">{achievement.title}</h4>
-                                        <p className="text-[#F4EBD0]/70 font-montserrat text-sm leading-relaxed">{achievement.description}</p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Call to Action */}
-                <motion.div
-                    className="text-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={controls}
-                    variants={{
-                        visible: {
-                            opacity: 1,
-                            y: 0,
-                            transition: { duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }
-                        }
-                    }}
-                >
-                    <a
-                        href="/about"
-                        className="inline-block bg-[#D6AD60] text-[#122620] font-montserrat font-medium px-12 py-5 rounded-md hover:bg-[#F4EBD0] transition-all duration-500 transform hover:scale-105 shadow-md hover:shadow-lg"
-                    >
-                        Learn More About Us
-                    </a>
+                    </div>
                 </motion.div>
             </div>
         </section>

@@ -199,7 +199,7 @@ import '../styles/fonts.css';
 
 const PropertyHero = ({ property }) => {
     return (
-        <div className="relative h-[85vh] overflow-hidden">
+        <div className="relative h-[75vh] overflow-hidden">
             {/* Parallax Background */}
             <div className="absolute inset-0 scale-105" style={{
                 backgroundImage: `url(${property.images[0]})`,

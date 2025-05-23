@@ -88,7 +88,7 @@ const AboutUs = () => {
 
             <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Header */}
-                <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                {/* <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="inline-block mb-4">
                         <span className="inline-block w-16 h-1 bg-[#122620] mb-2"></span>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-source-serif text-[#122620] mb-4">
@@ -99,8 +99,38 @@ const AboutUs = () => {
                     <p className="text-[#122620]/80 font-montserrat text-lg max-w-2xl mx-auto">
                         A journey of excellence, innovation, and unwavering commitment to transforming real estate in India.
                     </p>
-                </div>
+                </div> */}
 
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
+                >
+                    <div className="flex justify-center mb-6">
+                        {/* <div className="w-20 h-20 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                <FaHome className="text-[#E5BE90] text-4xl" />
+                            </div> */}
+                    </div>
+                    <h2 className="text-6xl font-bold mb-4 text-[#122620] font-source-serif">Our Story</h2>
+                    <div className="flex justify-center items-center gap-4">
+                        <div className="flex justify-center items-center gap-4">
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#122620]"
+                            ></motion.span>
+                            <p className="text-[#122620]/80"> A journey of excellence, innovation, and unwavering commitment</p>
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#122620]"
+                            ></motion.span>
+                        </div>
+                    </div>
+                </motion.div>
                 {/* Main Content */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
                     {/* Left Column - Image */}

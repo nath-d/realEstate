@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+    FaChevronRight,
     FaMapMarkerAlt,
 } from 'react-icons/fa';
 import { IndianRupee, Search, MapPin, Home, DollarSign, ArrowRight, Filter, Star, Waves, Mountain, Hotel, LandPlot, Bed, Bath, Ruler, MapPinIcon } from 'lucide-react'
@@ -80,21 +81,21 @@ const PropertyListingCard = ({ property, handleImageError, isActive }) => {
                         }}
                     >
                         <motion.button
-                            className="flex items-center text-start w-full py-2 text-[#D6AD60] border-b-2 border-[#D6AD60] text-sm sm:text-lg font-medium"
+                            className="flex items-center text-start w-full py-2 text-[#D6AD60] border-b-2 border-[#D6AD60] text-sm sm:text-base font-medium"
                             whileTap={{ scale: 0.95 }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 // Add your navigation logic here
                             }}
                         >
-                            <span className="relative flex items-center">
+                            <span className="relative flex items-center tracking-wide">
                                 View Property
                                 <motion.span
                                     className="inline-block ml-2"
                                     animate={{ x: isCardActive ? 5 : 0 }}
                                     transition={{ duration: 0.2 }}
                                 >
-                                    <ArrowRight className="h-4 w-4" />
+                                    <FaChevronRight className="text-sm" />
                                 </motion.span>
                             </span>
                         </motion.button>
