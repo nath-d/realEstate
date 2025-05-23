@@ -8,7 +8,6 @@ import Achievements from './components/Achievements'
 import CoreStrengths from './components/CoreStrengths'
 import FutureVision from './components/FutureVision'
 import WhyChooseUs from './components/WhyChooseUs'
-import PropertyListingCard from '../propertyListings/components/PropertyListingCard'
 import Portfolio from './components/Portfolio'
 
 const Homepage = () => {
