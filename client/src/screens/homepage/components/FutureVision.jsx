@@ -366,6 +366,25 @@ const FutureVision = () => {
         }
     ];
 
+    const timeline = [
+        {
+            year: "2023",
+            title: "AI-Powered Property Matching Platform",
+            description: "Launched our AI-powered property matching platform to streamline the property search process for clients."
+        },
+        {
+            year: "2024",
+            title: "AI-Powered Property Matching Platform",
+            description: "Launched our AI-powered property matching platform to streamline the property search process for clients."
+        },
+        {
+            year: "2025",
+            title: "AI-Powered Property Matching Platform",
+            description: "Launched our AI-powered property matching platform to streamline the property search process for clients."
+        }
+    ]
+
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -534,41 +553,15 @@ const FutureVision = () => {
 
                             {/* Timeline Items */}
                             <div className="space-y-12">
-                                {/* 2023 */}
-                                <div className="relative pl-8">
-                                    <div className="absolute left-0 top-0 w-4 h-4 rounded-full bg-[#D6AD60] transform -translate-x-1/2"></div>
-                                    <div className="bg-[#F4EBD0]/5 p-6 border-l-2 border-[#D6AD60]">
-                                        <h4 className="text-xl font-source-serif text-[#D6AD60] mb-2">2023</h4>
-                                        <p className="text-[#F4EBD0]/80 font-montserrat">Launched our AI-powered property matching platform</p>
+                                {timeline.map((item, index) => (
+                                    <div key={index} className="relative pl-8">
+                                        <div className="absolute left-0 top-0 w-4 h-4 rounded-full bg-[#D6AD60] transform -translate-x-1/2"></div>
+                                        <div className="bg-[#F4EBD0]/5 p-6 border-l-2 border-[#D6AD60]">
+                                            <h4 className="text-xl font-source-serif text-[#D6AD60] mb-2">{item.year}</h4>
+                                            <p className="text-[#F4EBD0]/80 font-montserrat">{item.description}</p>
+                                        </div>
                                     </div>
-                                </div>
-
-                                {/* 2024 */}
-                                <div className="relative pl-8">
-                                    <div className="absolute left-0 top-0 w-4 h-4 rounded-full bg-[#D6AD60] transform -translate-x-1/2"></div>
-                                    <div className="bg-[#F4EBD0]/5 p-6 border-l-2 border-[#D6AD60]">
-                                        <h4 className="text-xl font-source-serif text-[#D6AD60] mb-2">2024</h4>
-                                        <p className="text-[#F4EBD0]/80 font-montserrat">Expanding to three new markets and launching virtual tour technology</p>
-                                    </div>
-                                </div>
-
-                                {/* 2025 */}
-                                <div className="relative pl-8">
-                                    <div className="absolute left-0 top-0 w-4 h-4 rounded-full bg-[#D6AD60] transform -translate-x-1/2"></div>
-                                    <div className="bg-[#F4EBD0]/5 p-6 border-l-2 border-[#D6AD60]">
-                                        <h4 className="text-xl font-source-serif text-[#D6AD60] mb-2">2025</h4>
-                                        <p className="text-[#F4EBD0]/80 font-montserrat">Implementing sustainable development initiatives and community programs</p>
-                                    </div>
-                                </div>
-
-                                {/* 2026 */}
-                                <div className="relative pl-8">
-                                    <div className="absolute left-0 top-0 w-4 h-4 rounded-full bg-[#D6AD60] transform -translate-x-1/2"></div>
-                                    <div className="bg-[#F4EBD0]/5 p-6 border-l-2 border-[#D6AD60]">
-                                        <h4 className="text-xl font-source-serif text-[#D6AD60] mb-2">2026</h4>
-                                        <p className="text-[#F4EBD0]/80 font-montserrat">Achieving industry leadership in technology integration and client satisfaction</p>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </motion.div>

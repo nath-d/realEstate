@@ -1,16 +1,52 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Portfolio = () => {
     const sectionRef = useRef(null);
-    const controls = useAnimation();
-    const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+    const [isVisible, setIsVisible] = useState(false);
+    const hasAnimatedRef = useRef(false);
 
-    React.useEffect(() => {
-        if (isInView) {
-            controls.start('visible');
+    useEffect(() => {
+        const checkInitialVisibility = () => {
+            if (sectionRef.current && !hasAnimatedRef.current) {
+                const rect = sectionRef.current.getBoundingClientRect();
+                const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+
+                if (isInView) {
+                    setIsVisible(true);
+                    hasAnimatedRef.current = true;
+                }
+            }
+        };
+
+        const initialCheckTimer = setTimeout(checkInitialVisibility, 100);
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !hasAnimatedRef.current) {
+                    setIsVisible(true);
+                    hasAnimatedRef.current = true;
+                    observer.unobserve(entry.target);
+                }
+            },
+            {
+                threshold: 0.2,
+                rootMargin: '-100px 0px 0px 0px'
+            }
+        );
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
         }
-    }, [isInView, controls]);
+
+        return () => {
+            clearTimeout(initialCheckTimer);
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, []);
 
     const properties = [
         {
@@ -76,24 +112,24 @@ const Portfolio = () => {
             size: "small",
             features: ["7 Beds", "9 Baths", "10,000 sqft"]
         },
-        {
-            id: 8,
-            title: "Historic Mansion",
-            location: "Charleston, SC",
-            price: "$7.5M",
-            image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
-            size: "small",
-            features: ["7 Beds", "9 Baths", "10,000 sqft"]
-        },
-        {
-            id: 9,
-            title: "Historic Mansion",
-            location: "Charleston, SC",
-            price: "$7.5M",
-            image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
-            size: "small",
-            features: ["7 Beds", "9 Baths", "10,000 sqft"]
-        },
+        // {
+        //     id: 8,
+        //     title: "Historic Mansion",
+        //     location: "Charleston, SC",
+        //     price: "$7.5M",
+        //     image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
+        //     size: "small",
+        //     features: ["7 Beds", "9 Baths", "10,000 sqft"]
+        // },
+        // {
+        //     id: 9,
+        //     title: "Historic Mansion",
+        //     location: "Charleston, SC",
+        //     price: "$7.5M",
+        //     image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
+        //     size: "small",
+        //     features: ["7 Beds", "9 Baths", "10,000 sqft"]
+        // },
     ];
 
     const getGridClass = (size) => {
@@ -173,17 +209,15 @@ const Portfolio = () => {
                 </motion.div>
 
                 {/* Portfolio Grid */}
-                <motion.div
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full mb-24"
-                    initial={{ opacity: 0 }}
-                    animate={controls}
-                    variants={{ visible: { opacity: 1, transition: { staggerChildren: 0.15 } } }}
-                >
-                    {properties.map((property) => (
+                <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 h-full mb-24 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+                    {properties.map((property, index) => (
                         <motion.div
                             key={property.id}
                             className={`group relative ${getGridClass(property.size)}`}
-                            variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }, hidden: { opacity: 0, y: 20 } }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: index * 0.1 }}
                         >
                             <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
                                 <img
@@ -223,16 +257,17 @@ const Portfolio = () => {
                             </div>
                         </motion.div>
                     ))}
-                </motion.div>
+                </div>
 
                 {/* Call to Action */}
                 <motion.div
-                    className="text-center"
                     initial={{ opacity: 0, y: 20 }}
-                    animate={controls}
-                    variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] } } }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="text-center"
                 >
-                    <div className="max-w-3xl mx-auto bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 rounded-2xl p-12 relative overflow-hidden">
+                    <div className="max-w-3xl mx-auto bg-[#F4EBD0]/5 backdrop-blur-sm border-4 border-[#D6AD60]/20 rounded-none p-12 relative overflow-hidden">
                         {/* Decorative Elements */}
                         <div className="absolute top-0 left-0 w-32 h-32 bg-[#D6AD60]/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                         <div className="absolute bottom-0 right-0 w-32 h-32 bg-[#D6AD60]/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
@@ -244,18 +279,18 @@ const Portfolio = () => {
                             Let us guide you through our exclusive collection of luxury properties and help you find the perfect match for your lifestyle.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center relative">
-                            <a
-                                href="/properties"
-                                className="inline-block bg-gradient-to-r from-[#D6AD60] to-[#B38C3D] text-[#122620] font-montserrat font-semibold px-10 py-4 rounded-full hover:from-[#F4EBD0] hover:to-[#D6AD60] transition-all duration-500 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg"
+                            <Link
+                                to="/properties"
+                                className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
                             >
-                                Explore All Properties
-                            </a>
-                            <a
-                                href="/contact"
-                                className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#F4EBD0] font-montserrat font-semibold px-10 py-4 rounded-full hover:bg-[#D6AD60]/10 transition-all duration-500 transform hover:scale-105 text-lg"
+                                View All Properties
+                            </Link>
+                            <Link
+                                to="/properties"
+                                className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
                             >
                                 Schedule a Viewing
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </motion.div>
