@@ -29,7 +29,11 @@ const Navbar = () => {
                             Properties
                             <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-full"></span>
                         </Link>
-                        <Link to="/temp" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 relative group">
+                        {/* <Link to="/temp" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 relative group">
+                            About
+                            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-full"></span>
+                        </Link> */}
+                        <Link to="/about" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 relative group">
                             About
                             <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-full"></span>
                         </Link>

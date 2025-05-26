@@ -54,7 +54,8 @@ const Portfolio = () => {
             title: "Luxury Villa",
             location: "Beverly Hills, CA",
             price: "$12.5M",
-            image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyTwo.jpg",
             size: "large",
             features: ["8 Beds", "12 Baths", "15,000 sqft"]
         },
@@ -63,7 +64,8 @@ const Portfolio = () => {
             title: "Modern Penthouse",
             location: "Manhattan, NY",
             price: "$8.9M",
-            image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyThree.jpg",
             size: "medium",
             features: ["4 Beds", "5 Baths", "6,500 sqft"]
         },
@@ -72,7 +74,8 @@ const Portfolio = () => {
             title: "Waterfront Estate",
             location: "Miami Beach, FL",
             price: "$15.2M",
-            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyFour.jpg",
             size: "medium",
             features: ["6 Beds", "8 Baths", "12,000 sqft"]
         },
@@ -81,7 +84,8 @@ const Portfolio = () => {
             title: "Mountain Retreat",
             location: "Aspen, CO",
             price: "$9.8M",
-            image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyOne.jpg",
             size: "small",
             features: ["5 Beds", "6 Baths", "8,500 sqft"]
         },
@@ -90,7 +94,8 @@ const Portfolio = () => {
             title: "Historic Mansion",
             location: "Charleston, SC",
             price: "$7.5M",
-            image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyTwo.jpg",
             size: "small",
             features: ["7 Beds", "9 Baths", "10,000 sqft"]
         },
@@ -99,7 +104,8 @@ const Portfolio = () => {
             title: "Tech Executive Home",
             location: "Silicon Valley, CA",
             price: "$18.3M",
-            image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyFour.jpg",
             size: "large",
             features: ["9 Beds", "11 Baths", "18,000 sqft"]
         },
@@ -108,7 +114,8 @@ const Portfolio = () => {
             title: "Historic Mansion",
             location: "Charleston, SC",
             price: "$7.5M",
-            image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
+            // image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
+            image: "/propertyOne.jpg",
             size: "small",
             features: ["7 Beds", "9 Baths", "10,000 sqft"]
         },
@@ -209,17 +216,19 @@ const Portfolio = () => {
                 </motion.div>
 
                 {/* Portfolio Grid */}
-                <div className={`grid grid-cols-1 md:grid-cols-3 gap-6 h-full mb-24 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 h-full mb-24 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
                     {properties.map((property, index) => (
                         <motion.div
                             key={property.id}
-                            className={`group relative ${getGridClass(property.size)}`}
+                            className={`group relative ${property.size === 'large' ? 'sm:col-span-2 lg:col-span-2 sm:row-span-2 lg:row-span-2' :
+                                property.size === 'medium' ? 'sm:col-span-1 lg:col-span-1 sm:row-span-2 lg:row-span-2' :
+                                    'sm:col-span-1 lg:col-span-1 sm:row-span-1 lg:row-span-1'}`}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, delay: index * 0.1 }}
                         >
-                            <div className="relative h-full w-full overflow-hidden rounded-xl bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
+                            <div className="relative h-[300px] sm:h-full w-full overflow-hidden rounded-xl bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
                                 <img
                                     src={property.image}
                                     alt={property.title}

@@ -5,8 +5,8 @@ const Footer = () => {
     return (
         <footer className="relative bg-gradient-to-b from-[#1a3329] to-[#122620] text-white pt-20 pb-8 overflow-hidden">
             {/* Decorative Elements */}
-            {/* <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#c9a66b] via-[#e6c48a] to-[#c9a66b]"></div>
-            <div className="absolute top-0 left-0 w-full h-full opacity-5">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#c9a66b] via-[#e6c48a] to-[#c9a66b]"></div>
+            {/* <div className="absolute top-0 left-0 w-full h-full opacity-5">
                 <div className="absolute top-10 left-10 w-32 h-32 border-2 border-[#c9a66b] rounded-full"></div>
                 <div className="absolute bottom-10 right-10 w-40 h-40 border-2 border-[#c9a66b] rounded-full"></div>
             </div> */}

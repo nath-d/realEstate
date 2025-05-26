@@ -4,6 +4,7 @@ import PropertyListingCard from './components/PropertyListingCard'
 import { Search, MapPin, Home, DollarSign, ArrowDownUp, Filter, Star, Waves, Mountain, Hotel, LandPlot } from 'lucide-react'
 import { motion } from 'framer-motion'
 import PropertyCard from './components/PropertyListingCard'
+import Footer from '../homepage/components/Footer'
 
 const properties = [
     {
@@ -299,12 +300,12 @@ const PropertyListings = () => {
                     className="w-full h-full object-cover object-center"
                     onError={handleImageError}
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#122620]/90 via-[#122620]/70 to-[#122620] flex flex-col items-center justify-center z-10 text-center px-4 sm:px-6 md:px-8">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-[#122620] flex flex-col items-center justify-center z-10 text-center px-4 sm:px-6 md:px-8">
                     <motion.h1
                         variants={itemVariants}
                         className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-cardo mb-4 sm:mb-6 font-bold text-[#D6AD60] leading-tight px-4"
                     >
-                        Discover Your Perfect <span className="text-white">Property</span>
+                        <span className="text-white">Discover Your</span> <span className="text-[#D6AD60]">Perfect</span> <span className="text-white">Property</span>
                     </motion.h1>
                     <motion.p
                         variants={itemVariants}
@@ -617,6 +618,7 @@ const PropertyListings = () => {
                     </motion.div>
                 </div>
             </div>
+            <Footer />
         </motion.div>
     )
 }

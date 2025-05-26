@@ -119,14 +119,14 @@ const AboutUs = () => {
                                 initial={{ width: 0 }}
                                 whileInView={{ width: 120 }}
                                 transition={{ duration: 0.8 }}
-                                className="h-0.5 bg-[#122620]"
+                                className="h-0.5 bg-[#D6AD60]"
                             ></motion.span>
                             <p className="text-[#122620]/80"> A journey of excellence, innovation, and unwavering commitment</p>
                             <motion.span
                                 initial={{ width: 0 }}
                                 whileInView={{ width: 120 }}
                                 transition={{ duration: 0.8 }}
-                                className="h-0.5 bg-[#122620]"
+                                className="h-0.5 bg-[#D6AD60]"
                             ></motion.span>
                         </div>
                     </div>

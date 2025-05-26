@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 
-const WhyChooseUs = ({ image, alt }) => {
+const WhyChooseUs = () => {
     const sectionRef = useRef(null);
     const controls = useAnimation();
     const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
@@ -95,9 +95,23 @@ const WhyChooseUs = ({ image, alt }) => {
 
     return (
         <section ref={sectionRef} className="py-32 bg-gradient-to-b from-[#122620] to-[#0a1a17] relative overflow-hidden">
-            {/* Brand Watermark */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-                <img src="/logo192.png" alt="ProjectEstate" className="w-64 h-64" />
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0">
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('/pattern.png')] opacity-5"></div>
+                <motion.div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={controls}
+                    variants={{
+                        visible: {
+                            opacity: 0.1,
+                            scale: 1,
+                            transition: { duration: 1.5, ease: "easeOut" }
+                        }
+                    }}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#D6AD60]/20 to-transparent blur-3xl"></div>
+                </motion.div>
             </div>
 
             <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -114,204 +128,113 @@ const WhyChooseUs = ({ image, alt }) => {
                         }
                     }}
                 >
-                    <div className="inline-block mb-4">
-                        <span className="inline-block w-16 h-1 bg-[#D6AD60] mb-2"></span>
-                        <h2 className="text-3xl md:text-4xl lg:text-6xl font-source-serif text-[#F4EBD0] mb-4 italic">
-                            Why Choose Us?
-                        </h2>
-                        <span className="inline-block w-16 h-1 bg-[#D6AD60]"></span>
-                    </div>
-                    <p className="text-[#F4EBD0]/90 font-montserrat text-lg max-w-3xl mx-auto leading-relaxed">
+                    <motion.div
+                        className="inline-block mb-6"
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={controls}
+                        variants={{
+                            visible: {
+                                scale: 1,
+                                opacity: 1,
+                                transition: { duration: 0.6, delay: 0.2 }
+                            }
+                        }}
+                    >
+                        <span className="inline-block px-6 py-2 rounded-full bg-[#D6AD60]/10 text-[#D6AD60] text-sm font-medium border border-[#D6AD60]/20">
+                            Why Choose ProjectEstate
+                        </span>
+                    </motion.div>
+                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-source-serif text-[#F4EBD0] mb-8 leading-tight">
+                        The Art of <span className="text-[#D6AD60]">Luxury</span> Living
+                    </h2>
+                    <p className="text-[#F4EBD0]/80 font-montserrat text-xl max-w-3xl mx-auto leading-relaxed">
                         Experience the perfect blend of luxury, innovation, and unparalleled service that has made us the most trusted name in real estate
-                    </p>
-                    <p className="italic text-[#D6AD60]/70 font-parisienne text-4xl mt-12 p-4">
-                        "Setting the Standard in Luxury Real Estate"
                     </p>
                 </motion.div>
 
-                {/* Bento Grid Layout */}
+                {/* Main Content Grid */}
                 <motion.div
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 h-full"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                     initial={{ opacity: 0 }}
                     animate={controls}
-                    variants={{ visible: { opacity: 1, transition: { staggerChildren: 0.15 } } }}
+                    variants={{ visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
                 >
-                    {/* Feature 1 - Large */}
-                    <motion.div
-                        className="col-span-1 md:col-span-2 row-span-2"
-                        variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }, hidden: { opacity: 0, y: 20 } }}
-                    >
-                        <div className="group relative flex flex-col overflow-hidden rounded-xl px-6 pb-8 pt-40 h-full bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
-                            <img
-                                src={reasons[0].bgImg}
-                                alt={reasons[0].title}
-                                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-[#122620]/90 to-[#0a1a17]/90"></div>
-
-                            <div className="z-10 flex flex-col h-full justify-end">
-                                <div className="mt-auto">
-                                    <div className="flex items-center mb-4">
-                                        <div className="w-12 h-12 rounded-lg bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mr-4">
-                                            {reasons[0].icon}
-                                        </div>
-                                        <h3 className="text-3xl font-source-serif text-[#F4EBD0]">{reasons[0].title}</h3>
-                                    </div>
-                                    <p className="text-[#F4EBD0]/90 font-montserrat text-lg mb-6">{reasons[0].description}</p>
-                                    <div className="flex items-baseline space-x-2">
-                                        <span className="text-4xl font-bold text-[#D6AD60]">{reasons[0].stat}</span>
-                                        <span className="text-[#F4EBD0]/80 text-sm uppercase tracking-wide">{reasons[0].statText}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Feature 2 */}
-                    <motion.div
-                        className="col-span-1 md:col-span-2 row-span-1"
-                        variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }, hidden: { opacity: 0, y: 20 } }}
-                    >
-                        <div className="group relative flex flex-col overflow-hidden rounded-xl px-6 pb-8 pt-40 h-full bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
-                            <img
-                                src={reasons[1].bgImg}
-                                alt={reasons[1].title}
-                                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-[#122620]/90 to-[#0a1a17]/90"></div>
-
-                            <div className="z-10 flex flex-col h-full justify-end">
-                                <div className="mt-auto">
-                                    <div className="flex items-center mb-3">
-                                        <div className="w-10 h-10 rounded-lg bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mr-3">
-                                            {reasons[1].icon}
-                                        </div>
-                                        <h3 className="text-2xl font-source-serif text-[#F4EBD0]">{reasons[1].title}</h3>
-                                    </div>
-                                    <p className="text-[#F4EBD0]/90 font-montserrat text-base mb-4">{reasons[1].description}</p>
-                                    <div className="flex items-baseline space-x-2">
-                                        <span className="text-3xl font-bold text-[#D6AD60]">{reasons[1].stat}</span>
-                                        <span className="text-[#F4EBD0]/80 text-sm uppercase tracking-wide">{reasons[1].statText}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Features 3-4 (Grid) */}
-                    <motion.div
-                        className="col-span-1 md:col-span-2 row-span-1"
-                        variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }, hidden: { opacity: 0, y: 20 } }}
-                    >
-                        <div className="grid grid-cols-2 gap-6 h-full">
-                            {[2, 3].map(index => (
-                                <div key={reasons[index].id} className="group relative flex flex-col overflow-hidden rounded-xl px-4 pb-6 pt-36 bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
+                    {reasons.map((reason, index) => (
+                        <motion.div
+                            key={reason.id}
+                            className="group"
+                            variants={{
+                                visible: {
+                                    opacity: 1,
+                                    y: 0,
+                                    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+                                },
+                                hidden: { opacity: 0, y: 20 }
+                            }}
+                        >
+                            <div className="relative h-[450px] rounded-2xl overflow-hidden">
+                                {/* Background Image with Parallax Effect */}
+                                <motion.div
+                                    className="absolute inset-0"
+                                    whileHover={{ scale: 1.1 }}
+                                    transition={{ duration: 0.8, ease: "easeOut" }}
+                                >
                                     <img
-                                        src={reasons[index].bgImg}
-                                        alt={reasons[index].title}
-                                        className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                                        src={reason.bgImg}
+                                        alt={reason.title}
+                                        className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-b from-[#122620]/90 to-[#0a1a17]/90"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#122620] via-[#122620]/80 to-transparent"></div>
+                                </motion.div>
 
-                                    <div className="z-10 flex flex-col h-full justify-end">
-                                        <div className="mt-auto">
-                                            <div className="flex items-center mb-2">
-                                                <div className="w-8 h-8 rounded-lg bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mr-2">
-                                                    {reasons[index].icon}
-                                                </div>
-                                                <h3 className="text-xl font-source-serif text-[#F4EBD0]">{reasons[index].title}</h3>
-                                            </div>
-                                            <p className="text-[#F4EBD0]/90 font-montserrat text-sm mb-3 line-clamp-2">{reasons[index].description}</p>
-                                            <div className="flex items-baseline space-x-2">
-                                                <span className="text-2xl font-bold text-[#D6AD60]">{reasons[index].stat}</span>
-                                                <span className="text-[#F4EBD0]/80 text-xs uppercase tracking-wide">{reasons[index].statText}</span>
-                                            </div>
+                                {/* Content */}
+                                <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                                    <motion.div
+                                        className="transform transition-all duration-500 group-hover:-translate-y-2"
+                                        whileHover={{ scale: 1.02 }}
+                                    >
+                                        <div className="w-14 h-14 rounded-xl bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mb-4 transform transition-transform duration-500 group-hover:rotate-12">
+                                            {reason.icon}
                                         </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    {/* Feature 5 */}
-                    <motion.div
-                        className="col-span-1 md:col-span-1 row-span-1"
-                        variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }, hidden: { opacity: 0, y: 20 } }}
-                    >
-                        <div className="group relative flex flex-col overflow-hidden rounded-xl px-4 pb-6 pt-36 h-full bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
-                            <img
-                                src={reasons[4].bgImg}
-                                alt={reasons[4].title}
-                                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-[#122620]/90 to-[#0a1a17]/90"></div>
-
-                            <div className="z-10 flex flex-col h-full justify-end">
-                                <div className="mt-auto">
-                                    <div className="flex items-center mb-2">
-                                        <div className="w-8 h-8 rounded-lg bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mr-2">
-                                            {reasons[4].icon}
+                                        <h3 className="text-2xl font-source-serif text-[#F4EBD0] mb-3">{reason.title}</h3>
+                                        <p className="text-[#F4EBD0]/80 font-montserrat text-base mb-4 line-clamp-2">{reason.description}</p>
+                                        <div className="flex items-baseline space-x-2">
+                                            <span className="text-4xl font-bold text-[#D6AD60]">{reason.stat}</span>
+                                            <span className="text-[#F4EBD0]/70 text-sm uppercase tracking-wide">{reason.statText}</span>
                                         </div>
-                                        <h3 className="text-xl font-source-serif text-[#F4EBD0]">{reasons[4].title}</h3>
-                                    </div>
-                                    <p className="text-[#F4EBD0]/90 font-montserrat text-sm mb-3 line-clamp-3">{reasons[4].description}</p>
-                                    <div className="flex items-baseline space-x-2">
-                                        <span className="text-2xl font-bold text-[#D6AD60]">{reasons[4].stat}</span>
-                                        <span className="text-[#F4EBD0]/80 text-xs uppercase tracking-wide">{reasons[4].statText}</span>
-                                    </div>
+                                    </motion.div>
                                 </div>
+
+                                {/* Hover Overlay */}
+                                <div className="absolute inset-0 bg-[#D6AD60]/0 group-hover:bg-[#D6AD60]/5 transition-colors duration-500"></div>
                             </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Feature 6 */}
-                    <motion.div
-                        className="col-span-1 md:col-span-3 row-span-1"
-                        variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }, hidden: { opacity: 0, y: 20 } }}
-                    >
-                        <div className="group relative flex flex-col overflow-hidden rounded-xl px-6 pb-8 pt-40 h-full bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
-                            <img
-                                src={reasons[5].bgImg}
-                                alt={reasons[5].title}
-                                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-[#122620]/90 to-[#0a1a17]/90"></div>
-
-                            <div className="z-10 flex flex-col h-full justify-end">
-                                <div className="mt-auto">
-                                    <div className="flex items-center mb-3">
-                                        <div className="w-10 h-10 rounded-lg bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mr-3">
-                                            {reasons[5].icon}
-                                        </div>
-                                        <h3 className="text-2xl font-source-serif text-[#F4EBD0]">{reasons[5].title}</h3>
-                                    </div>
-                                    <p className="text-[#F4EBD0]/90 font-montserrat text-base mb-4">{reasons[5].description}</p>
-                                    <div className="flex items-baseline space-x-2">
-                                        <span className="text-3xl font-bold text-[#D6AD60]">{reasons[5].stat}</span>
-                                        <span className="text-[#F4EBD0]/80 text-sm uppercase tracking-wide">{reasons[5].statText}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    ))}
                 </motion.div>
 
                 {/* Call to Action */}
                 <motion.div
-                    className="text-center mt-28"
+                    className="text-center mt-24"
                     initial={{ opacity: 0, y: 20 }}
                     animate={controls}
-                    variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] } } }}
+                    variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.4 } } }}
                 >
-                    <h3 className="text-2xl md:text-3xl font-source-serif text-[#F4EBD0] mb-6">
-                        Ready to Redefine Luxury Living?
-                    </h3>
-                    <a
-                        href="/contact"
-                        className="inline-block bg-gradient-to-r from-[#D6AD60] to-[#B38C3D] text-[#122620] font-montserrat font-semibold px-14 py-6 rounded-full hover:from-[#F4EBD0] hover:to-[#D6AD60] transition-all duration-500 transform hover:scale-110 shadow-xl hover:shadow-2xl text-lg"
-                    >
-                        Schedule Your Private Consultation
-                    </a>
+                    <div className="inline-block p-10 rounded-2xl bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20">
+                        <h3 className="text-3xl md:text-4xl font-source-serif text-[#F4EBD0] mb-8">
+                            Begin Your Journey to <span className="text-[#D6AD60]">Luxury Living</span>
+                        </h3>
+                        <motion.a
+                            href="/contact"
+                            className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#D6AD60] to-[#B38C3D] text-[#122620] font-montserrat font-semibold px-10 py-5 rounded-full hover:from-[#F4EBD0] hover:to-[#D6AD60] transition-all duration-500 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <span>Schedule Your Private Consultation</span>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </motion.a>
+                    </div>
                 </motion.div>
             </div>
         </section>
