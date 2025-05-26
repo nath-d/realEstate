@@ -16,6 +16,7 @@ import ScheduleVisit from './components/ScheduleVisit';
 import PropertyHistory from './components/PropertyHistory';
 import NeighborhoodInsights from './components/NeighborhoodInsights';
 import MaterialCertifications from './components/MaterialCertifications';
+import PropertySpecifications from './components/PropertySpecifications';
 import Navbar from '../homepage/components/Navbar';
 
 const PropertyDetails = () => {
@@ -284,6 +285,7 @@ const PropertyDetails = () => {
                     {/* <VirtualTour url={property.virtualTour} /> */}
                     <PropertyDescription description={property.description} />
                     <PropertyGallery images={property.images} />
+                    <PropertySpecifications />
                     <MaterialCertifications />
                     <PropertyAmenities amenities={property.amenities} />
                     <PropertyHistory history={property.history} />
