@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaBed, FaBath, FaRuler, FaHeart, FaBuilding } from 'react-icons/fa';
+import { FaBed, FaBath, FaRuler, FaHeart, FaBuilding, FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const SimilarProperties = ({ properties }) => {
@@ -62,12 +62,12 @@ const SimilarProperties = ({ properties }) => {
     return (
         <section className="py-20 relative overflow-hidden">
             {/* Decorative Elements */}
-            <div className="absolute inset-0">
+            {/* <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
                 <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-r from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
-            </div>
+            </div> */}
 
             <div className="container mx-auto px-6 relative">
                 <motion.div
@@ -81,11 +81,23 @@ const SimilarProperties = ({ properties }) => {
                             <FaBuilding className="text-[#E5BE90] text-3xl" />
                         </div>
                     </div>
-                    <h2 className="text-4xl font-bold mb-4 text-white">Similar Properties</h2>
+                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Similar Properties</h2>
                     <div className="flex justify-center items-center gap-4">
-                        <span className="w-12 h-0.5 bg-[#E5BE90]"></span>
-                        <p className="text-gray-400">Discover more exceptional luxury estates</p>
-                        <span className="w-12 h-0.5 bg-[#E5BE90]"></span>
+                        <div className="flex justify-center items-center gap-4">
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                            <p className="text-gray-400 tracking-wider">Discover more exceptional luxury estates</p>
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                        </div>
                     </div>
                 </motion.div>
 
@@ -125,14 +137,15 @@ const SimilarProperties = ({ properties }) => {
 
                                     {/* Property Details */}
                                     <div className="p-6">
-                                        <h3 className="text-xl font-bold text-[#E5BE90] mb-2 group-hover:underline">
+                                        <h3 className="font-source-serif tracking-wide text-2xl font-bold text-[#E5BE90] mb-2 group-hover:underline">
                                             {property.title}
                                         </h3>
                                         <p className="text-2xl font-bold text-white mb-3">
                                             {property.price}
                                         </p>
                                         <p className="text-gray-400 text-sm mb-4 flex items-center space-x-1">
-                                            <span className="inline-block w-4 h-4 bg-[#E5BE90]/10 rounded-full flex-shrink-0"></span>
+                                            {/* <span className="inline-block w-4 h-4 bg-[#E5BE90]/10 rounded-full flex-shrink-0"></span> */}
+                                            <FaMapMarkerAlt className="text-[#E5BE90]" />
                                             <span>{property.address}</span>
                                         </p>
 
@@ -172,9 +185,9 @@ const SimilarProperties = ({ properties }) => {
                     >
                         <Link
                             to="/properties"
-                            className="inline-block px-8 py-4 bg-[#E5BE90] text-[#122620] rounded-lg font-bold hover:bg-[#E5BE90]/90 transition-colors shadow-lg"
+                            className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
                         >
-                            View More Properties
+                            View All Properties
                         </Link>
                     </motion.div>
                 </div>

@@ -235,7 +235,7 @@ const CoreStrengths = ({ image, alt }) => {
                 </div>
 
                 {/* Call to Action */}
-                <motion.div
+                {/* <motion.div
                     className="text-center"
                     initial={{ opacity: 0, y: 20 }}
                     animate={controls}
@@ -253,7 +253,7 @@ const CoreStrengths = ({ image, alt }) => {
                     >
                         Explore Our Services
                     </a>
-                </motion.div>
+                </motion.div> */}
             </div>
         </section>
     );

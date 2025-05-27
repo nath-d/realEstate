@@ -18,6 +18,7 @@ import NeighborhoodInsights from './components/NeighborhoodInsights';
 import MaterialCertifications from './components/MaterialCertifications';
 import PropertySpecifications from './components/PropertySpecifications';
 import Navbar from '../homepage/components/Navbar';
+import Footer from '../homepage/components/Footer';
 
 const PropertyDetails = () => {
     const { id } = useParams();
@@ -287,12 +288,13 @@ const PropertyDetails = () => {
                     <PropertyGallery images={property.images} />
                     <PropertySpecifications />
                     <MaterialCertifications />
-                    <PropertyAmenities amenities={property.amenities} />
-                    <PropertyHistory history={property.history} />
+                    {/* <PropertyAmenities amenities={property.amenities} /> */}
+                    {/* <PropertyHistory history={property.history} /> */}
                     {/* <NeighborhoodInsights neighborhood={property.neighborhood} /> */}
                     <PropertyLocation />
                     <SimilarProperties properties={property.similarProperties} />
                     <PropertyAgent agent={property.agent} />
+                    <Footer />
                 </div>
             </div >
 

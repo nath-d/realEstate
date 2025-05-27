@@ -9,6 +9,7 @@ import CoreStrengths from './components/CoreStrengths'
 import FutureVision from './components/FutureVision'
 import WhyChooseUs from './components/WhyChooseUs'
 import Portfolio from './components/Portfolio'
+import BlogSection from './components/BlogSection'
 import Footer from './components/Footer'
 
 const Homepage = () => {
@@ -36,6 +37,7 @@ const Homepage = () => {
                 alt="Modern real estate office with technology"
             />
             <FutureVision />
+            <BlogSection />
             <Footer />
         </div>
     )

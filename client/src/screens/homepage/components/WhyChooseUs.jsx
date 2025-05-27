@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const WhyChooseUs = () => {
     const sectionRef = useRef(null);
@@ -129,27 +130,41 @@ const WhyChooseUs = () => {
                     }}
                 >
                     <motion.div
-                        className="inline-block mb-6"
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={controls}
-                        variants={{
-                            visible: {
-                                scale: 1,
-                                opacity: 1,
-                                transition: { duration: 0.6, delay: 0.2 }
-                            }
-                        }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
                     >
-                        <span className="inline-block px-6 py-2 rounded-full bg-[#D6AD60]/10 text-[#D6AD60] text-sm font-medium border border-[#D6AD60]/20">
-                            Why Choose ProjectEstate
-                        </span>
+                        <div className="flex justify-center mb-6">
+                            {/* <div className="w-20 h-20 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                            <FaCertificate className="text-[#E5BE90] text-4xl" />
+                        </div> */}
+                        </div>
+                        <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Why Choose Us</h2>
+                        <div className="flex justify-center items-center gap-4">
+                            <div className="flex justify-center items-center gap-4">
+                                <motion.span
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: 120 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="h-0.5 bg-[#E5BE90]"
+                                ></motion.span>
+                                <p className="text-gray-400 tracking-wider">Most Trusted Name in Real Estate</p>
+                                <motion.span
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: 120 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="h-0.5 bg-[#E5BE90]"
+                                ></motion.span>
+                            </div>
+                        </div>
                     </motion.div>
-                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-source-serif text-[#F4EBD0] mb-8 leading-tight">
+                    {/* <h2 className="text-5xl md:text-3xl lg:text-4xl font-source-serif text-[#F4EBD0] mb-8 leading-tight">
                         The Art of <span className="text-[#D6AD60]">Luxury</span> Living
-                    </h2>
-                    <p className="text-[#F4EBD0]/80 font-montserrat text-xl max-w-3xl mx-auto leading-relaxed">
+                    </h2> */}
+                    {/* <p className="text-[#F4EBD0]/80 font-montserrat text-lg max-w-3xl mx-auto leading-relaxed">
                         Experience the perfect blend of luxury, innovation, and unparalleled service that has made us the most trusted name in real estate
-                    </p>
+                    </p> */}
                 </motion.div>
 
                 {/* Main Content Grid */}
@@ -172,41 +187,46 @@ const WhyChooseUs = () => {
                                 hidden: { opacity: 0, y: 20 }
                             }}
                         >
-                            <div className="relative h-[450px] rounded-2xl overflow-hidden">
-                                {/* Background Image with Parallax Effect */}
-                                <motion.div
-                                    className="absolute inset-0"
-                                    whileHover={{ scale: 1.1 }}
-                                    transition={{ duration: 0.8, ease: "easeOut" }}
-                                >
+                            <div className="bg-[#1a2f2a] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
+                                {/* Card Header with Image */}
+                                <div className="relative h-48">
                                     <img
                                         src={reason.bgImg}
                                         alt={reason.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#122620] via-[#122620]/80 to-transparent"></div>
-                                </motion.div>
-
-                                {/* Content */}
-                                <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                                    <motion.div
-                                        className="transform transition-all duration-500 group-hover:-translate-y-2"
-                                        whileHover={{ scale: 1.02 }}
-                                    >
-                                        <div className="w-14 h-14 rounded-xl bg-[#D6AD60]/20 backdrop-blur-sm flex items-center justify-center text-[#D6AD60] mb-4 transform transition-transform duration-500 group-hover:rotate-12">
-                                            {reason.icon}
-                                        </div>
-                                        <h3 className="text-2xl font-source-serif text-[#F4EBD0] mb-3">{reason.title}</h3>
-                                        <p className="text-[#F4EBD0]/80 font-montserrat text-base mb-4 line-clamp-2">{reason.description}</p>
-                                        <div className="flex items-baseline space-x-2">
-                                            <span className="text-4xl font-bold text-[#D6AD60]">{reason.stat}</span>
-                                            <span className="text-[#F4EBD0]/70 text-sm uppercase tracking-wide">{reason.statText}</span>
-                                        </div>
-                                    </motion.div>
+                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1a2f2a]"></div>
                                 </div>
 
-                                {/* Hover Overlay */}
-                                <div className="absolute inset-0 bg-[#D6AD60]/0 group-hover:bg-[#D6AD60]/5 transition-colors duration-500"></div>
+                                {/* Card Content */}
+                                <div className="p-6">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="w-12 h-12 rounded-lg bg-[#D6AD60]/10 flex items-center justify-center text-[#D6AD60]">
+                                            {reason.icon}
+                                        </div>
+                                        <h3 className="text-xl font-source-serif text-white font-semibold">{reason.title}</h3>
+                                    </div>
+
+                                    <p className="text-gray-300 mb-6 text-sm leading-relaxed">
+                                        {reason.description}
+                                    </p>
+
+                                    <div className="flex items-center justify-between pt-4 border-t border-[#D6AD60]/20">
+                                        <div>
+                                            <span className="text-3xl font-bold text-[#D6AD60] block">{reason.stat}</span>
+                                            <span className="text-gray-400 text-sm uppercase tracking-wide">{reason.statText}</span>
+                                        </div>
+                                        <motion.button
+                                            className="text-[#D6AD60] hover:text-white transition-colors duration-300"
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                            </svg>
+                                        </motion.button>
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     ))}
@@ -219,11 +239,17 @@ const WhyChooseUs = () => {
                     animate={controls}
                     variants={{ visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.4 } } }}
                 >
-                    <div className="inline-block p-10 rounded-2xl bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20">
+                    <div className="">
                         <h3 className="text-3xl md:text-4xl font-source-serif text-[#F4EBD0] mb-8">
                             Begin Your Journey to <span className="text-[#D6AD60]">Luxury Living</span>
                         </h3>
-                        <motion.a
+                        <Link
+                            to="/about"
+                            className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
+                        >
+                            Learn More About Us
+                        </Link>
+                        {/* <motion.a
                             href="/contact"
                             className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#D6AD60] to-[#B38C3D] text-[#122620] font-montserrat font-semibold px-10 py-5 rounded-full hover:from-[#F4EBD0] hover:to-[#D6AD60] transition-all duration-500 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg"
                             whileHover={{ scale: 1.05 }}
@@ -233,7 +259,7 @@ const WhyChooseUs = () => {
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
-                        </motion.a>
+                        </motion.a> */}
                     </div>
                 </motion.div>
             </div>

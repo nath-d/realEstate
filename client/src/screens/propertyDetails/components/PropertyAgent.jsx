@@ -8,9 +8,9 @@ const PropertyAgent = ({ agent }) => {
             {/* Decorative Elements */}
             <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
+                {/* <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" /> */}
+                {/* <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" /> */}
+                {/* <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" /> */}
             </div>
 
             <div className="container mx-auto px-6 relative">
@@ -25,11 +25,23 @@ const PropertyAgent = ({ agent }) => {
                             <FaUser className="text-[#E5BE90] text-3xl" />
                         </div>
                     </div>
-                    <h2 className="text-4xl font-bold mb-4 text-white">Your Property Expert</h2>
+                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Contact Us</h2>
                     <div className="flex justify-center items-center gap-4">
-                        <span className="w-12 h-0.5 bg-[#E5BE90]"></span>
-                        <p className="text-gray-400">Connect with a luxury real estate specialist</p>
-                        <span className="w-12 h-0.5 bg-[#E5BE90]"></span>
+                        <div className="flex justify-center items-center gap-4">
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                            <p className="text-gray-400 tracking-wider">Connect with a luxury real estate specialist</p>
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                        </div>
                     </div>
                 </motion.div>
 
@@ -133,10 +145,12 @@ const PropertyAgent = ({ agent }) => {
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className="w-full bg-[#E5BE90] text-[#122620] py-4 rounded-lg font-bold hover:bg-[#E5BE90]/90 transition-colors shadow-lg"
+                                        className="w-full inline-block bg-transparent border-2 border-[#E5BE90] text-[#E5BE90] px-8 py-4 rounded-none hover:bg-[#E5BE90] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
+
                                     >
                                         Request Viewing
                                     </motion.button>
+
                                 </form>
 
                                 <div className="mt-8 space-y-4">

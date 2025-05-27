@@ -36,7 +36,7 @@ const ScheduleVisit = ({ property, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-[#122620] rounded-lg p-6 w-full max-w-2xl relative">
+            <div className="bg-[#122620] rounded-2xl p-6 w-full max-w-2xl relative border border-[#D6AD60]/20">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -44,7 +44,7 @@ const ScheduleVisit = ({ property, onClose }) => {
                     <FaTimes size={24} />
                 </button>
 
-                <h2 className="text-2xl font-bold mb-6 text-[#D4AF37]">Schedule a Visit</h2>
+                <h2 className="font-source-serif tracking-wide text-3xl font-bold mb-6 text-[#D6AD60]">Contact Us</h2>
                 <p className="text-gray-400 mb-6">
                     Schedule a private viewing of {property.title}
                 </p>
@@ -170,7 +170,7 @@ const ScheduleVisit = ({ property, onClose }) => {
                     <div className="flex justify-end">
                         <button
                             type="submit"
-                            className="px-6 py-3 bg-[#D4AF37] text-[#122620] rounded-lg font-semibold hover:bg-[#C19B2E] transition-colors"
+                            className="px-6 py-3 bg-[#D6AD60] text-[#122620] rounded-lg font-semibold hover:bg-[#C19B2E] transition-colors"
                         >
                             Schedule Visit
                         </button>

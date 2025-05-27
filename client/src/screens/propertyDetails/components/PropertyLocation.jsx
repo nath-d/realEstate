@@ -54,11 +54,23 @@ const PropertyLocation = () => {
                             <FaMapMarkerAlt className="text-[#E5BE90] text-3xl" />
                         </div>
                     </div>
-                    <h2 className="text-4xl font-bold mb-4 text-white">Prime Location</h2>
+                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Prime Location</h2>
                     <div className="flex justify-center items-center gap-4">
-                        <span className="w-12 h-0.5 bg-[#E5BE90]"></span>
-                        <p className="text-gray-400">Perfectly positioned for your lifestyle</p>
-                        <span className="w-12 h-0.5 bg-[#E5BE90]"></span>
+                        <div className="flex justify-center items-center gap-4">
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                            <p className="text-gray-400 tracking-wider">Perfectly positioned for your lifestyle</p>
+                            <motion.span
+                                initial={{ width: 0 }}
+                                whileInView={{ width: 120 }}
+                                transition={{ duration: 0.8 }}
+                                className="h-0.5 bg-[#E5BE90]"
+                            ></motion.span>
+                        </div>
                     </div>
                 </motion.div>
 

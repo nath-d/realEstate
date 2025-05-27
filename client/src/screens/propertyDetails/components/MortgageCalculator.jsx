@@ -55,7 +55,7 @@ const MortgageCalculator = ({ price, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-[#122620] rounded-lg p-6 w-full max-w-2xl relative">
+            <div className="bg-[#122620] rounded-lg p-6 w-full max-w-2xl relative border border-[#D6AD60]/20">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -63,7 +63,7 @@ const MortgageCalculator = ({ price, onClose }) => {
                     <FaTimes size={24} />
                 </button>
 
-                <h2 className="text-2xl font-bold mb-6 text-[#D4AF37]">Mortgage Calculator</h2>
+                <h2 className="font-source-serif tracking-wide text-3xl font-bold mb-6 text-[#D6AD60]">EMI Calculator</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
@@ -125,7 +125,7 @@ const MortgageCalculator = ({ price, onClose }) => {
                     </div>
 
                     <div className="bg-gray-800 rounded-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4 text-[#D4AF37]">Monthly Payment Breakdown</h3>
+                        <h3 className="text-xl font-semibold mb-4 text-[#D6AD60]">Monthly Payment Breakdown</h3>
                         <div className="space-y-3">
                             <div className="flex justify-between">
                                 <span className="text-gray-400">Principal & Interest</span>
@@ -153,8 +153,8 @@ const MortgageCalculator = ({ price, onClose }) => {
                             )}
                             <div className="border-t border-gray-700 my-3"></div>
                             <div className="flex justify-between">
-                                <span className="text-[#D4AF37] font-semibold">Total Monthly Payment</span>
-                                <span className="text-[#D4AF37] font-semibold">${monthlyPayment.toFixed(2)}</span>
+                                <span className="text-[#D6AD60] font-semibold">Total Monthly Payment</span>
+                                <span className="text-[#D6AD60] font-semibold">${monthlyPayment.toFixed(2)}</span>
                             </div>
                         </div>
 

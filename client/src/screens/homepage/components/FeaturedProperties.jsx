@@ -245,14 +245,14 @@ const FeaturedProperties = () => {
                                     initial={{ width: 0 }}
                                     whileInView={{ width: 120 }}
                                     transition={{ duration: 0.8 }}
-                                    className="h-0.5 bg-[#122620]"
+                                    className="h-0.5 bg-[#D6AD60]"
                                 ></motion.span>
                                 <p className="text-[#122620]/80">Discover our exclusive collection of premium real estate</p>
                                 <motion.span
                                     initial={{ width: 0 }}
                                     whileInView={{ width: 120 }}
                                     transition={{ duration: 0.8 }}
-                                    className="h-0.5 bg-[#122620]"
+                                    className="h-0.5 bg-[#D6AD60]"
                                 ></motion.span>
                             </div>
                         </div>

@@ -81,7 +81,7 @@ const Hero = () => {
     const textIndex = currentIndex % textContent.length;
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-[#122620]">
+        <div className="relative h-[90vh] w-full overflow-hidden bg-[#122620]">
             {/* Carousel */}
             <div className="relative h-full">
                 {images.map((image, index) => (

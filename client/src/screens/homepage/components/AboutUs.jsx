@@ -180,44 +180,82 @@ const AboutUs = () => {
 
                 {/* Timeline */}
                 <div className="mt-20">
-                    <h3 className="text-2xl md:text-3xl font-source-serif text-[#122620] mb-12 text-center">
+                    <motion.h3
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-2xl md:text-3xl font-source-serif text-[#122620] mb-12 text-center"
+                    >
                         Our Journey
-                    </h3>
+                    </motion.h3>
                     <div className="relative">
                         {/* Timeline Line */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#D6AD60]/30"></div>
+                        <motion.div
+                            initial={{ height: 0 }}
+                            whileInView={{ height: "100%" }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1.5 }}
+                            className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-[#D6AD60]/30"
+                        ></motion.div>
 
                         {/* Timeline Items */}
                         {timelineData.map((item, index) => (
-                            <div
+                            <motion.div
                                 key={item.year}
-                                className={`relative mb-12 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                                    }`}
-                                style={{ transitionDelay: `${index * 200}ms` }}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: index * 0.2 }}
+                                className="relative mb-12"
                             >
                                 <div className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
                                     {/* Content */}
-                                    <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
+                                    <motion.div
+                                        initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
+                                        className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}
+                                    >
                                         <h4 className="text-xl font-source-serif text-[#D6AD60] mb-2">{item.year}</h4>
                                         <h5 className="text-lg font-montserrat font-semibold text-[#122620] mb-2">{item.title}</h5>
                                         <p className="text-[#122620]/80 font-montserrat">{item.description}</p>
-                                    </div>
+                                    </motion.div>
 
                                     {/* Timeline Dot */}
-                                    <div className="relative z-10">
+                                    <motion.div
+                                        initial={{ scale: 0 }}
+                                        whileInView={{ scale: 1 }}
+                                        viewport={{ once: true }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20,
+                                            delay: index * 0.2 + 0.4
+                                        }}
+                                        className="relative z-10"
+                                    >
                                         <div className="w-4 h-4 bg-[#D6AD60] rounded-full"></div>
-                                    </div>
+                                    </motion.div>
 
                                     {/* Image */}
-                                    <div className={`w-1/2 ${index % 2 === 0 ? 'pl-8' : 'pr-8'}`}>
-                                        <img
+                                    <motion.div
+                                        initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
+                                        className={`w-1/2 ${index % 2 === 0 ? 'pl-8' : 'pr-8'}`}
+                                    >
+                                        <motion.img
+                                            whileHover={{ scale: 1.05 }}
+                                            transition={{ duration: 0.3 }}
                                             src={item.image}
                                             alt={item.title}
                                             className="w-full h-48 object-cover rounded-lg shadow-md"
                                         />
-                                    </div>
+                                    </motion.div>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
