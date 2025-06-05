@@ -45,6 +45,13 @@ const MaterialCertifications = () => {
             certificate: "ISO 9001:2015",
             description: "Premium quality paints with superior finish and durability",
             verified: true
+        },
+        {
+            material: "Wood",
+            brand: "XYZ Wood",
+            certificate: "ISO 9001:2015",
+            description: "Premium quality wooden products with superior finish and durability",
+            verified: false
         }
     ];
 
