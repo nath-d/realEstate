@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Property {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    price       Float
+    featured    Boolean  @default(false)
+    type        String   @default("house") // villa, apartment, house, penthouse, etc.
+    status      String   @default("for sale") // for sale, for rent, sold, etc.
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Property Details
+    bedrooms   Int    @default(0)
+    bathrooms  Float  @default(0)
+    garage     Int    @default(0)
+    lotSize    String @default("0")
+    livingArea String @default("0")
+    yearBuilt  Int    @default(2024)
+
+    // Images
+    images Image[]
+
+    // Amenities
+    amenities Amenity[]
+
+    // Specifications
+    specifications PropertySpecification[]
+
+    // Location
+    location Location?
+
+    // Agent
+    agentId Int?
+    agent   Agent? @relation(fields: [agentId], references: [id])
+
+    // Similar Properties (self-referential many-to-many)
+    similarTo   Property[] @relation("SimilarProperties")
+    similarFrom Property[] @relation("SimilarProperties")
+}
+
+model Image {
+    id         Int      @id @default(autoincrement())
+    url        String
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id])
+    createdAt  DateTime @default(now())
+}
+
+model Amenity {
+    id         Int      @id @default(autoincrement())
+    name       String
+    category   String // interior, exterior
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id])
+}
+
+model PropertySpecification {
+    id         Int      @id @default(autoincrement())
+    category   String // Structure, External, Interior, etc.
+    details    String[] // Array of specification details
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id])
+}
+
+model Location {
+    id         Int      @id @default(autoincrement())
+    latitude   Float
+    longitude  Float
+    address    String
+    city       String
+    state      String
+    zipCode    String
+    propertyId Int      @unique
+    property   Property @relation(fields: [propertyId], references: [id])
+}
+
+model Agent {
+    id         Int        @id @default(autoincrement())
+    name       String
+    email      String     @unique
+    phone      String
+    image      String?
+    properties Property[]
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+}
