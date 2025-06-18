@@ -10,6 +10,15 @@ interface PropertySpecification {
     structure: string[];
     brickwork: string[];
     windows: string[];
+    externalFinish: string[];
+    interiorFinish: string[];
+    doors: string[];
+    flooring: string[];
+    kitchen: string[];
+    washroom: string[];
+    elevator: string[];
+    electricity: string[];
+    waterSupply: string[];
 }
 
 interface PropertyFormData {
@@ -59,7 +68,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 // Map specifications array to individual fields for the form
                 specification: initialData.specifications && initialData.specifications.length > 0
                     ? initialData.specifications[0]
-                    : { structure: [], brickwork: [], windows: [] }
+                    : { structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] }
             };
 
             form.setFieldsValue(formInitialValues);
@@ -91,7 +100,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
             const transformedData: PropertyFormData = {
                 ...values,
                 // Transform specification object back to specifications array
-                specifications: values.specification ? [values.specification] : [{ structure: [], brickwork: [], windows: [] }],
+                specifications: values.specification ? [values.specification] : [{ structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] }],
                 // Remove the temporary specification field
                 specification: undefined
             };
@@ -114,7 +123,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
             initialValues={{
                 featured: false,
                 images: [],
-                specification: { structure: [], brickwork: [], windows: [] },
+                specification: { structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] },
             }}
             className="p-6"
         >
@@ -282,6 +291,87 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     rules={[{ required: true, message: 'Please enter at least one window type' }]}
                                 >
                                     <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., UPVC, Aluminum" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "externalFinish"]}
+                                    label="External Finish"
+                                    rules={[{ required: true, message: 'Please enter at least one external finish' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Paint, Stone Cladding" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "interiorFinish"]}
+                                    label="Interior Finish"
+                                    rules={[{ required: true, message: 'Please enter at least one interior finish' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Wallpaper, Paint, Tiles" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "doors"]}
+                                    label="Doors"
+                                    rules={[{ required: true, message: 'Please enter at least one door type' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Wooden, Steel, Glass" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "flooring"]}
+                                    label="Flooring"
+                                    rules={[{ required: true, message: 'Please enter at least one flooring type' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Marble, Tiles, Wood" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "kitchen"]}
+                                    label="Kitchen"
+                                    rules={[{ required: true, message: 'Please enter at least one kitchen feature' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Modular, Granite Counter" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "washroom"]}
+                                    label="Washroom"
+                                    rules={[{ required: true, message: 'Please enter at least one washroom feature' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Modern Fittings, Tiles" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "elevator"]}
+                                    label="Elevator"
+                                    rules={[{ required: true, message: 'Please enter elevator details' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Passenger, Service, None" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "electricity"]}
+                                    label="Electricity"
+                                    rules={[{ required: true, message: 'Please enter electricity details' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., 3 Phase, Backup Power" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "waterSupply"]}
+                                    label="Water Supply"
+                                    rules={[{ required: true, message: 'Please enter water supply details' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., 24/7, Borewell, Municipal" />
                                 </Form.Item>
                             </Col>
                         </Row>

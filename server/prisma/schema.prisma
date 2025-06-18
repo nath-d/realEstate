@@ -51,14 +51,23 @@ model Property {
 }
 
 model PropertySpecification {
-    id         Int      @id @default(autoincrement())
-    structure  String[]
-    brickwork  String[]
-    windows    String[]
-    propertyId Int
-    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
+    id             Int      @id @default(autoincrement())
+    structure      String[]
+    brickwork      String[]
+    windows        String[]
+    externalFinish String[]
+    interiorFinish String[]
+    doors          String[]
+    flooring       String[]
+    kitchen        String[]
+    washroom       String[]
+    elevator       String[]
+    electricity    String[]
+    waterSupply    String[]
+    propertyId     Int
+    property       Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
 }
 
 model Image {

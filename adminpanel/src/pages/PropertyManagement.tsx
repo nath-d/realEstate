@@ -26,6 +26,15 @@ interface Property {
         structure: string[];
         brickwork: string[];
         windows: string[];
+        externalFinish: string[];
+        interiorFinish: string[];
+        doors: string[];
+        flooring: string[];
+        kitchen: string[];
+        washroom: string[];
+        elevator: string[];
+        electricity: string[];
+        waterSupply: string[];
     }>;
     location: {
         id: number;
@@ -113,7 +122,16 @@ const PropertyManagement: React.FC = () => {
                         create: (values.specifications || []).map((spec: any) => ({
                             structure: spec.structure || [],
                             brickwork: spec.brickwork || [],
-                            windows: spec.windows || []
+                            windows: spec.windows || [],
+                            externalFinish: spec.externalFinish || [],
+                            interiorFinish: spec.interiorFinish || [],
+                            doors: spec.doors || [],
+                            flooring: spec.flooring || [],
+                            kitchen: spec.kitchen || [],
+                            washroom: spec.washroom || [],
+                            elevator: spec.elevator || [],
+                            electricity: spec.electricity || [],
+                            waterSupply: spec.waterSupply || []
                         }))
                     },
                     location: {
@@ -163,7 +181,16 @@ const PropertyManagement: React.FC = () => {
                         create: (values.specifications || []).map((spec: any) => ({
                             structure: spec.structure || [],
                             brickwork: spec.brickwork || [],
-                            windows: spec.windows || []
+                            windows: spec.windows || [],
+                            externalFinish: spec.externalFinish || [],
+                            interiorFinish: spec.interiorFinish || [],
+                            doors: spec.doors || [],
+                            flooring: spec.flooring || [],
+                            kitchen: spec.kitchen || [],
+                            washroom: spec.washroom || [],
+                            elevator: spec.elevator || [],
+                            electricity: spec.electricity || [],
+                            waterSupply: spec.waterSupply || []
                         }))
                     },
                     location: {
@@ -244,9 +271,18 @@ const PropertyManagement: React.FC = () => {
                 ? property.specifications.map(spec => ({
                     structure: spec.structure || [],
                     brickwork: spec.brickwork || [],
-                    windows: spec.windows || []
+                    windows: spec.windows || [],
+                    externalFinish: spec.externalFinish || [],
+                    interiorFinish: spec.interiorFinish || [],
+                    doors: spec.doors || [],
+                    flooring: spec.flooring || [],
+                    kitchen: spec.kitchen || [],
+                    washroom: spec.washroom || [],
+                    elevator: spec.elevator || [],
+                    electricity: spec.electricity || [],
+                    waterSupply: spec.waterSupply || []
                 }))
-                : [{ structure: [], brickwork: [], windows: [] }],
+                : [{ structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] }],
             location: property.location ? {
                 latitude: property.location.latitude,
                 longitude: property.location.longitude,
@@ -466,7 +502,7 @@ const PropertyManagement: React.FC = () => {
                 />
             ) : (
                 <Card className="shadow-lg border-0 rounded-xl overflow-hidden">
-                    <div className="p-6 bg-white">
+                    <div className="p-2 bg-white">
                         <Table
                             columns={columns}
                             dataSource={properties}
@@ -651,6 +687,132 @@ const PropertyManagement: React.FC = () => {
                                                         ))
                                                     ) : (
                                                         <Text type="secondary">No window specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">External Finish:</Text>
+                                                <div className="mt-1">
+                                                    {spec.externalFinish && spec.externalFinish.length > 0 ? (
+                                                        spec.externalFinish.map((item, i) => (
+                                                            <Tag key={i} color="purple" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No external finish specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Interior Finish:</Text>
+                                                <div className="mt-1">
+                                                    {spec.interiorFinish && spec.interiorFinish.length > 0 ? (
+                                                        spec.interiorFinish.map((item, i) => (
+                                                            <Tag key={i} color="cyan" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No interior finish specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Doors:</Text>
+                                                <div className="mt-1">
+                                                    {spec.doors && spec.doors.length > 0 ? (
+                                                        spec.doors.map((item, i) => (
+                                                            <Tag key={i} color="magenta" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No door specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Flooring:</Text>
+                                                <div className="mt-1">
+                                                    {spec.flooring && spec.flooring.length > 0 ? (
+                                                        spec.flooring.map((item, i) => (
+                                                            <Tag key={i} color="lime" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No flooring specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Kitchen:</Text>
+                                                <div className="mt-1">
+                                                    {spec.kitchen && spec.kitchen.length > 0 ? (
+                                                        spec.kitchen.map((item, i) => (
+                                                            <Tag key={i} color="volcano" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No kitchen specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Washroom:</Text>
+                                                <div className="mt-1">
+                                                    {spec.washroom && spec.washroom.length > 0 ? (
+                                                        spec.washroom.map((item, i) => (
+                                                            <Tag key={i} color="geekblue" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No washroom specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Elevator:</Text>
+                                                <div className="mt-1">
+                                                    {spec.elevator && spec.elevator.length > 0 ? (
+                                                        spec.elevator.map((item, i) => (
+                                                            <Tag key={i} color="gold" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No elevator specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Electricity:</Text>
+                                                <div className="mt-1">
+                                                    {spec.electricity && spec.electricity.length > 0 ? (
+                                                        spec.electricity.map((item, i) => (
+                                                            <Tag key={i} color="red" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No electricity specifications</Text>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Text strong className="text-gray-700">Water Supply:</Text>
+                                                <div className="mt-1">
+                                                    {spec.waterSupply && spec.waterSupply.length > 0 ? (
+                                                        spec.waterSupply.map((item, i) => (
+                                                            <Tag key={i} color="processing" className="mb-1 mr-1">
+                                                                {item}
+                                                            </Tag>
+                                                        ))
+                                                    ) : (
+                                                        <Text type="secondary">No water supply specifications</Text>
                                                     )}
                                                 </div>
                                             </div>

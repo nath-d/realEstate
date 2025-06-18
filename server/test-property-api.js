@@ -12,6 +12,22 @@ const testProperty = {
     livingArea: "2500 sq ft",
     yearBuilt: 2020,
     featured: true,
+    specifications: {
+        create: [{
+            structure: ["RCC Frame", "Steel Frame"],
+            brickwork: ["Red Brick", "Fly Ash"],
+            windows: ["UPVC", "Aluminum"],
+            externalFinish: ["Paint", "Stone Cladding"],
+            interiorFinish: ["Wallpaper", "Paint", "Tiles"],
+            doors: ["Wooden", "Steel"],
+            flooring: ["Marble", "Tiles"],
+            kitchen: ["Modular", "Granite Counter"],
+            washroom: ["Modern Fittings", "Tiles"],
+            elevator: ["Passenger", "Service"],
+            electricity: ["3 Phase", "Backup Power"],
+            waterSupply: ["24/7", "Municipal"]
+        }]
+    },
     images: {
         create: [
             { url: "https://example.com/test-image1.jpg" },
