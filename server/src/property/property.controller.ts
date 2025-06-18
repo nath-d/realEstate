@@ -8,12 +8,17 @@ export class PropertyController {
 
     @Post()
     create(@Body() createPropertyData: any) {
-        // Map 'specification' object to 'specifications' relation
+        // Handle specifications data - support both 'specification' and 'specifications' fields
         if (createPropertyData.specification) {
             createPropertyData.specifications = {
                 create: [createPropertyData.specification]
             };
             delete createPropertyData.specification;
+        } else if (createPropertyData.specifications && Array.isArray(createPropertyData.specifications)) {
+            // If specifications is already an array, convert it to Prisma relation format
+            createPropertyData.specifications = {
+                create: createPropertyData.specifications
+            };
         }
         return this.propertyService.create(createPropertyData as Prisma.PropertyCreateInput);
     }
@@ -38,13 +43,19 @@ export class PropertyController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updatePropertyData: any,
     ) {
-        // Map 'specification' object to 'specifications' relation (replace all)
+        // Handle specifications data - support both 'specification' and 'specifications' fields
         if (updatePropertyData.specification) {
             updatePropertyData.specifications = {
                 deleteMany: {},
                 create: [updatePropertyData.specification]
             };
             delete updatePropertyData.specification;
+        } else if (updatePropertyData.specifications && Array.isArray(updatePropertyData.specifications)) {
+            // If specifications is already an array, convert it to Prisma relation format
+            updatePropertyData.specifications = {
+                deleteMany: {},
+                create: updatePropertyData.specifications
+            };
         }
         return this.propertyService.update(id, updatePropertyData as Prisma.PropertyUpdateInput);
     }

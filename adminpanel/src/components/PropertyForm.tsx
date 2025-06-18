@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, Divider, Row, Col } from 'antd';
 import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -50,17 +50,54 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Set initial values when initialData changes
+    useEffect(() => {
+        if (initialData) {
+            // Transform specifications data for form fields
+            const formInitialValues = {
+                ...initialData,
+                // Map specifications array to individual fields for the form
+                specification: initialData.specifications && initialData.specifications.length > 0
+                    ? initialData.specifications[0]
+                    : { structure: [], brickwork: [], windows: [] }
+            };
+
+            form.setFieldsValue(formInitialValues);
+
+            // Set file list for images
+            if (initialData.images && initialData.images.length > 0) {
+                const files: UploadFile[] = initialData.images.map((url, index) => ({
+                    uid: `-${index}`,
+                    name: `image-${index}`,
+                    status: 'done' as const,
+                    url: url,
+                }));
+                setFileList(files);
+            }
+        }
+    }, [initialData, form]);
+
     const handleImageUpload = (info: any) => {
         setFileList(info.fileList);
         const imageUrls = info.fileList.map((file: any) => file.url || '').filter(Boolean);
         form.setFieldValue('images', imageUrls);
     };
 
-    const onFinish = async (values: PropertyFormData) => {
+    const onFinish = async (values: any) => {
         try {
             setIsSubmitting(true);
-            console.log('Submitting form data:', values);
-            await onSubmit(values);
+
+            // Transform form data to match PropertyFormData structure
+            const transformedData: PropertyFormData = {
+                ...values,
+                // Transform specification object back to specifications array
+                specifications: values.specification ? [values.specification] : [{ structure: [], brickwork: [], windows: [] }],
+                // Remove the temporary specification field
+                specification: undefined
+            };
+
+            console.log('Submitting form data:', transformedData);
+            await onSubmit(transformedData);
             setFileList([]);
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -77,8 +114,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
             initialValues={{
                 featured: false,
                 images: [],
-                specifications: [{ structure: [], brickwork: [], windows: [] }],
-                ...initialData,
+                specification: { structure: [], brickwork: [], windows: [] },
             }}
             className="p-6"
         >
