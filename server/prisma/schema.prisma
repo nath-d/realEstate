@@ -35,14 +35,11 @@ model Property {
     // Images
     images Image[]
 
-    // Amenities
-    amenities Amenity[]
-
-    // Specifications
-    specifications PropertySpecification[]
-
     // Location
     location Location?
+
+    // Property Specifications (one-to-many)
+    specifications PropertySpecification[]
 
     // Agent
     agentId Int?
@@ -53,28 +50,23 @@ model Property {
     similarFrom Property[] @relation("SimilarProperties")
 }
 
+model PropertySpecification {
+    id         Int      @id @default(autoincrement())
+    structure  String[]
+    brickwork  String[]
+    windows    String[]
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
 model Image {
     id         Int      @id @default(autoincrement())
     url        String
     propertyId Int
-    property   Property @relation(fields: [propertyId], references: [id])
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
     createdAt  DateTime @default(now())
-}
-
-model Amenity {
-    id         Int      @id @default(autoincrement())
-    name       String
-    category   String // interior, exterior
-    propertyId Int
-    property   Property @relation(fields: [propertyId], references: [id])
-}
-
-model PropertySpecification {
-    id         Int      @id @default(autoincrement())
-    category   String // Structure, External, Interior, etc.
-    details    String[] // Array of specification details
-    propertyId Int
-    property   Property @relation(fields: [propertyId], references: [id])
 }
 
 model Location {
@@ -86,7 +78,7 @@ model Location {
     state      String
     zipCode    String
     propertyId Int      @unique
-    property   Property @relation(fields: [propertyId], references: [id])
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model Agent {

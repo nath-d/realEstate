@@ -19,8 +19,6 @@ interface Property {
     yearBuilt: number;
     featured: boolean;
     images: Array<{ id: number; url: string }>;
-    amenities: Array<{ id: number; name: string; category: 'interior' | 'exterior' }>;
-    specifications: Array<{ id: number; category: string; details: string[] }>;
     location: {
         id: number;
         address: string;
@@ -79,7 +77,8 @@ const PropertyManagement: React.FC = () => {
         try {
             console.log('Form submission started with values:', values);
 
-            const formattedData = {
+            // Base property data
+            const baseData = {
                 ...values,
                 price: Number(values.price) || 0,
                 bedrooms: Number(values.bedrooms) || 0,
@@ -88,35 +87,38 @@ const PropertyManagement: React.FC = () => {
                 lotSize: String(values.lotSize || ''),
                 livingArea: String(values.livingArea || ''),
                 yearBuilt: Number(values.yearBuilt) || 0,
-                images: (values.images || []).map((url: string) => ({ url })),
-                amenities: (values.amenities || []).map((amenity: { name: string; category: 'interior' | 'exterior' }) => ({
-                    name: amenity.name,
-                    category: amenity.category
-                })),
-                specifications: (values.specifications || []).map((spec: { category: string; details: string[] }) => ({
-                    category: spec.category,
-                    details: spec.details || []
-                })),
-                location: {
-                    latitude: Number(values.location?.latitude) || 0,
-                    longitude: Number(values.location?.longitude) || 0,
-                    address: values.location?.address || '',
-                    city: values.location?.city || '',
-                    state: values.location?.state || '',
-                    zipCode: values.location?.zipCode || ''
-                }
             };
 
-            console.log('Formatted data:', formattedData);
-
             if (editingProperty) {
+                // For updates, we need to replace existing relations
                 console.log('Updating property with ID:', editingProperty.id);
+                const updateData = {
+                    ...baseData,
+                    images: {
+                        deleteMany: {},
+                        create: (values.images || []).map((url: string) => ({ url }))
+                    },
+                    location: {
+                        delete: true,
+                        create: {
+                            latitude: Number(values.location?.latitude) || 0,
+                            longitude: Number(values.location?.longitude) || 0,
+                            address: values.location?.address || '',
+                            city: values.location?.city || '',
+                            state: values.location?.state || '',
+                            zipCode: values.location?.zipCode || ''
+                        }
+                    }
+                };
+
+                console.log('Update formatted data:', updateData);
+
                 const response = await fetch(`http://localhost:3000/properties/${editingProperty.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formattedData),
+                    body: JSON.stringify(updateData),
                 });
 
                 if (!response.ok) {
@@ -132,13 +134,33 @@ const PropertyManagement: React.FC = () => {
                 setEditingProperty(null);
                 setIsModalVisible(false);
             } else {
+                // For creates, we just use create
                 console.log('Creating new property');
+                const createData = {
+                    ...baseData,
+                    images: {
+                        create: (values.images || []).map((url: string) => ({ url }))
+                    },
+                    location: {
+                        create: {
+                            latitude: Number(values.location?.latitude) || 0,
+                            longitude: Number(values.location?.longitude) || 0,
+                            address: values.location?.address || '',
+                            city: values.location?.city || '',
+                            state: values.location?.state || '',
+                            zipCode: values.location?.zipCode || ''
+                        }
+                    }
+                };
+
+                console.log('Create formatted data:', createData);
+
                 const response = await fetch('http://localhost:3000/properties', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formattedData),
+                    body: JSON.stringify(createData),
                 });
 
                 if (!response.ok) {
@@ -174,14 +196,6 @@ const PropertyManagement: React.FC = () => {
             yearBuilt: property.yearBuilt,
             featured: property.featured,
             images: property.images.map(img => img.url),
-            amenities: property.amenities.map(amenity => ({
-                name: amenity.name,
-                category: amenity.category,
-            })),
-            specifications: property.specifications.map(spec => ({
-                category: spec.category,
-                details: spec.details,
-            })),
             location: {
                 address: property.location.address,
                 city: property.location.city,
@@ -219,14 +233,6 @@ const PropertyManagement: React.FC = () => {
         return {
             ...property,
             images: property.images.map(img => img.url),
-            amenities: property.amenities.map(amenity => ({
-                name: amenity.name,
-                category: amenity.category as 'interior' | 'exterior'
-            })),
-            specifications: property.specifications.map(spec => ({
-                category: spec.category,
-                details: spec.details
-            })),
             location: property.location ? {
                 latitude: property.location.latitude,
                 longitude: property.location.longitude,

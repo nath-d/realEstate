@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, Divider, Row, Col } from 'antd';
-import { PlusOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-interface Amenity {
-    name: string;
-    category: 'interior' | 'exterior';
-}
-
-interface Specification {
-    category: string;
-    details: string[];
+interface PropertySpecification {
+    structure: string[];
+    brickwork: string[];
+    windows: string[];
 }
 
 interface PropertyFormData {
@@ -30,8 +26,7 @@ interface PropertyFormData {
     livingArea: string;
     yearBuilt: number;
     images: string[];
-    amenities: Amenity[];
-    specifications: Specification[];
+    specifications: PropertySpecification[];
     location: {
         latitude: number;
         longitude: number;
@@ -53,8 +48,6 @@ export type { PropertyFormData };
 export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialData }) => {
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
-    const [amenities, setAmenities] = useState<Amenity[]>(initialData?.amenities || []);
-    const [specifications, setSpecifications] = useState<Specification[]>(initialData?.specifications || []);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleImageUpload = (info: any) => {
@@ -63,50 +56,12 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
         form.setFieldValue('images', imageUrls);
     };
 
-    const addAmenity = () => {
-        const newAmenity: Amenity = { name: '', category: 'interior' };
-        const newAmenities = [...amenities, newAmenity];
-        setAmenities(newAmenities);
-        form.setFieldValue('amenities', newAmenities);
-    };
-
-    const addSpecification = () => {
-        const newSpec: Specification = { category: '', details: [] };
-        const newSpecs = [...specifications, newSpec];
-        setSpecifications(newSpecs);
-        form.setFieldValue('specifications', newSpecs);
-    };
-
-    const handleAmenityChange = (index: number, field: keyof Amenity, value: string) => {
-        const newAmenities = [...amenities];
-        const currentAmenity = newAmenities[index] || { name: '', category: 'interior' as const };
-        newAmenities[index] = {
-            name: field === 'name' ? value : currentAmenity.name,
-            category: field === 'category' ? (value as 'interior' | 'exterior') : currentAmenity.category,
-        };
-        setAmenities(newAmenities);
-        form.setFieldValue('amenities', newAmenities);
-    };
-
-    const handleSpecificationChange = (index: number, field: keyof Specification, value: string | string[]) => {
-        const newSpecs = [...specifications];
-        const currentSpec = newSpecs[index] || { category: '', details: [] };
-        newSpecs[index] = {
-            category: field === 'category' ? (value as string) : currentSpec.category,
-            details: field === 'details' ? (value as string[]) : currentSpec.details,
-        };
-        setSpecifications(newSpecs);
-        form.setFieldValue('specifications', newSpecs);
-    };
-
     const onFinish = async (values: PropertyFormData) => {
         try {
             setIsSubmitting(true);
             console.log('Submitting form data:', values);
             await onSubmit(values);
             setFileList([]);
-            setAmenities([]);
-            setSpecifications([]);
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
@@ -121,9 +76,8 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
             onFinish={onFinish}
             initialValues={{
                 featured: false,
-                amenities: [],
-                specifications: [],
                 images: [],
+                specifications: [{ structure: [], brickwork: [], windows: [] }],
                 ...initialData,
             }}
             className="p-6"
@@ -221,7 +175,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     label="Bathrooms"
                                     rules={[{ required: true, message: 'Please enter the number of bathrooms' }]}
                                 >
-                                    <InputNumber className="w-full" min={0} />
+                                    <InputNumber className="w-full" min={0} step={0.5} />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
@@ -239,7 +193,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     label="Lot Size"
                                     rules={[{ required: true, message: 'Please enter the lot size' }]}
                                 >
-                                    <Input />
+                                    <Input placeholder="e.g., 5000 sq ft" />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
@@ -248,7 +202,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     label="Living Area"
                                     rules={[{ required: true, message: 'Please enter the living area' }]}
                                 >
-                                    <Input />
+                                    <Input placeholder="e.g., 2500 sq ft" />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
@@ -261,6 +215,60 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 </Form.Item>
                             </Col>
                         </Row>
+                    </Card>
+                </Col>
+
+                <Col span={24}>
+                    <Card title="Property Specifications (Tags)" bordered={false}>
+                        <Row gutter={24}>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "structure"]}
+                                    label="Structure"
+                                    rules={[{ required: true, message: 'Please enter at least one structure' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., RCC Frame, Steel Frame" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "brickwork"]}
+                                    label="Brickwork"
+                                    rules={[{ required: true, message: 'Please enter at least one brickwork' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., Red Brick, Fly Ash" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    name={["specification", "windows"]}
+                                    label="Windows"
+                                    rules={[{ required: true, message: 'Please enter at least one window type' }]}
+                                >
+                                    <Select mode="tags" style={{ width: '100%' }} placeholder="e.g., UPVC, Aluminum" />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Card>
+                </Col>
+
+                <Col span={24}>
+                    <Card title="Images" bordered={false}>
+                        <Form.Item name="images">
+                            <Upload
+                                listType="picture-card"
+                                fileList={fileList}
+                                onChange={handleImageUpload}
+                                beforeUpload={() => false}
+                            >
+                                {fileList.length >= 8 ? null : (
+                                    <div>
+                                        <UploadOutlined />
+                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                    </div>
+                                )}
+                            </Upload>
+                        </Form.Item>
                     </Card>
                 </Col>
 
@@ -297,8 +305,8 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             <Col span={12}>
                                 <Form.Item
                                     name={['location', 'zipCode']}
-                                    label="ZIP Code"
-                                    rules={[{ required: true, message: 'Please enter the ZIP code' }]}
+                                    label="Zip Code"
+                                    rules={[{ required: true, message: 'Please enter the zip code' }]}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -309,7 +317,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     label="Latitude"
                                     rules={[{ required: true, message: 'Please enter the latitude' }]}
                                 >
-                                    <InputNumber className="w-full" />
+                                    <InputNumber className="w-full" step={0.000001} />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -318,114 +326,20 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     label="Longitude"
                                     rules={[{ required: true, message: 'Please enter the longitude' }]}
                                 >
-                                    <InputNumber className="w-full" />
+                                    <InputNumber className="w-full" step={0.000001} />
                                 </Form.Item>
                             </Col>
                         </Row>
                     </Card>
                 </Col>
-
-                <Col span={24}>
-                    <Card title="Images" bordered={false}>
-                        <Form.Item name="images">
-                            <Upload
-                                listType="picture-card"
-                                fileList={fileList}
-                                onChange={handleImageUpload}
-                                beforeUpload={() => false}
-                            >
-                                <div>
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload</div>
-                                </div>
-                            </Upload>
-                        </Form.Item>
-                    </Card>
-                </Col>
-
-                <Col span={24}>
-                    <Card title="Amenities" bordered={false}>
-                        {amenities.map((amenity, index) => (
-                            <Row key={index} gutter={16} className="mb-4">
-                                <Col span={10}>
-                                    <Input
-                                        placeholder="Amenity name"
-                                        value={amenity.name}
-                                        onChange={(e) => handleAmenityChange(index, 'name', e.target.value)}
-                                    />
-                                </Col>
-                                <Col span={10}>
-                                    <Select
-                                        value={amenity.category}
-                                        onChange={(value) => handleAmenityChange(index, 'category', value)}
-                                    >
-                                        <Option value="interior">Interior</Option>
-                                        <Option value="exterior">Exterior</Option>
-                                    </Select>
-                                </Col>
-                                <Col span={4}>
-                                    <Button
-                                        type="text"
-                                        danger
-                                        icon={<DeleteOutlined />}
-                                        onClick={() => {
-                                            const newAmenities = amenities.filter((_, i) => i !== index);
-                                            setAmenities(newAmenities);
-                                            form.setFieldValue('amenities', newAmenities);
-                                        }}
-                                    />
-                                </Col>
-                            </Row>
-                        ))}
-                        <Button type="dashed" onClick={addAmenity} block icon={<PlusOutlined />}>
-                            Add Amenity
-                        </Button>
-                    </Card>
-                </Col>
-
-                <Col span={24}>
-                    <Card title="Specifications" bordered={false}>
-                        {specifications.map((spec, index) => (
-                            <Row key={index} gutter={16} className="mb-4">
-                                <Col span={10}>
-                                    <Input
-                                        placeholder="Category"
-                                        value={spec.category}
-                                        onChange={(e) => handleSpecificationChange(index, 'category', e.target.value)}
-                                    />
-                                </Col>
-                                <Col span={10}>
-                                    <Select
-                                        mode="tags"
-                                        placeholder="Details"
-                                        value={spec.details}
-                                        onChange={(value) => handleSpecificationChange(index, 'details', value)}
-                                    />
-                                </Col>
-                                <Col span={4}>
-                                    <Button
-                                        type="text"
-                                        danger
-                                        icon={<DeleteOutlined />}
-                                        onClick={() => {
-                                            const newSpecs = specifications.filter((_, i) => i !== index);
-                                            setSpecifications(newSpecs);
-                                            form.setFieldValue('specifications', newSpecs);
-                                        }}
-                                    />
-                                </Col>
-                            </Row>
-                        ))}
-                        <Button type="dashed" onClick={addSpecification} block icon={<PlusOutlined />}>
-                            Add Specification
-                        </Button>
-                    </Card>
-                </Col>
             </Row>
 
-            <div className="mt-6 flex justify-end">
+            <div className="flex justify-end space-x-4 mt-6">
+                <Button onClick={() => form.resetFields()}>
+                    Reset
+                </Button>
                 <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                    {initialData ? 'Update Property' : 'Create Property'}
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
                 </Button>
             </div>
         </Form>

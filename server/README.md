@@ -21,6 +21,184 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# Real Estate Server
+
+A NestJS server for managing real estate properties using Prisma as the ORM.
+
+## Features
+
+- Property management (CRUD operations)
+- Image management
+- Location tracking
+- Agent relationships
+- Similar property recommendations
+
+## Architecture
+
+This server uses **Prisma exclusively** for data modeling and validation. No DTOs are used - all data validation and typing is handled by Prisma's generated types.
+
+### Key Components
+
+- **Prisma Schema**: Defines all data models and relationships
+- **Property Service**: Handles business logic using Prisma types
+- **Property Controller**: REST API endpoints using Prisma input types
+
+## API Endpoints
+
+### Properties
+
+- `POST /properties` - Create a new property
+- `GET /properties` - Get all properties
+- `GET /properties/:id` - Get a specific property
+- `GET /properties/:id/similar` - Get similar properties
+- `PUT /properties/:id` - Update a property
+- `DELETE /properties/:id` - Delete a property
+
+## Data Types
+
+All API endpoints use Prisma-generated types:
+
+- `Prisma.PropertyCreateInput` - For creating properties
+- `Prisma.PropertyUpdateInput` - For updating properties
+- `Property` - The complete property model with relations
+
+## Example Usage
+
+### Creating a Property
+
+**Important**: When creating related data (images, location), you must use Prisma's relation syntax with `create` objects.
+
+```typescript
+// POST /properties
+{
+  "title": "Modern Villa",
+  "description": "Beautiful modern villa with ocean view",
+  "price": 750000,
+  "type": "villa",
+  "status": "for sale",
+  "bedrooms": 4,
+  "bathrooms": 3.5,
+  "garage": 2,
+  "lotSize": "5000 sq ft",
+  "livingArea": "3500 sq ft",
+  "yearBuilt": 2020,
+  "featured": true,
+  "images": {
+    "create": [
+      { "url": "https://example.com/image1.jpg" },
+      { "url": "https://example.com/image2.jpg" }
+    ]
+  },
+  "location": {
+    "create": {
+      "latitude": 34.0522,
+      "longitude": -118.2437,
+      "address": "123 Main St",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90210"
+    }
+  }
+}
+```
+
+### Common Mistakes to Avoid
+
+❌ **Incorrect** - Direct field assignment:
+```json
+{
+  "location": {
+    "latitude": 34.0522,
+    "longitude": -118.2437,
+    "address": "123 Main St"
+  }
+}
+```
+
+✅ **Correct** - Using `create` object:
+```json
+{
+  "location": {
+    "create": {
+      "latitude": 34.0522,
+      "longitude": -118.2437,
+      "address": "123 Main St"
+    }
+  }
+}
+```
+
+### Updating a Property
+
+```typescript
+// PUT /properties/1
+{
+  "price": 800000,
+  "status": "sold",
+  "images": {
+    "deleteMany": {},
+    "create": [
+      { "url": "https://example.com/new-image.jpg" }
+    ]
+  }
+}
+```
+
+### Property Types and Status Values
+
+**Property Types:**
+- `"villa"`
+- `"apartment"`
+- `"house"`
+- `"penthouse"`
+
+**Property Status:**
+- `"for sale"`
+- `"for rent"`
+- `"sold"`
+
+## Setup
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Set up your database and update the DATABASE_URL in `.env`
+
+3. Run migrations:
+   ```bash
+   npm run prisma:migrate
+   ```
+
+4. Generate Prisma client:
+   ```bash
+   npm run prisma:generate
+   ```
+
+5. Start the development server:
+   ```bash
+   npm run start:dev
+   ```
+
+## Benefits of Prisma-Only Approach
+
+- **Type Safety**: Full TypeScript support with generated types
+- **Validation**: Automatic validation through Prisma schema
+- **Simplicity**: No need for separate DTO classes
+- **Consistency**: Single source of truth for data models
+- **Performance**: Optimized queries and relationships
+
+## Troubleshooting
+
+### Common Errors
+
+1. **"Unknown argument" errors**: Make sure you're using the correct Prisma relation syntax with `create`, `connect`, or `connectOrCreate` objects.
+
+2. **Validation errors**: Check that all required fields are provided and data types match the schema.
+
+3. **Relation errors**: Ensure related data is properly structured using Prisma's relation syntax.
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
