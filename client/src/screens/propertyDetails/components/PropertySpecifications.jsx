@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaClipboardList, FaBuilding, FaPaintBrush, FaDoorOpen, FaWindowMaximize, FaLayerGroup, FaUtensils, FaBath, FaBolt, FaWater } from 'react-icons/fa';
 import { FaElevator } from 'react-icons/fa6';
+
 const SpecificationCard = ({ icon: Icon, title, details, index }) => {
     return (
         <motion.div
@@ -26,22 +27,33 @@ const SpecificationCard = ({ icon: Icon, title, details, index }) => {
 
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 gap-4">
-                        {details.map((detail, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="col-span-2 md:col-span-1"
-                            >
+                        {details && details.length > 0 ? (
+                            details.map((detail, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.1 }}
+                                    className="col-span-2 md:col-span-1"
+                                >
+                                    <div className="h-full p-4 rounded-lg bg-[#122620] hover:bg-[#E5BE90]/10 transition-colors duration-300">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[#D6AD60] mt-2 flex-shrink-0"></div>
+                                            <p className="text-gray-300 text-sm leading-relaxed">{detail}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))
+                        ) : (
+                            <div className="col-span-2">
                                 <div className="h-full p-4 rounded-lg bg-[#122620] hover:bg-[#E5BE90]/10 transition-colors duration-300">
                                     <div className="flex items-start gap-3">
                                         <div className="w-1.5 h-1.5 rounded-full bg-[#D6AD60] mt-2 flex-shrink-0"></div>
-                                        <p className="text-gray-300 text-sm leading-relaxed">{detail}</p>
+                                        <p className="text-gray-300 text-sm leading-relaxed">No specifications available</p>
                                     </div>
                                 </div>
-                            </motion.div>
-                        ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -49,109 +61,64 @@ const SpecificationCard = ({ icon: Icon, title, details, index }) => {
     );
 };
 
-const PropertySpecifications = () => {
-    const specifications = [
+const PropertySpecifications = ({ specifications }) => {
+    // Default specifications if none provided
+    const defaultSpecifications = [
         {
             icon: FaBuilding,
             title: "Structure & Brickwork",
-            details: [
-                "Premium RCC Frame Structure",
-                "High-grade Cement (OPC 53 Grade)",
-                "First-class Brickwork with 1:6 Mortar Ratio",
-                "Reinforced Concrete Columns and Beams"
-            ]
+            details: specifications?.structure || ["No structure specifications available"]
         },
         {
             icon: FaPaintBrush,
             title: "External & Interior Finish",
             details: [
-                "Premium Weatherproof Exterior Paint",
-                "High-quality Interior Putty Finish",
-                "Textured Wall Finishes",
-                "Anti-bacterial Interior Paint"
-            ]
+                ...(specifications?.externalFinish || []),
+                ...(specifications?.interiorFinish || [])
+            ].length > 0 ? [
+                ...(specifications?.externalFinish || []),
+                ...(specifications?.interiorFinish || [])
+            ] : ["No finish specifications available"]
         },
         {
             icon: FaDoorOpen,
             title: "Doors and Hardware",
-            details: [
-                "Premium Brand Main Door",
-                "High-quality Internal Doors",
-                "Stainless Steel Hardware",
-                "Security Locks and Fittings"
-            ]
+            details: specifications?.doors || ["No door specifications available"]
         },
         {
             icon: FaWindowMaximize,
             title: "Windows",
-            details: [
-                "Double-glazed UPVC Windows",
-                "Premium Quality Glass",
-                "Weather-resistant Frames",
-                "Safety Grills and Mosquito Nets"
-            ]
+            details: specifications?.windows || ["No window specifications available"]
         },
         {
             icon: FaLayerGroup,
             title: "Flooring",
-            details: [
-                "Premium Vitrified Tiles",
-                "Anti-skid Bathroom Tiles",
-                "Marble/Granite Flooring in Common Areas",
-                "High-quality Tile Adhesives"
-            ]
+            details: specifications?.flooring || ["No flooring specifications available"]
         },
         {
             icon: FaUtensils,
             title: "Kitchen Counter",
-            details: [
-                "Premium Granite/Quartz Countertops",
-                "Stainless Steel Sink",
-                "High-quality Plumbing Fixtures",
-                "Modular Kitchen Units"
-            ]
+            details: specifications?.kitchen || ["No kitchen specifications available"]
         },
         {
             icon: FaBath,
             title: "Washroom",
-            details: [
-                "Premium Sanitaryware Brands",
-                "Anti-skid Floor Tiles",
-                "High-quality CP Fittings",
-                "Modern Bathroom Fixtures"
-            ]
+            details: specifications?.washroom || ["No washroom specifications available"]
         },
         {
             icon: FaElevator,
             title: "Elevator",
-            details: [
-                "Premium Brand Elevator",
-                "Safety Features and Sensors",
-                "Emergency Backup System",
-                "Regular Maintenance Schedule"
-            ]
+            details: specifications?.elevator || ["No elevator specifications available"]
         },
         {
             icon: FaBolt,
             title: "Electricity",
-            details: [
-                "Premium Electrical Points",
-                "Modular Switches",
-                "LED Lighting Fixtures",
-                "Power Backup System"
-            ]
+            details: specifications?.electricity || ["No electricity specifications available"]
         },
         {
             icon: FaWater,
             title: "Water Supply",
-            details: [
-                "Municipal Water Connection",
-                "24/7 Water Supply",
-                "Water Treatment System",
-                "Rainwater Harvesting",
-                "Rainwater Harvesting",
-
-            ]
+            details: specifications?.waterSupply || ["No water supply specifications available"]
         }
     ];
 
@@ -190,7 +157,7 @@ const PropertySpecifications = () => {
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16">
-                    {specifications.map((spec, index) => (
+                    {defaultSpecifications.map((spec, index) => (
                         <SpecificationCard
                             key={index}
                             icon={spec.icon}

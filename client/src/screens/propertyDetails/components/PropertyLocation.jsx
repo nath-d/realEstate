@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaPlane, FaBus, FaSchool, FaShoppingCart, FaUtensils } from 'react-icons/fa';
 import { BsShieldCheck } from 'react-icons/bs';
 
-const PropertyLocation = () => {
+const PropertyLocation = ({ location }) => {
     const locationInfo = {
         nearbyAmenities: [
             { icon: FaShoppingCart, text: 'Shopping Center - 10 min drive' },
@@ -87,6 +87,14 @@ const PropertyLocation = () => {
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <p className="text-gray-400">Interactive map coming soon</p>
                             </div>
+                            {location && (
+                                <div className="absolute bottom-4 left-4 bg-[#122620]/90 p-4 rounded-lg">
+                                    <h4 className="text-white font-semibold mb-2">Property Location</h4>
+                                    <p className="text-gray-300 text-sm">{location.address}</p>
+                                    <p className="text-gray-300 text-sm">{location.city}, {location.state} {location.zipCode}</p>
+                                    <p className="text-gray-300 text-sm">Coordinates: {location.latitude}, {location.longitude}</p>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
 
@@ -98,6 +106,24 @@ const PropertyLocation = () => {
                         viewport={{ once: true }}
                         className="space-y-8"
                     >
+                        {/* Property Address */}
+                        {location && (
+                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
+                                <h3 className="text-2xl font-bold mb-6 text-white">Property Address</h3>
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                            <FaMapMarkerAlt className="text-[#E5BE90]" />
+                                        </div>
+                                        <div>
+                                            <p className="text-gray-300">{location.address}</p>
+                                            <p className="text-gray-300">{location.city}, {location.state} {location.zipCode}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
                         {/* Nearby Amenities */}
                         <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
                             <h3 className="text-2xl font-bold mb-6 text-white">Nearby Amenities</h3>

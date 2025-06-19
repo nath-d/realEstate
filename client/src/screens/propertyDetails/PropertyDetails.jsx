@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { FaHeart, FaShare, FaCalculator, FaCalendarAlt, FaMapMarkerAlt, FaHistory, FaBuilding, FaBed, FaBath, FaRuler, FaCar, FaTree, FaSun, FaPhone } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import PropertyHero from './components/PropertyHero';
@@ -19,13 +19,41 @@ import MaterialCertifications from './components/MaterialCertifications';
 import PropertySpecifications from './components/PropertySpecifications';
 import Navbar from '../homepage/components/Navbar';
 import Footer from '../homepage/components/Footer';
+import { propertyService } from '../../services/propertyService';
 
 const PropertyDetails = () => {
-    const { id } = useParams();
+    const [searchParams] = useSearchParams();
+    const propertyId = searchParams.get('id');
+    const [property, setProperty] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false);
     const [showMortgageCalculator, setShowMortgageCalculator] = useState(false);
     const [showScheduleVisit, setShowScheduleVisit] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
+
+    useEffect(() => {
+        const fetchProperty = async () => {
+            if (!propertyId) {
+                setError('No property ID provided');
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const data = await propertyService.getPropertyById(propertyId);
+                setProperty(data);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching property:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProperty();
+    }, [propertyId]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -35,20 +63,57 @@ const PropertyDetails = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // This would typically come from an API call using the ID
-    const property = {
-        id: 1,
-        title: "Luxurious Beachfront Villa",
-        price: "$5,750,000",
-        address: "123 Ocean View Drive, Malibu, CA 90265",
-        description: "Experience the epitome of luxury living in this stunning beachfront villa. This architectural masterpiece seamlessly blends indoor and outdoor living with floor-to-ceiling windows, offering breathtaking ocean views from every room.",
+    const handleShare = () => {
+        if (navigator.share && property) {
+            navigator.share({
+                title: property.title,
+                text: `Check out this amazing property: ${property.title}`,
+                url: window.location.href
+            });
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-[#122620] text-white flex items-center justify-center">
+                <div className="text-center">
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#D6AD60] mb-4"></div>
+                    <p>Loading property details...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !property) {
+        return (
+            <div className="min-h-screen bg-[#122620] text-white flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-red-400 mb-4">Error: {error || 'Property not found'}</p>
+                    <button
+                        onClick={() => window.history.back()}
+                        className="bg-[#D6AD60] text-[#122620] px-6 py-2 rounded hover:bg-[#C19A4F] transition-colors"
+                    >
+                        Go Back
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Map database fields to component expectations
+    const propertyData = {
+        id: property.id,
+        title: property.title,
+        price: property.price ? `$${property.price.toLocaleString()}` : 'Price on request',
+        address: property.location ? `${property.location.address}, ${property.location.city}, ${property.location.state} ${property.location.zipCode}` : 'Address not available',
+        description: property.description,
         details: {
-            bedrooms: 6,
-            bathrooms: 7.5,
-            garage: 3,
-            lotSize: "0.75 acres",
-            livingArea: "8,500 sq ft",
-            yearBuilt: 2022,
+            bedrooms: property.bedrooms || 0,
+            bathrooms: property.bathrooms || 0,
+            garage: property.garage || 0,
+            lotSize: property.lotSize || 'N/A',
+            livingArea: property.livingArea || 'N/A',
+            yearBuilt: property.yearBuilt || 'N/A',
         },
         features: [
             "Private Beach Access",
@@ -62,14 +127,9 @@ const PropertyDetails = () => {
             "Security System",
             "Landscaped Gardens"
         ],
-        images: [
-            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
-            "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
-        ],
+        images: property.images && property.images.length > 0
+            ? property.images.map(img => img.url)
+            : ['https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg'],
         amenities: {
             interior: [
                 "Custom Italian Kitchen",
@@ -99,16 +159,14 @@ const PropertyDetails = () => {
             image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
         },
         virtualTour: "https://example.com/virtual-tour",
-        similarProperties: [
-            // Similar properties data would go here
-        ],
+        similarProperties: [],
         history: {
             listedDate: "2024-01-15",
             lastSoldDate: "2020-06-20",
             lastSoldPrice: "$4,200,000",
             priceHistory: [
                 { date: "2020-06-20", price: "$4,200,000" },
-                { date: "2024-01-15", price: "$5,750,000" }
+                { date: "2024-01-15", price: property.price ? `$${property.price.toLocaleString()}` : "Price on request" }
             ]
         },
         neighborhood: {
@@ -126,17 +184,9 @@ const PropertyDetails = () => {
                 "Restaurants (0.3 miles)",
                 "Parks (0.4 miles)"
             ]
-        }
-    };
-
-    const handleShare = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: property.title,
-                text: `Check out this amazing property: ${property.title}`,
-                url: window.location.href
-            });
-        }
+        },
+        specifications: property.specifications && property.specifications.length > 0 ? property.specifications[0] : null,
+        materialCertifications: property.materialCertifications || []
     };
 
     return (
@@ -154,14 +204,14 @@ const PropertyDetails = () => {
                 <div className="container mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col">
-                            <h1 className="text-2xl font-bold tracking-tight">{property.title}</h1>
+                            <h1 className="text-2xl font-bold tracking-tight">{propertyData.title}</h1>
                             <div className="flex items-center space-x-2 text-[#D6AD60]">
                                 <FaMapMarkerAlt className="text-sm" />
-                                <span className="text-sm opacity-90">{property.address}</span>
+                                <span className="text-sm opacity-90">{propertyData.address}</span>
                             </div>
                         </div>
                         <div className="flex items-center space-x-6">
-                            <span className="text-3xl font-bold text-[#D6AD60]">{property.price}</span>
+                            <span className="text-3xl font-bold text-[#D6AD60]">{propertyData.price}</span>
                             <div className="flex items-center space-x-3">
                                 <motion.button
                                     initial={{ scale: 0 }}
@@ -203,8 +253,8 @@ const PropertyDetails = () => {
             {/* Main Content */}
             <div div className="pt-24" >
 
-                <PropertyHero property={property} />
-                <PropertyStats details={property.details} />
+                <PropertyHero property={propertyData} />
+                <PropertyStats details={propertyData.details} />
 
                 {/* Quick Stats Bar */}
                 {/* <div className="bg-[#1A332C] py-6 border-t border-b border-[#D4AF37]/20">
@@ -284,16 +334,16 @@ const PropertyDetails = () => {
                 {/* Rest of the content sections */}
                 <div className="container mx-auto px-6 space-y-16">
                     {/* <VirtualTour url={property.virtualTour} /> */}
-                    <PropertyDescription description={property.description} />
-                    <PropertyGallery images={property.images} />
-                    <PropertySpecifications />
-                    <MaterialCertifications />
+                    <PropertyDescription description={propertyData.description} />
+                    <PropertyGallery images={propertyData.images} />
+                    <PropertySpecifications specifications={propertyData.specifications} />
+                    <MaterialCertifications certifications={propertyData.materialCertifications} />
                     {/* <PropertyAmenities amenities={property.amenities} /> */}
                     {/* <PropertyHistory history={property.history} /> */}
                     {/* <NeighborhoodInsights neighborhood={property.neighborhood} /> */}
-                    <PropertyLocation />
-                    <SimilarProperties properties={property.similarProperties} />
-                    <PropertyAgent agent={property.agent} />
+                    <PropertyLocation location={property.location} />
+                    <SimilarProperties properties={propertyData.similarProperties} />
+                    <PropertyAgent agent={propertyData.agent} />
                     <Footer />
                 </div>
             </div >
@@ -310,14 +360,11 @@ const PropertyDetails = () => {
                 <FaCalculator className="text-3xl" />
             </motion.button >
 
-
-
-
             {/* Modals */}
             {
                 showMortgageCalculator && (
                     <MortgageCalculator
-                        price={property.price}
+                        price={propertyData.price}
                         onClose={() => setShowMortgageCalculator(false)}
                     />
                 )
@@ -326,7 +373,7 @@ const PropertyDetails = () => {
             {
                 showScheduleVisit && (
                     <ScheduleVisit
-                        property={property}
+                        property={propertyData}
                         onClose={() => setShowScheduleVisit(false)}
                     />
                 )

@@ -3,12 +3,20 @@ import { Link } from 'react-router-dom';
 import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaRupeeSign, FaStar } from 'react-icons/fa';
 
 const FeaturedPropertyCard = ({ property, handleImageError }) => {
+    // Map database fields to component expectations
+    const imageUrl = property.images && property.images.length > 0 ? property.images[0].url : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg';
+    const price = property.price ? `$${property.price.toLocaleString()}` : 'Price on request';
+    const location = property.location ? `${property.location.city}, ${property.location.state}` : 'Location not specified';
+    const bedrooms = property.bedrooms || 0;
+    const bathrooms = property.bathrooms || 0;
+    const livingArea = property.livingArea || 'N/A';
+
     return (
         <div className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-500">
             <div className="grid grid-cols-1 lg:grid-cols-2">
                 <div className="relative h-80 lg:h-auto overflow-hidden">
                     <img
-                        src={property.image}
+                        src={imageUrl}
                         alt={property.title}
                         onError={handleImageError}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -24,14 +32,14 @@ const FeaturedPropertyCard = ({ property, handleImageError }) => {
                     <div className="absolute top-4 right-4 bg-[#D6AD60] text-[#122620] px-4 py-2 rounded-sm transform translate-y-0 group-hover:-translate-y-1 transition-transform duration-500 shadow-md">
                         <div className="flex items-center font-montserrat font-bold">
                             <FaRupeeSign className="text-sm" />
-                            <span>{property.price}</span>
+                            <span>{price}</span>
                         </div>
                     </div>
 
                     <div className="absolute bottom-4 left-4 text-white">
                         <div className="flex items-center font-montserrat text-sm">
                             <FaMapMarkerAlt className="mr-2 text-[#D6AD60]" />
-                            <span>{property.location}</span>
+                            <span>{location}</span>
                         </div>
                     </div>
                 </div>
@@ -43,30 +51,30 @@ const FeaturedPropertyCard = ({ property, handleImageError }) => {
                         </h3>
 
                         <p className="text-[#D6AD60]/80 font-montserrat mb-6">
-                            Experience luxury living at its finest with this exceptional property featuring stunning views and premium amenities.
+                            {property.description || 'Experience luxury living at its finest with this exceptional property featuring stunning views and premium amenities.'}
                         </p>
 
                         <div className="grid grid-cols-3 gap-4 mb-6">
                             <div className="flex flex-col items-center p-3 bg-[#122620]/50 rounded-sm hover:bg-[#122620]/70 transition-colors duration-300">
                                 <FaBed className="text-[#D6AD60] text-xl mb-1" />
-                                <span className="text-[#D6AD60]/90 font-montserrat text-sm">{property.specs.beds}</span>
+                                <span className="text-[#D6AD60]/90 font-montserrat text-sm">{bedrooms}</span>
                                 <span className="text-[#D6AD60]/60 font-montserrat text-xs">Bedrooms</span>
                             </div>
                             <div className="flex flex-col items-center p-3 bg-[#122620]/50 rounded-sm hover:bg-[#122620]/70 transition-colors duration-300">
                                 <FaBath className="text-[#D6AD60] text-xl mb-1" />
-                                <span className="text-[#D6AD60]/90 font-montserrat text-sm">{property.specs.baths}</span>
+                                <span className="text-[#D6AD60]/90 font-montserrat text-sm">{bathrooms}</span>
                                 <span className="text-[#D6AD60]/60 font-montserrat text-xs">Bathrooms</span>
                             </div>
                             <div className="flex flex-col items-center p-3 bg-[#122620]/50 rounded-sm hover:bg-[#122620]/70 transition-colors duration-300">
                                 <FaRulerCombined className="text-[#D6AD60] text-xl mb-1" />
-                                <span className="text-[#D6AD60]/90 font-montserrat text-sm">{property.specs.sqft.toLocaleString()}</span>
+                                <span className="text-[#D6AD60]/90 font-montserrat text-sm">{livingArea}</span>
                                 <span className="text-[#D6AD60]/60 font-montserrat text-xs">Sq.Ft</span>
                             </div>
                         </div>
                     </div>
 
                     <Link
-                        to={`/properties/${property.id}`}
+                        to={`/propertyDet?id=${property.id}`}
                         className="inline-block w-full text-center bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-3 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
                     >
                         View Details

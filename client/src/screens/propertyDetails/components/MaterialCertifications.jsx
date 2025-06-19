@@ -2,8 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCertificate, FaCheckCircle } from 'react-icons/fa';
 
-const MaterialCertifications = () => {
-    const certifications = [
+const MaterialCertifications = ({ certifications = [] }) => {
+    // Default certifications if none provided
+    const defaultCertifications = [
         {
             material: "Cement",
             brand: "UltraTech Cement",
@@ -45,15 +46,11 @@ const MaterialCertifications = () => {
             certificate: "ISO 9001:2015",
             description: "Premium quality paints with superior finish and durability",
             verified: true
-        },
-        {
-            material: "Wood",
-            brand: "XYZ Wood",
-            certificate: "ISO 9001:2015",
-            description: "Premium quality wooden products with superior finish and durability",
-            verified: false
         }
     ];
+
+    // Use provided certifications if available, otherwise use defaults
+    const displayCertifications = certifications.length > 0 ? certifications : defaultCertifications;
 
     const container = {
         hidden: { opacity: 0 },
@@ -104,38 +101,44 @@ const MaterialCertifications = () => {
                     </div>
                 </motion.div>
 
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    {certifications.map((cert, index) => (
-                        <motion.div
-                            key={index}
-                            variants={item}
-                            className="bg-[#122620]/50 backdrop-blur-sm rounded-2xl p-6 border border-[#E5BE90]/20 hover:border-[#E5BE90]/40 transition-all duration-300"
-                        >
-                            <div className="flex items-start justify-between mb-4">
-                                <div>
-                                    <h3 className="text-2xl font-bold text-white mb-2">{cert.material}</h3>
-                                    <p className="text-[#E5BE90] font-medium">{cert.brand}</p>
+                {displayCertifications.length === 0 ? (
+                    <div className="text-center py-12">
+                        <p className="text-gray-400 text-lg">No material certifications available for this property.</p>
+                    </div>
+                ) : (
+                    <motion.div
+                        variants={container}
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true }}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        {displayCertifications.map((cert, index) => (
+                            <motion.div
+                                key={index}
+                                variants={item}
+                                className="bg-[#122620]/50 backdrop-blur-sm rounded-2xl p-6 border border-[#E5BE90]/20 hover:border-[#E5BE90]/40 transition-all duration-300"
+                            >
+                                <div className="flex items-start justify-between mb-4">
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-white mb-2">{cert.material}</h3>
+                                        <p className="text-[#E5BE90] font-medium">{cert.brand}</p>
+                                    </div>
+                                    {cert.verified && (
+                                        <FaCheckCircle className="text-[#E5BE90] text-xl" />
+                                    )}
                                 </div>
-                                {cert.verified && (
-                                    <FaCheckCircle className="text-[#E5BE90] text-xl" />
-                                )}
-                            </div>
-                            <div className="space-y-3">
-                                <div className="bg-[#E5BE90]/10 rounded-lg p-3">
-                                    <p className="text-sm text-gray-400">Certificate</p>
-                                    <p className="text-white font-medium">{cert.certificate}</p>
+                                <div className="space-y-3">
+                                    <div className="bg-[#E5BE90]/10 rounded-lg p-3">
+                                        <p className="text-sm text-gray-400">Certificate</p>
+                                        <p className="text-white font-medium">{cert.certificate}</p>
+                                    </div>
+                                    <p className="text-gray-400 text-sm">{cert.description}</p>
                                 </div>
-                                <p className="text-gray-400 text-sm">{cert.description}</p>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
             </div>
         </section>
     );

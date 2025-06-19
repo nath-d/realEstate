@@ -5,99 +5,7 @@ import { Search, MapPin, Home, DollarSign, ArrowDownUp, Filter, Star, Waves, Mou
 import { motion } from 'framer-motion'
 import PropertyCard from './components/PropertyListingCard'
 import Footer from '../homepage/components/Footer'
-
-const properties = [
-    {
-        id: 1,
-        title: "Luxury Villa with Ocean View",
-        image: "/propertyOne.jpg",
-        price: "2,50,00,000",
-        location: "Beverly Hills, CA",
-        featured: true,
-        type: "villa",
-        specs: { beds: 5, baths: 3, sqft: 3500 }
-    },
-    {
-        id: 2,
-        title: "Modern Downtown Apartment",
-        image: "/propertyOne.jpg",
-        price: "1,20,00,000",
-        location: "Downtown, NY",
-        featured: false,
-        type: "apartment",
-        specs: { beds: 2, baths: 2, sqft: 1200 }
-    },
-    {
-        id: 3,
-        title: "Beachfront Paradise House",
-        image: "/propertyTwo.jpg",
-        price: "3,75,00,000",
-        location: "Miami Beach, FL",
-        featured: true,
-        type: "house",
-        specs: { beds: 3, baths: 4, sqft: 4200 }
-    },
-    {
-        id: 4,
-        title: "Alpine Mountain View Cabin",
-        image: "/propertyThree.jpg",
-        price: "1,85,00,000",
-        location: "Aspen, CO",
-        featured: false,
-        type: "cabin",
-        specs: { beds: 4, baths: 2, sqft: 1800 }
-    },
-    {
-        id: 5,
-        title: "Skyline Penthouse Suite",
-        image: "/propertyFour.jpg",
-        price: "4,20,00,000",
-        location: "Chicago, IL",
-        featured: true,
-        type: "penthouse",
-        specs: { beds: 5, baths: 3, sqft: 2800 }
-    },
-    {
-        id: 6,
-        title: "Luxury Bayview Condo",
-        image: "/propertyTwo.jpg",
-        price: "3,90,00,000",
-        location: "San Francisco, CA",
-        featured: false,
-        type: "condo",
-        specs: { beds: 6, baths: 2, sqft: 2200 }
-    },
-    {
-        id: 7,
-        title: "Exclusive Waterfront Estate",
-        image: "/propertyThree.jpg",
-        price: "5,50,00,000",
-        location: "Seattle, WA",
-        featured: true,
-        type: "estate",
-        specs: { beds: 7, baths: 5, sqft: 4800 }
-    },
-    {
-        id: 8,
-        title: "Premium Development Land",
-        image: "/propertyThree.jpg",
-        price: "1,00,00,000",
-        location: "Seattle, WA",
-        featured: true,
-        type: "land",
-        specs: { beds: 1, baths: 1, sqft: 2800 }
-    },
-    {
-        id: 9,
-        title: "Premium Development Land 24",
-        image: "/propertyTwo.jpg",
-        price: "1,70,00,000",
-        location: "Kolkata, WB",
-        featured: false,
-        type: "land",
-        specs: { beds: 3, baths: 3, sqft: 2800 }
-    }
-]
+import { propertyService } from '../../services/propertyService'
 
 const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -153,6 +61,8 @@ const PropertyListings = () => {
 
     const [listing, setListing] = useState([])
     const [filteredListings, setFilteredListings] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
     const [showFilters, setShowFilters] = useState(false)
     const [activeType, setActiveType] = useState('all')
     const [activeCardId, setActiveCardId] = useState(null)
@@ -179,8 +89,21 @@ const PropertyListings = () => {
     ]
 
     useEffect(() => {
-        setListing(properties)
-        setFilteredListings(properties)
+        const fetchProperties = async () => {
+            try {
+                setLoading(true);
+                const data = await propertyService.getAllProperties();
+                setListing(data);
+                setFilteredListings(data);
+            } catch (err) {
+                setError(err.message);
+                console.error('Error fetching properties:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProperties();
     }, [])
 
     useEffect(() => {
@@ -514,7 +437,7 @@ const PropertyListings = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        {filteredListings.length} {activeType !== 'all' ? activeType.charAt(0).toUpperCase() + activeType.slice(1) : 'Premium'} Properties
+                        {loading ? 'Loading...' : `${filteredListings.length} ${activeType !== 'all' ? activeType.charAt(0).toUpperCase() + activeType.slice(1) : 'Premium'} Properties`}
                     </motion.h2>
 
                     <motion.div
@@ -528,7 +451,26 @@ const PropertyListings = () => {
                     </motion.div>
                 </div>
 
-                {filteredListings.length > 0 ? (
+                {loading ? (
+                    <div className="flex justify-center items-center py-20">
+                        <div className="text-center">
+                            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#D6AD60] mb-4"></div>
+                            <p className="text-[#D6AD60]">Loading properties...</p>
+                        </div>
+                    </div>
+                ) : error ? (
+                    <div className="flex justify-center items-center py-20">
+                        <div className="text-center">
+                            <p className="text-red-400 mb-4">Error: {error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="bg-[#D6AD60] text-[#122620] px-6 py-2 rounded hover:bg-[#C19A4F] transition-colors"
+                            >
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
+                ) : filteredListings.length > 0 ? (
                     <motion.div
                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 relative"
                         initial={{ opacity: 0 }}
