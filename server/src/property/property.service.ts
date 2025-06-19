@@ -13,6 +13,7 @@ export class PropertyService {
                 images: true,
                 location: true,
                 specifications: true,
+                materialCertifications: true,
                 agent: true,
             },
         });
@@ -24,6 +25,7 @@ export class PropertyService {
                 images: true,
                 location: true,
                 specifications: true,
+                materialCertifications: true,
                 agent: true,
             },
         });
@@ -36,6 +38,7 @@ export class PropertyService {
                 images: true,
                 location: true,
                 specifications: true,
+                materialCertifications: true,
                 agent: true,
             },
         });
@@ -67,6 +70,7 @@ export class PropertyService {
                 images: true,
                 location: true,
                 specifications: true,
+                materialCertifications: true,
                 agent: true,
             },
             take: 3,
@@ -77,7 +81,7 @@ export class PropertyService {
         // First, get the existing property to check if it exists
         const existingProperty = await this.prisma.property.findUnique({
             where: { id },
-            include: { location: true, specifications: true }
+            include: { location: true, specifications: true, materialCertifications: true }
         });
 
         if (!existingProperty) {
@@ -92,6 +96,7 @@ export class PropertyService {
                     images: true,
                     location: true,
                     specifications: true,
+                    materialCertifications: true,
                     agent: true
                 }
             });
@@ -110,6 +115,7 @@ export class PropertyService {
                 images: true,
                 location: true,
                 specifications: true,
+                materialCertifications: true,
                 agent: true,
             },
         });

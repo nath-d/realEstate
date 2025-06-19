@@ -41,6 +41,9 @@ model Property {
     // Property Specifications (one-to-many)
     specifications PropertySpecification[]
 
+    // Material Certifications (one-to-many)
+    materialCertifications MaterialCertification[]
+
     // Agent
     agentId Int?
     agent   Agent? @relation(fields: [agentId], references: [id])
@@ -99,4 +102,17 @@ model Agent {
     properties Property[]
     createdAt  DateTime   @default(now())
     updatedAt  DateTime   @updatedAt
+}
+
+model MaterialCertification {
+    id          Int      @id @default(autoincrement())
+    material    String
+    brand       String
+    certificate String
+    description String   @db.Text
+    verified    Boolean  @default(false)
+    propertyId  Int
+    property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, message, Modal, Alert, Spin, Table, Image, Tag, Space, Drawer, Descriptions, Divider, Typography } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, HomeOutlined, DollarOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { PiBedDuotone, PiBathtubDuotone, PiCarDuotone, PiHouseDuotone, PiBuildingDuotone, PiCalendarBlankDuotone } from "react-icons/pi";
+
 import { PropertyForm } from '../components/PropertyForm';
 import type { PropertyFormData } from '../components/PropertyForm';
 
@@ -46,6 +48,14 @@ interface Property {
         longitude: number;
     };
     agentId?: number;
+    materialCertifications: Array<{
+        id: number;
+        material: string;
+        brand: string;
+        certificate: string;
+        description: string;
+        verified: boolean;
+    }>;
 }
 
 const PropertyManagement: React.FC = () => {
@@ -134,6 +144,16 @@ const PropertyManagement: React.FC = () => {
                             waterSupply: spec.waterSupply || []
                         }))
                     },
+                    materialCertifications: {
+                        deleteMany: {},
+                        create: (values.materialCertifications || []).map((cert: any) => ({
+                            material: cert.material,
+                            brand: cert.brand,
+                            certificate: cert.certificate,
+                            description: cert.description,
+                            verified: !!cert.verified
+                        }))
+                    },
                     location: {
                         delete: true,
                         create: {
@@ -191,6 +211,15 @@ const PropertyManagement: React.FC = () => {
                             elevator: spec.elevator || [],
                             electricity: spec.electricity || [],
                             waterSupply: spec.waterSupply || []
+                        }))
+                    },
+                    materialCertifications: {
+                        create: (values.materialCertifications || []).map((cert: any) => ({
+                            material: cert.material,
+                            brand: cert.brand,
+                            certificate: cert.certificate,
+                            description: cert.description,
+                            verified: !!cert.verified
                         }))
                     },
                     location: {
@@ -283,6 +312,7 @@ const PropertyManagement: React.FC = () => {
                     waterSupply: spec.waterSupply || []
                 }))
                 : [{ structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] }],
+            materialCertifications: property.materialCertifications || [],
             location: property.location ? {
                 latitude: property.location.latitude,
                 longitude: property.location.longitude,
@@ -381,28 +411,28 @@ const PropertyManagement: React.FC = () => {
                 <div className="space-y-2 py-2">
                     <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600 flex items-center">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                            <PiBedDuotone className="w-6 h-6 mr-2" />
                             Beds:
                         </span>
                         <span className="font-semibold text-gray-800">{record.bedrooms}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600 flex items-center">
-                            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            <PiBathtubDuotone className="w-6 h-6 mr-2" />
                             Baths:
                         </span>
                         <span className="font-semibold text-gray-800">{record.bathrooms}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600 flex items-center">
-                            <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                            <PiCarDuotone className="w-6 h-6 mr-2" />
                             Garage:
                         </span>
                         <span className="font-semibold text-gray-800">{record.garage}</span>
                     </div>
                     <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600 flex items-center">
-                            <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                            <PiCalendarBlankDuotone className="w-6 h-6 mr-2" />
                             Year:
                         </span>
                         <span className="font-semibold text-gray-800">{record.yearBuilt}</span>
@@ -547,17 +577,25 @@ const PropertyManagement: React.FC = () => {
                 }
                 open={isModalVisible}
                 onCancel={() => {
+                    console.log('Modal onCancel called');
                     setIsModalVisible(false);
+                    setEditingProperty(null);
+                }}
+                afterClose={() => {
+                    console.log('Modal afterClose called');
                     setEditingProperty(null);
                 }}
                 footer={null}
                 width={1000}
-                className="modern-modal"
+                destroyOnClose={true}
+                maskClosable={false}
             >
-                <PropertyForm
-                    onSubmit={handleFormSubmit}
-                    initialData={editingProperty ? formatPropertyForForm(editingProperty) : undefined}
-                />
+                <div className="p-4">
+                    <PropertyForm
+                        onSubmit={handleFormSubmit}
+                        initialData={editingProperty ? formatPropertyForForm(editingProperty) : undefined}
+                    />
+                </div>
             </Modal>
 
             <Drawer
@@ -819,6 +857,28 @@ const PropertyManagement: React.FC = () => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+
+                        <Divider />
+
+                        {/* Material Certifications */}
+                        {viewingProperty && viewingProperty.materialCertifications && viewingProperty.materialCertifications.length > 0 && (
+                            <div>
+                                <Title level={4}>Material Certifications</Title>
+                                <Table
+                                    dataSource={viewingProperty.materialCertifications.map((cert, idx) => ({ ...cert, key: cert.id || idx }))}
+                                    columns={[
+                                        { title: 'Material', dataIndex: 'material', key: 'material' },
+                                        { title: 'Brand', dataIndex: 'brand', key: 'brand' },
+                                        { title: 'Certificate', dataIndex: 'certificate', key: 'certificate' },
+                                        { title: 'Description', dataIndex: 'description', key: 'description' },
+                                        { title: 'Verified', dataIndex: 'verified', key: 'verified', render: (v: boolean) => v ? <Tag color="green">Yes</Tag> : <Tag>No</Tag> },
+                                    ]}
+                                    pagination={false}
+                                    size="small"
+                                    bordered
+                                />
                             </div>
                         )}
 

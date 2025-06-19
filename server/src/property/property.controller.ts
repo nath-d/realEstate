@@ -20,6 +20,14 @@ export class PropertyController {
                 create: createPropertyData.specifications
             };
         }
+
+        // Handle materialCertifications data
+        if (createPropertyData.materialCertifications && Array.isArray(createPropertyData.materialCertifications)) {
+            createPropertyData.materialCertifications = {
+                create: createPropertyData.materialCertifications
+            };
+        }
+
         return this.propertyService.create(createPropertyData as Prisma.PropertyCreateInput);
     }
 
@@ -57,6 +65,15 @@ export class PropertyController {
                 create: updatePropertyData.specifications
             };
         }
+
+        // Handle materialCertifications data
+        if (updatePropertyData.materialCertifications && Array.isArray(updatePropertyData.materialCertifications)) {
+            updatePropertyData.materialCertifications = {
+                deleteMany: {},
+                create: updatePropertyData.materialCertifications
+            };
+        }
+
         return this.propertyService.update(id, updatePropertyData as Prisma.PropertyUpdateInput);
     }
 
