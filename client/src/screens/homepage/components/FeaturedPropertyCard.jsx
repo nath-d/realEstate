@@ -9,7 +9,7 @@ const FeaturedPropertyCard = ({ property, handleImageError }) => {
 
     // Use Cloudinary service to get optimized image URL
     const imageUrl = cloudinaryService.isCloudinaryUrl(originalImageUrl)
-        ? cloudinaryService.getHighQualityUrl(originalImageUrl, 600, 400)
+        ? cloudinaryService.getLowCreditThumbnailUrl(originalImageUrl, 600, 400)
         : originalImageUrl;
 
     const price = property.price ? `$${property.price.toLocaleString()}` : 'Price on request';

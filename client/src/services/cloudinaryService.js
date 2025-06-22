@@ -83,7 +83,30 @@ export const cloudinaryService = {
      * @returns {string} Thumbnail URL
      */
     getThumbnailUrl(url, width = 300, height = 200) {
-        return this.getOptimizedUrl(url, { width, height, crop: 'fill' });
+        return this.getOptimizedUrl(url, {
+            width,
+            height,
+            crop: 'fill',
+            quality: '60', // Low quality for thumbnails to save credits
+            format: 'auto'
+        });
+    },
+
+    /**
+     * Get an ultra-low credit thumbnail URL (for lists and grids)
+     * @param {string} url - The original Cloudinary URL
+     * @param {number} width - Thumbnail width (default: 200)
+     * @param {number} height - Thumbnail height (default: 150)
+     * @returns {string} Ultra-low credit thumbnail URL
+     */
+    getLowCreditThumbnailUrl(url, width = 200, height = 150) {
+        return this.getOptimizedUrl(url, {
+            width,
+            height,
+            crop: 'fill',
+            quality: '50', // Very low quality for maximum credit savings
+            format: 'auto'
+        });
     },
 
     /**
@@ -98,7 +121,7 @@ export const cloudinaryService = {
             width,
             height,
             crop: 'fill',
-            quality: 'auto',
+            quality: '70',
             format: 'auto'
         });
     },
@@ -115,7 +138,7 @@ export const cloudinaryService = {
             width,
             height,
             crop: 'fill',
-            quality: '90',
+            quality: '80',
             format: 'auto'
         });
     },
@@ -144,6 +167,35 @@ export const cloudinaryService = {
      */
     isCloudinaryUrl(url) {
         return url && url.includes('cloudinary.com');
+    },
+
+    /**
+     * Check if optimization should be applied (for credit management)
+     * @param {string} url - The URL to check
+     * @returns {boolean} True if optimization should be applied
+     */
+    shouldOptimize(url) {
+        // Only optimize Cloudinary URLs
+        if (!this.isCloudinaryUrl(url)) {
+            return false;
+        }
+
+        // You can add additional logic here to control optimization
+        // For example, only optimize during development or based on user preferences
+        return true;
+    },
+
+    /**
+     * Get an optimized URL only if optimization should be applied
+     * @param {string} url - The original URL
+     * @param {Object} options - Optimization options
+     * @returns {string} Optimized URL or original URL
+     */
+    getOptimizedUrlIfNeeded(url, options = {}) {
+        if (!this.shouldOptimize(url)) {
+            return url;
+        }
+        return this.getOptimizedUrl(url, options);
     },
 
     /**

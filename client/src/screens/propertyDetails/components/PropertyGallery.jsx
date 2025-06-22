@@ -58,11 +58,11 @@ const PropertyGallery = ({ images }) => {
         // Different optimization for different positions
         let optimizedUrl;
         if (index === 0) {
-            // Main image - high quality, larger size
-            optimizedUrl = cloudinaryService.getHighQualityUrl(imageUrl, 800, 600);
+            // Main image - medium quality, larger size
+            optimizedUrl = cloudinaryService.getResponsiveUrl(imageUrl, 800, 600);
         } else {
-            // Gallery images - optimized for grid
-            optimizedUrl = cloudinaryService.getResponsiveUrl(imageUrl, 400, 300);
+            // Gallery images - low credit usage for grid
+            optimizedUrl = cloudinaryService.getLowCreditThumbnailUrl(imageUrl, 400, 300);
         }
 
         console.log(`Optimized URL for image ${index}:`, {
@@ -77,7 +77,7 @@ const PropertyGallery = ({ images }) => {
         if (!cloudinaryService.isCloudinaryUrl(imageUrl)) {
             return imageUrl;
         }
-        // High quality for lightbox
+        // Medium quality for lightbox to save credits
         return cloudinaryService.getHighQualityUrl(imageUrl, 1200, 800);
     };
 

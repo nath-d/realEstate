@@ -59,10 +59,8 @@ export class CloudinaryService {
                 {
                     folder: 'real-estate',
                     resource_type: 'auto',
-                    transformation: [
-                        { width: 1200, height: 800, crop: 'fill', quality: 'auto' },
-                        { fetch_format: 'auto' }
-                    ]
+                    // Remove transformations to save credits - upload original image
+                    // Transformations will be applied on-demand when displaying
                 },
                 (error, result) => {
                     if (error) return reject(error);
