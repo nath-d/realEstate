@@ -1,10 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaRupeeSign, FaStar } from 'react-icons/fa';
+import { cloudinaryService } from '../../../services/cloudinaryService';
 
 const PropertyCard = ({ property, handleImageError }) => {
     // Map database fields to component expectations
-    const imageUrl = property.images && property.images.length > 0 ? property.images[0].url : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg';
+    const originalImageUrl = property.images && property.images.length > 0 ? property.images[0].url : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg';
+
+    // Use Cloudinary service to get optimized image URL
+    const imageUrl = cloudinaryService.isCloudinaryUrl(originalImageUrl)
+        ? cloudinaryService.getResponsiveUrl(originalImageUrl, 400, 320)
+        : originalImageUrl;
+
     const price = property.price ? `$${property.price.toLocaleString()}` : 'Price on request';
     const location = property.location ? `${property.location.city}, ${property.location.state}` : 'Location not specified';
     const bedrooms = property.bedrooms || 0;

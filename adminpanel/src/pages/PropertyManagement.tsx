@@ -105,6 +105,11 @@ const PropertyManagement: React.FC = () => {
     const handleFormSubmit = async (values: PropertyFormData) => {
         try {
             console.log('Form submission started with values:', values);
+            console.log('Images array from form:', values.images);
+
+            // Ensure images is always an array
+            const imagesArray = Array.isArray(values.images) ? values.images : [];
+            console.log('Processed images array:', imagesArray);
 
             // Base property data
             const baseData = {
@@ -125,7 +130,7 @@ const PropertyManagement: React.FC = () => {
                     ...baseData,
                     images: {
                         deleteMany: {},
-                        create: (values.images || []).map((url: string) => ({ url }))
+                        create: (imagesArray || []).map((url: string) => ({ url }))
                     },
                     specifications: {
                         deleteMany: {},
@@ -195,7 +200,7 @@ const PropertyManagement: React.FC = () => {
                 const createData = {
                     ...baseData,
                     images: {
-                        create: (values.images || []).map((url: string) => ({ url }))
+                        create: (imagesArray || []).map((url: string) => ({ url }))
                     },
                     specifications: {
                         create: (values.specifications || []).map((spec: any) => ({
@@ -235,6 +240,7 @@ const PropertyManagement: React.FC = () => {
                 };
 
                 console.log('Create formatted data:', createData);
+                console.log('Images to create:', createData.images.create);
 
                 const response = await fetch('http://localhost:3000/properties', {
                     method: 'POST',

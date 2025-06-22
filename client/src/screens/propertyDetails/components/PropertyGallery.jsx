@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaChevronLeft, FaChevronRight, FaCamera } from 'react-icons/fa';
+import { cloudinaryService } from '../../../services/cloudinaryService';
 import '../styles/fonts.css';
 
 const PropertyGallery = ({ images }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+
+    // Debug logging
+    console.log('PropertyGallery received images:', images);
+    console.log('Images type:', typeof images);
+    console.log('Images length:', images ? images.length : 0);
 
     const openLightbox = (index) => {
         setSelectedImage(images[index]);
@@ -43,8 +49,40 @@ const PropertyGallery = ({ images }) => {
         show: { opacity: 1, y: 0 }
     };
 
+    // Optimize images for different use cases
+    const getOptimizedImageUrl = (imageUrl, index) => {
+        if (!cloudinaryService.isCloudinaryUrl(imageUrl)) {
+            return imageUrl;
+        }
+
+        // Different optimization for different positions
+        let optimizedUrl;
+        if (index === 0) {
+            // Main image - high quality, larger size
+            optimizedUrl = cloudinaryService.getHighQualityUrl(imageUrl, 800, 600);
+        } else {
+            // Gallery images - optimized for grid
+            optimizedUrl = cloudinaryService.getResponsiveUrl(imageUrl, 400, 300);
+        }
+
+        console.log(`Optimized URL for image ${index}:`, {
+            original: imageUrl,
+            optimized: optimizedUrl
+        });
+
+        return optimizedUrl;
+    };
+
+    const getLightboxImageUrl = (imageUrl) => {
+        if (!cloudinaryService.isCloudinaryUrl(imageUrl)) {
+            return imageUrl;
+        }
+        // High quality for lightbox
+        return cloudinaryService.getHighQualityUrl(imageUrl, 1200, 800);
+    };
+
     return (
-        <section className="py-20 relative overflow-hidden">
+        <section className="py-20 bg-[#122620] relative overflow-hidden">
             {/* Decorative Elements */}
             {/* <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
@@ -52,7 +90,7 @@ const PropertyGallery = ({ images }) => {
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
             </div> */}
 
-            <div className="container mx-auto px-6 relative">
+            <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -91,27 +129,40 @@ const PropertyGallery = ({ images }) => {
                     viewport={{ once: true }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
-                    {images.map((image, index) => (
-                        <motion.div
-                            key={index}
-                            variants={item}
-                            className={`relative ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
-                        >
-                            <div
-                                className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
-                                onClick={() => openLightbox(index)}
+                    {images.map((image, index) => {
+                        const optimizedUrl = getOptimizedImageUrl(image, index);
+                        console.log(`Image ${index}:`, { original: image, optimized: optimizedUrl });
+
+                        return (
+                            <motion.div
+                                key={index}
+                                variants={item}
+                                className={`relative ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
                             >
-                                <img
-                                    src={image}
-                                    alt={`Property view ${index + 1}`}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                                    <span className="font-montserrat px-6 py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider">View Larger</span>
+                                <div
+                                    className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
+                                    onClick={() => openLightbox(index)}
+                                >
+                                    <img
+                                        src={optimizedUrl}
+                                        alt={`Property view ${index + 1}`}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        loading={index < 3 ? "eager" : "lazy"}
+                                        onError={(e) => {
+                                            console.error(`Failed to load image ${index}:`, optimizedUrl);
+                                            console.error('Error event:', e);
+                                        }}
+                                        onLoad={() => {
+                                            console.log(`Successfully loaded image ${index}:`, optimizedUrl);
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+                                        <span className="font-montserrat px-6 py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider">View Larger</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.div>
+                        );
+                    })}
                 </motion.div>
             </div>
 
@@ -132,7 +183,7 @@ const PropertyGallery = ({ images }) => {
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                 key={lightboxIndex}
-                                src={selectedImage}
+                                src={getLightboxImageUrl(selectedImage)}
                                 alt="Selected property view"
                                 className="border-4 border-[#E5BE90] object-cover max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl"
                             />

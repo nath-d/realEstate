@@ -3,9 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { PropertyModule } from './property/property.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
-    imports: [PrismaModule, PropertyModule],
+    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule],
     controllers: [AppController],
     providers: [AppService],
 })

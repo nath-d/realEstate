@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, Divider, Row, Col } from 'antd';
-import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, Divider, Row, Col, message } from 'antd';
+import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
+import { cloudinaryService } from '../services/cloudinaryService';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -67,6 +68,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (initialData) {
@@ -93,10 +95,113 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
         }
     }, [initialData, form]);
 
-    const handleImageUpload = (info: any) => {
-        setFileList(info.fileList);
-        const imageUrls = info.fileList.map((file: any) => file.url || '').filter(Boolean);
+    const handleImageUpload = async (info: any) => {
+        const { fileList: newFileList, file } = info;
+
+        console.log('handleImageUpload called with:', { fileList: newFileList, file });
+        console.log('File status:', file.status);
+        console.log('File response:', file.response);
+
+        // Handle file status changes
+        if (file.status === 'uploading') {
+            console.log('File is uploading...');
+            setUploading(true);
+            return;
+        }
+
+        if (file.status === 'done') {
+            console.log('File upload done!');
+            setUploading(false);
+            message.success(`${file.name} uploaded successfully`);
+
+            // Ensure the file has the URL set from the response
+            if (file.response && file.response.data && file.response.data.url) {
+                file.url = file.response.data.url;
+                console.log('Set file.url to:', file.url);
+            }
+        }
+
+        if (file.status === 'error') {
+            console.log('File upload error!');
+            setUploading(false);
+            message.error(`${file.name} upload failed`);
+            return;
+        }
+
+        setFileList(newFileList);
+
+        // Extract URLs from uploaded files
+        const imageUrls = newFileList
+            .filter((file: any) => {
+                // Check if file has a URL (either from response or direct url property)
+                const hasUrl = file.url || (file.response && file.response.data && file.response.data.url);
+                console.log(`File ${file.name} has URL:`, hasUrl, 'URL:', file.url || (file.response && file.response.data && file.response.data.url));
+                return hasUrl;
+            })
+            .map((file: any) => {
+                const url = file.url || (file.response && file.response.data && file.response.data.url);
+                console.log(`Extracting URL for ${file.name}:`, url);
+                return url;
+            });
+
+        console.log('Extracted image URLs:', imageUrls);
+        console.log('Setting form field images to:', imageUrls);
+
+        // Ensure images is always an array of strings
         form.setFieldValue('images', imageUrls);
+
+        // Also log the current form values to verify
+        const currentImages = form.getFieldValue('images');
+        console.log('Current form images value:', currentImages);
+    };
+
+    const customUpload = async (options: any) => {
+        const { file, onSuccess, onError, onProgress } = options;
+
+        console.log('customUpload called with options:', options);
+        console.log('File object:', file);
+
+        try {
+            setUploading(true);
+            console.log('Starting upload for file:', file.name);
+
+            // Upload to Cloudinary via our server
+            const response = await cloudinaryService.uploadImage(file);
+            console.log('Upload response:', response);
+
+            if (response.success) {
+                console.log('Upload successful, calling onSuccess with:', response.data);
+
+                // Manually update the file object with the response
+                file.status = 'done';
+                file.response = { data: response.data };
+                file.url = response.data.url;
+
+                // AntD expects the first arg to be a plain object (the response)
+                onSuccess({ data: response.data }, file);
+                console.log('onSuccess called');
+
+                // Manually trigger the onChange handler to update the form
+                const updatedFileList = [...fileList, file];
+                setFileList(updatedFileList);
+
+                // Extract URLs and update form
+                const imageUrls = updatedFileList
+                    .filter((f: any) => f.url || (f.response && f.response.data && f.response.data.url))
+                    .map((f: any) => f.url || (f.response && f.response.data && f.response.data.url));
+
+                console.log('Manually updating form with URLs:', imageUrls);
+                form.setFieldValue('images', imageUrls);
+            } else {
+                console.error('Upload failed:', response);
+                onError(new Error('Upload failed'));
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            onError(error);
+        } finally {
+            setUploading(false);
+        }
     };
 
     const addCertification = () => {
@@ -139,6 +244,13 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
             setIsSubmitting(false);
         }
     };
+
+    const uploadButton = (
+        <div className="flex flex-col items-center justify-center">
+            {uploading ? <LoadingOutlined /> : <UploadOutlined />}
+            <span>{uploading ? 'Uploading...' : 'Upload'}</span>
+        </div>
+    );
 
     return (
         <Form
@@ -375,17 +487,15 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Images</h3>
                 <Form.Item name="images" label="Images">
                     <Upload
+                        name="image"
                         listType="picture-card"
                         fileList={fileList}
                         onChange={handleImageUpload}
-                        beforeUpload={() => false}
+                        customRequest={customUpload}
+                        accept="image/*"
+                        maxCount={8}
                     >
-                        {fileList.length >= 8 ? null : (
-                            <div className="flex flex-col items-center justify-center">
-                                <UploadOutlined />
-                                <span>Upload</span>
-                            </div>
-                        )}
+                        {fileList.length >= 8 ? null : uploadButton}
                     </Upload>
                 </Form.Item>
             </div>
