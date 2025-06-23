@@ -14,6 +14,7 @@ export class PropertyService {
                 location: true,
                 specifications: true,
                 materialCertifications: true,
+                pois: true,
                 agent: true,
             },
         });
@@ -26,6 +27,7 @@ export class PropertyService {
                 location: true,
                 specifications: true,
                 materialCertifications: true,
+                pois: true,
                 agent: true,
             },
         });
@@ -39,6 +41,7 @@ export class PropertyService {
                 location: true,
                 specifications: true,
                 materialCertifications: true,
+                pois: true,
                 agent: true,
             },
         });
@@ -61,7 +64,12 @@ export class PropertyService {
                         OR: [
                             { type: property.type },
                             { status: property.status },
-                            { bedrooms: property.bedrooms },
+                            {
+                                price: {
+                                    gte: property.price * 0.8,
+                                    lte: property.price * 1.2,
+                                },
+                            },
                         ],
                     },
                 ],
@@ -71,9 +79,10 @@ export class PropertyService {
                 location: true,
                 specifications: true,
                 materialCertifications: true,
+                pois: true,
                 agent: true,
             },
-            take: 3,
+            take: 6,
         });
     }
 
@@ -81,7 +90,7 @@ export class PropertyService {
         // First, get the existing property to check if it exists
         const existingProperty = await this.prisma.property.findUnique({
             where: { id },
-            include: { location: true, specifications: true, materialCertifications: true }
+            include: { location: true, specifications: true, materialCertifications: true, pois: true }
         });
 
         if (!existingProperty) {
@@ -97,6 +106,7 @@ export class PropertyService {
                     location: true,
                     specifications: true,
                     materialCertifications: true,
+                    pois: true,
                     agent: true
                 }
             });
@@ -116,6 +126,7 @@ export class PropertyService {
                 location: true,
                 specifications: true,
                 materialCertifications: true,
+                pois: true,
                 agent: true,
             },
         });

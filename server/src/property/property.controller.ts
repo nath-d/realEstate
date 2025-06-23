@@ -28,6 +28,13 @@ export class PropertyController {
             };
         }
 
+        // Handle POIs data
+        if (createPropertyData.pois && Array.isArray(createPropertyData.pois)) {
+            createPropertyData.pois = {
+                create: createPropertyData.pois
+            };
+        }
+
         return this.propertyService.create(createPropertyData as Prisma.PropertyCreateInput);
     }
 
@@ -74,6 +81,14 @@ export class PropertyController {
             };
         }
 
+        // Handle POIs data
+        if (updatePropertyData.pois && Array.isArray(updatePropertyData.pois)) {
+            updatePropertyData.pois = {
+                deleteMany: {},
+                create: updatePropertyData.pois
+            };
+        }
+
         return this.propertyService.update(id, updatePropertyData as Prisma.PropertyUpdateInput);
     }
 
@@ -82,30 +97,73 @@ export class PropertyController {
         return this.propertyService.remove(id);
     }
 
-    private validatePrismaRelations(data: any) {
-        const errors: string[] = [];
-
-        // Check location relation
-        if (data.location && typeof data.location === 'object') {
-            if (!data.location.create && !data.location.connect && !data.location.connectOrCreate) {
-                errors.push('Location must use Prisma relation syntax: { "location": { "create": { ... } } }');
-            }
-        }
-
-        // Check images relation
-        if (data.images && Array.isArray(data.images)) {
-            errors.push('Images must use Prisma relation syntax: { "images": { "create": [{ "url": "..." }] } }');
-        }
-
-        if (errors.length > 0) {
-            throw new BadRequestException({
-                message: 'Invalid Prisma relation syntax',
-                errors,
-                example: {
-                    location: { create: { latitude: 34.0522, longitude: -118.2437, address: "123 Main St", city: "LA", state: "CA", zipCode: "90210" } },
-                    images: { create: [{ url: "https://example.com/image.jpg" }] }
+    // New endpoints for map functionality
+    @Get('geocode/search/:query')
+    async searchLocation(@Param('query') query: string) {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+                {
+                    headers: {
+                        'User-Agent': 'RealEstateApp/1.0',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                    },
                 }
+            );
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            throw new Error('Failed to search location');
+        }
+    }
+
+    @Get('geocode/reverse/:lat/:lon')
+    async reverseGeocode(@Param('lat') lat: string, @Param('lon') lon: string) {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
+                {
+                    headers: {
+                        'User-Agent': 'RealEstateApp/1.0',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                    },
+                }
+            );
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            throw new Error('Failed to reverse geocode');
+        }
+    }
+
+    @Post('pois/fetch')
+    async fetchPOIs(@Body() body: { lat: number; lng: number; radius?: number }) {
+        try {
+            const { lat, lng, radius = 1000 } = body;
+            const query = `
+                [out:json][timeout:25];
+                (
+                    node["amenity"~"school|college|university|restaurant|cafe|hospital|pharmacy|police"](around:${radius},${lat},${lng});
+                    node["leisure"="park"](around:${radius},${lat},${lng});
+                    node["railway"~"station|metro|subway"](around:${radius},${lat},${lng});
+                    node["shop"~"supermarket|mall|grocery"](around:${radius},${lat},${lng});
+                );
+                out body;
+            `;
+
+            const response = await fetch('https://overpass-api.de/api/interpreter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': 'RealEstateApp/1.0',
+                },
+                body: `data=${encodeURIComponent(query)}`,
             });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            throw new Error('Failed to fetch POIs');
         }
     }
 } 

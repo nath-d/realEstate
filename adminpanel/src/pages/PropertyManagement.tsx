@@ -56,6 +56,14 @@ interface Property {
         description: string;
         verified: boolean;
     }>;
+    pois: Array<{
+        id: number;
+        name: string;
+        type: string;
+        latitude: number;
+        longitude: number;
+        distance?: number;
+    }>;
 }
 
 const PropertyManagement: React.FC = () => {
@@ -122,15 +130,19 @@ const PropertyManagement: React.FC = () => {
                 livingArea: String(values.livingArea || ''),
                 yearBuilt: Number(values.yearBuilt) || 0,
             };
+            // Remove locationPOIs from baseData if present
+            if ('locationPOIs' in baseData) {
+                delete baseData.locationPOIs;
+            }
 
             if (editingProperty) {
-                // For updates, we need to replace existing relations
+                // For updates, robustly update all nested relations using Prisma's update syntax
                 console.log('Updating property with ID:', editingProperty.id);
                 const updateData = {
                     ...baseData,
                     images: {
                         deleteMany: {},
-                        create: (imagesArray || []).map((url: string) => ({ url }))
+                        create: imagesArray.map((url: string) => ({ url })),
                     },
                     specifications: {
                         deleteMany: {},
@@ -146,8 +158,8 @@ const PropertyManagement: React.FC = () => {
                             washroom: spec.washroom || [],
                             elevator: spec.elevator || [],
                             electricity: spec.electricity || [],
-                            waterSupply: spec.waterSupply || []
-                        }))
+                            waterSupply: spec.waterSupply || [],
+                        })),
                     },
                     materialCertifications: {
                         deleteMany: {},
@@ -156,20 +168,39 @@ const PropertyManagement: React.FC = () => {
                             brand: cert.brand,
                             certificate: cert.certificate,
                             description: cert.description,
-                            verified: !!cert.verified
-                        }))
+                            verified: !!cert.verified,
+                        })),
+                    },
+                    pois: {
+                        deleteMany: {},
+                        create: (values.pois || []).map((poi: any) => ({
+                            name: poi.name,
+                            type: poi.type,
+                            latitude: Number(poi.latitude) || 0,
+                            longitude: Number(poi.longitude) || 0,
+                            distance: poi.distance ? Number(poi.distance) : null,
+                        })),
                     },
                     location: {
-                        delete: true,
-                        create: {
-                            latitude: Number(values.location?.latitude) || 0,
-                            longitude: Number(values.location?.longitude) || 0,
-                            address: values.location?.address || '',
-                            city: values.location?.city || '',
-                            state: values.location?.state || '',
-                            zipCode: values.location?.zipCode || ''
-                        }
-                    }
+                        upsert: {
+                            create: {
+                                latitude: Number(values.location?.latitude) || 0,
+                                longitude: Number(values.location?.longitude) || 0,
+                                address: values.location?.address || '',
+                                city: values.location?.city || '',
+                                state: values.location?.state || '',
+                                zipCode: values.location?.zipCode || '',
+                            },
+                            update: {
+                                latitude: Number(values.location?.latitude) || 0,
+                                longitude: Number(values.location?.longitude) || 0,
+                                address: values.location?.address || '',
+                                city: values.location?.city || '',
+                                state: values.location?.state || '',
+                                zipCode: values.location?.zipCode || '',
+                            },
+                        },
+                    },
                 };
 
                 console.log('Update formatted data:', updateData);
@@ -200,7 +231,7 @@ const PropertyManagement: React.FC = () => {
                 const createData = {
                     ...baseData,
                     images: {
-                        create: (imagesArray || []).map((url: string) => ({ url }))
+                        create: (imagesArray || []).map((url: string) => ({ url })),
                     },
                     specifications: {
                         create: (values.specifications || []).map((spec: any) => ({
@@ -215,8 +246,8 @@ const PropertyManagement: React.FC = () => {
                             washroom: spec.washroom || [],
                             elevator: spec.elevator || [],
                             electricity: spec.electricity || [],
-                            waterSupply: spec.waterSupply || []
-                        }))
+                            waterSupply: spec.waterSupply || [],
+                        })),
                     },
                     materialCertifications: {
                         create: (values.materialCertifications || []).map((cert: any) => ({
@@ -224,8 +255,17 @@ const PropertyManagement: React.FC = () => {
                             brand: cert.brand,
                             certificate: cert.certificate,
                             description: cert.description,
-                            verified: !!cert.verified
-                        }))
+                            verified: !!cert.verified,
+                        })),
+                    },
+                    pois: {
+                        create: (values.pois || []).map((poi: any) => ({
+                            name: poi.name,
+                            type: poi.type,
+                            latitude: Number(poi.latitude) || 0,
+                            longitude: Number(poi.longitude) || 0,
+                            distance: poi.distance ? Number(poi.distance) : null,
+                        })),
                     },
                     location: {
                         create: {
@@ -234,7 +274,7 @@ const PropertyManagement: React.FC = () => {
                             address: values.location?.address || '',
                             city: values.location?.city || '',
                             state: values.location?.state || '',
-                            zipCode: values.location?.zipCode || ''
+                            zipCode: values.location?.zipCode || '',
                         }
                     }
                 };
@@ -319,6 +359,7 @@ const PropertyManagement: React.FC = () => {
                 }))
                 : [{ structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] }],
             materialCertifications: property.materialCertifications || [],
+            pois: property.pois || [],
             location: property.location ? {
                 latitude: property.location.latitude,
                 longitude: property.location.longitude,
@@ -885,6 +926,35 @@ const PropertyManagement: React.FC = () => {
                                     size="small"
                                     bordered
                                 />
+                            </div>
+                        )}
+
+                        {/* Nearby POIs */}
+                        {viewingProperty && viewingProperty.pois && viewingProperty.pois.length > 0 && (
+                            <div>
+                                <Title level={4}>Nearby Points of Interest</Title>
+                                <div className="grid grid-cols-1 gap-3">
+                                    {viewingProperty.pois.map((poi, index) => (
+                                        <div key={poi.id || index} className="bg-gray-50 p-3 rounded-lg border">
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex-1">
+                                                    <div className="font-semibold text-gray-800">{poi.name}</div>
+                                                    <div className="text-sm text-gray-600 flex items-center mt-1">
+                                                        <Tag color="blue" className="mr-2">{poi.type}</Tag>
+                                                        {poi.distance && (
+                                                            <span className="text-gray-500">
+                                                                {poi.distance}m away
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500 mt-1">
+                                                        Coordinates: {poi.latitude.toFixed(6)}, {poi.longitude.toFixed(6)}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
 

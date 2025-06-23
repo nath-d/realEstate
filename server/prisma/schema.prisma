@@ -44,6 +44,9 @@ model Property {
     // Material Certifications (one-to-many)
     materialCertifications MaterialCertification[]
 
+    // Nearby POIs (one-to-many)
+    pois POI[]
+
     // Agent
     agentId Int?
     agent   Agent? @relation(fields: [agentId], references: [id])
@@ -115,4 +118,17 @@ model MaterialCertification {
     property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+}
+
+model POI {
+    id         Int      @id @default(autoincrement())
+    name       String
+    type       String // school, park, station, restaurant, shop, etc.
+    latitude   Float
+    longitude  Float
+    distance   Float? // distance from property in meters
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 }

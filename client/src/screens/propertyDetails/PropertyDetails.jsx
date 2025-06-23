@@ -186,7 +186,8 @@ const PropertyDetails = () => {
             ]
         },
         specifications: property.specifications && property.specifications.length > 0 ? property.specifications[0] : null,
-        materialCertifications: property.materialCertifications || []
+        materialCertifications: property.materialCertifications || [],
+        pois: property.pois || []
     };
 
     return (
@@ -248,10 +249,10 @@ const PropertyDetails = () => {
                         </div>
                     </div>
                 </div>
-            </motion.div >
+            </motion.div>
 
             {/* Main Content */}
-            <div div className="pt-24" >
+            <div className="pt-24">
 
                 <PropertyHero property={propertyData} />
                 <PropertyStats details={propertyData.details} />
@@ -340,13 +341,13 @@ const PropertyDetails = () => {
                     <MaterialCertifications certifications={propertyData.materialCertifications} />
                     {/* <PropertyAmenities amenities={property.amenities} /> */}
                     {/* <PropertyHistory history={property.history} /> */}
-                    {/* <NeighborhoodInsights neighborhood={property.neighborhood} /> */}
-                    <PropertyLocation location={property.location} />
+                    <PropertyLocation location={property.location} pois={propertyData.pois} />
+                    <NeighborhoodInsights pois={propertyData.pois} />
                     <SimilarProperties properties={propertyData.similarProperties} />
                     <PropertyAgent agent={propertyData.agent} />
                     <Footer />
                 </div>
-            </div >
+            </div>
 
             {/* Enhanced Floating Contact Button */}
             <motion.button
@@ -358,27 +359,23 @@ const PropertyDetails = () => {
                 className="fixed bottom-6 right-6 bg-[#D4AF37] text-[#122620] p-6 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
             >
                 <FaCalculator className="text-3xl" />
-            </motion.button >
+            </motion.button>
 
             {/* Modals */}
-            {
-                showMortgageCalculator && (
-                    <MortgageCalculator
-                        price={propertyData.price}
-                        onClose={() => setShowMortgageCalculator(false)}
-                    />
-                )
-            }
+            {showMortgageCalculator && (
+                <MortgageCalculator
+                    price={propertyData.price}
+                    onClose={() => setShowMortgageCalculator(false)}
+                />
+            )}
 
-            {
-                showScheduleVisit && (
-                    <ScheduleVisit
-                        property={propertyData}
-                        onClose={() => setShowScheduleVisit(false)}
-                    />
-                )
-            }
-        </div >
+            {showScheduleVisit && (
+                <ScheduleVisit
+                    property={propertyData}
+                    onClose={() => setShowScheduleVisit(false)}
+                />
+            )}
+        </div>
     );
 };
 

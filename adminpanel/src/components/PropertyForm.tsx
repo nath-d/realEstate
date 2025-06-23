@@ -3,6 +3,7 @@ import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, 
 import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { cloudinaryService } from '../services/cloudinaryService';
+import MapPicker from './MapPicker';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -55,6 +56,13 @@ interface PropertyFormData {
     };
     agentId?: number;
     materialCertifications: MaterialCertificationForm[];
+    pois: Array<{
+        name: string;
+        type: string;
+        latitude: number;
+        longitude: number;
+        distance?: number;
+    }>;
 }
 
 interface PropertyFormProps {
@@ -69,6 +77,8 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [mapModalOpen, setMapModalOpen] = useState(false);
+    const [mapPOIs, setMapPOIs] = useState<any[]>([]);
 
     useEffect(() => {
         if (initialData) {
@@ -78,6 +88,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                     ? initialData.specifications[0]
                     : { structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] },
                 materialCertifications: initialData.materialCertifications || [],
+                pois: initialData.pois || [],
             };
             form.setFieldsValue(formInitialValues);
             if (initialData.images && initialData.images.length > 0) {
@@ -234,7 +245,8 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 ...values,
                 specifications: values.specification ? [values.specification] : [{ structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] }],
                 materialCertifications: filteredMaterialCertifications,
-                specification: undefined
+                specification: undefined,
+                pois: values.pois || [],
             };
             await onSubmit(transformedData);
             setFileList([]);
@@ -252,337 +264,446 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
         </div>
     );
 
+    // Handler for map location selection
+    const handleMapSelect = (locationResult: any) => {
+        form.setFieldsValue({
+            location: {
+                address: locationResult.address,
+                city: locationResult.city,
+                state: locationResult.state,
+                zipCode: locationResult.zipCode,
+                latitude: locationResult.latitude,
+                longitude: locationResult.longitude,
+            }
+        });
+
+        // Merge POIs from map with existing POIs in form
+        const existingPOIs = form.getFieldValue('pois') || [];
+        const mapPOIs = locationResult.pois || [];
+        const combinedPOIs = [...existingPOIs, ...mapPOIs];
+
+        form.setFieldValue('pois', combinedPOIs);
+        setMapPOIs(locationResult.pois || []);
+        setMapModalOpen(false);
+    };
+
     return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-            initialValues={{
-                featured: false,
-                images: [],
-                specification: { structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] },
-                materialCertifications: [],
-            }}
-            className="p-0"
-        >
-            {/* Basic Information Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Basic Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Form.Item
-                        name="title"
-                        label="Title"
-                        rules={[{ required: true, message: 'Please enter the title' }]}
-                    >
-                        <Input className="w-full" />
-                    </Form.Item>
-                    <Form.Item
-                        name="price"
-                        label="Price"
-                        rules={[{ required: true, message: 'Please enter the price' }]}
-                    >
-                        <InputNumber
-                            className="w-full"
-                            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => Number(value!.replace(/\$\s?|(,*)/g, ''))}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="type"
-                        label="Type"
-                        rules={[{ required: true, message: 'Please select the type' }]}
-                    >
-                        <Select
-                            placeholder="Select property type"
-                            getPopupContainer={() => document.body}
-                            onDropdownVisibleChange={(open) => console.log('Type dropdown open:', open)}
-                            style={{ width: '100%' }}
+        <>
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={onFinish}
+                initialValues={{
+                    featured: false,
+                    images: [],
+                    specification: { structure: [], brickwork: [], windows: [], externalFinish: [], interiorFinish: [], doors: [], flooring: [], kitchen: [], washroom: [], elevator: [], electricity: [], waterSupply: [] },
+                    materialCertifications: [],
+                    pois: [],
+                }}
+                className="p-0"
+            >
+                {/* Basic Information Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Basic Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Form.Item
+                            name="title"
+                            label="Title"
+                            rules={[{ required: true, message: 'Please enter the title' }]}
                         >
-                            <Option value="villa">Villa</Option>
-                            <Option value="apartment">Apartment</Option>
-                            <Option value="house">House</Option>
-                            <Option value="penthouse">Penthouse</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="status"
-                        label="Status"
-                        rules={[{ required: true, message: 'Please select the status' }]}
-                    >
-                        <Select
-                            placeholder="Select property status"
-                            getPopupContainer={() => document.body}
-                            onDropdownVisibleChange={(open) => console.log('Status dropdown open:', open)}
-                            style={{ width: '100%' }}
+                            <Input className="w-full" />
+                        </Form.Item>
+                        <Form.Item
+                            name="price"
+                            label="Price"
+                            rules={[{ required: true, message: 'Please enter the price' }]}
                         >
-                            <Option value="for sale">For Sale</Option>
-                            <Option value="for rent">For Rent</Option>
-                            <Option value="sold">Sold</Option>
-                        </Select>
-                    </Form.Item>
+                            <InputNumber
+                                className="w-full"
+                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                parser={value => Number(value!.replace(/\$\s?|(,*)/g, ''))}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="type"
+                            label="Type"
+                            rules={[{ required: true, message: 'Please select the type' }]}
+                        >
+                            <Select
+                                placeholder="Select property type"
+                                getPopupContainer={() => document.body}
+                                onDropdownVisibleChange={(open) => console.log('Type dropdown open:', open)}
+                                style={{ width: '100%' }}
+                            >
+                                <Option value="villa">Villa</Option>
+                                <Option value="apartment">Apartment</Option>
+                                <Option value="house">House</Option>
+                                <Option value="penthouse">Penthouse</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="status"
+                            label="Status"
+                            rules={[{ required: true, message: 'Please select the status' }]}
+                        >
+                            <Select
+                                placeholder="Select property status"
+                                getPopupContainer={() => document.body}
+                                onDropdownVisibleChange={(open) => console.log('Status dropdown open:', open)}
+                                style={{ width: '100%' }}
+                            >
+                                <Option value="for sale">For Sale</Option>
+                                <Option value="for rent">For Rent</Option>
+                                <Option value="sold">Sold</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="featured"
+                            label="Featured"
+                            valuePropName="checked"
+                        >
+                            <Switch />
+                        </Form.Item>
+                    </div>
+                </div>
+
+                {/* Description Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Description</h3>
                     <Form.Item
-                        name="featured"
-                        label="Featured"
-                        valuePropName="checked"
+                        name="description"
+                        label="Description"
+                        rules={[{ required: true, message: 'Please enter the description' }]}
                     >
-                        <Switch />
+                        <TextArea rows={4} className="w-full" />
                     </Form.Item>
                 </div>
-            </div>
 
-            {/* Description Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Description</h3>
-                <Form.Item
-                    name="description"
-                    label="Description"
-                    rules={[{ required: true, message: 'Please enter the description' }]}
-                >
-                    <TextArea rows={4} className="w-full" />
-                </Form.Item>
-            </div>
+                {/* Property Details Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Property Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Form.Item
+                            name="bedrooms"
+                            label="Bedrooms"
+                            rules={[{ required: true, message: 'Please enter the number of bedrooms' }]}
+                        >
+                            <InputNumber className="w-full" min={0} />
+                        </Form.Item>
+                        <Form.Item
+                            name="bathrooms"
+                            label="Bathrooms"
+                            rules={[{ required: true, message: 'Please enter the number of bathrooms' }]}
+                        >
+                            <InputNumber className="w-full" min={0} step={0.5} />
+                        </Form.Item>
+                        <Form.Item
+                            name="garage"
+                            label="Garage"
+                            rules={[{ required: true, message: 'Please enter the number of garage spaces' }]}
+                        >
+                            <InputNumber className="w-full" min={0} />
+                        </Form.Item>
+                        <Form.Item
+                            name="lotSize"
+                            label="Lot Size"
+                            rules={[{ required: true, message: 'Please enter the lot size' }]}
+                        >
+                            <Input placeholder="e.g., 5000 sq ft" />
+                        </Form.Item>
+                        <Form.Item
+                            name="livingArea"
+                            label="Living Area"
+                            rules={[{ required: true, message: 'Please enter the living area' }]}
+                        >
+                            <Input placeholder="e.g., 2500 sq ft" />
+                        </Form.Item>
+                        <Form.Item
+                            name="yearBuilt"
+                            label="Year Built"
+                            rules={[{ required: true, message: 'Please enter the year built' }]}
+                        >
+                            <InputNumber className="w-full" min={1800} max={new Date().getFullYear()} />
+                        </Form.Item>
+                    </div>
+                </div>
 
-            {/* Property Details Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Property Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Form.Item
-                        name="bedrooms"
-                        label="Bedrooms"
-                        rules={[{ required: true, message: 'Please enter the number of bedrooms' }]}
-                    >
-                        <InputNumber className="w-full" min={0} />
-                    </Form.Item>
-                    <Form.Item
-                        name="bathrooms"
-                        label="Bathrooms"
-                        rules={[{ required: true, message: 'Please enter the number of bathrooms' }]}
-                    >
-                        <InputNumber className="w-full" min={0} step={0.5} />
-                    </Form.Item>
-                    <Form.Item
-                        name="garage"
-                        label="Garage"
-                        rules={[{ required: true, message: 'Please enter the number of garage spaces' }]}
-                    >
-                        <InputNumber className="w-full" min={0} />
-                    </Form.Item>
-                    <Form.Item
-                        name="lotSize"
-                        label="Lot Size"
-                        rules={[{ required: true, message: 'Please enter the lot size' }]}
-                    >
-                        <Input placeholder="e.g., 5000 sq ft" />
-                    </Form.Item>
-                    <Form.Item
-                        name="livingArea"
-                        label="Living Area"
-                        rules={[{ required: true, message: 'Please enter the living area' }]}
-                    >
-                        <Input placeholder="e.g., 2500 sq ft" />
-                    </Form.Item>
-                    <Form.Item
-                        name="yearBuilt"
-                        label="Year Built"
-                        rules={[{ required: true, message: 'Please enter the year built' }]}
-                    >
-                        <InputNumber className="w-full" min={1800} max={new Date().getFullYear()} />
+                {/* Property Specifications Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Property Specifications (Tags)</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Form.Item
+                            name={["specification", "structure"]}
+                            label="Structure"
+                            rules={[{ required: true, message: 'Please enter at least one structure' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., RCC Frame, Steel Frame" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "brickwork"]}
+                            label="Brickwork"
+                            rules={[{ required: true, message: 'Please enter at least one brickwork' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Red Brick, Fly Ash" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "windows"]}
+                            label="Windows"
+                            rules={[{ required: true, message: 'Please enter at least one window type' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., UPVC, Aluminum" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "externalFinish"]}
+                            label="External Finish"
+                            rules={[{ required: true, message: 'Please enter at least one external finish' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Paint, Stone Cladding" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "interiorFinish"]}
+                            label="Interior Finish"
+                            rules={[{ required: true, message: 'Please enter at least one interior finish' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Wallpaper, Paint, Tiles" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "doors"]}
+                            label="Doors"
+                            rules={[{ required: true, message: 'Please enter at least one door type' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Wooden, Steel, Glass" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "flooring"]}
+                            label="Flooring"
+                            rules={[{ required: true, message: 'Please enter at least one flooring type' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Marble, Tiles, Wood" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "kitchen"]}
+                            label="Kitchen"
+                            rules={[{ required: true, message: 'Please enter at least one kitchen feature' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Modular, Granite Counter" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "washroom"]}
+                            label="Washroom"
+                            rules={[{ required: true, message: 'Please enter at least one washroom feature' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Modern Fittings, Tiles" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "elevator"]}
+                            label="Elevator"
+                            rules={[{ required: true, message: 'Please enter elevator details' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., Passenger, Service, None" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "electricity"]}
+                            label="Electricity"
+                            rules={[{ required: true, message: 'Please enter electricity details' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., 3 Phase, Backup Power" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                        <Form.Item
+                            name={["specification", "waterSupply"]}
+                            label="Water Supply"
+                            rules={[{ required: true, message: 'Please enter water supply details' }]}
+                        >
+                            <Select mode="tags" placeholder="e.g., 24/7, Borewell, Municipal" getPopupContainer={() => document.body} />
+                        </Form.Item>
+                    </div>
+                </div>
+
+                {/* Images Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Images</h3>
+                    <Form.Item name="images" label="Images">
+                        <Upload
+                            name="image"
+                            listType="picture-card"
+                            fileList={fileList}
+                            onChange={handleImageUpload}
+                            customRequest={customUpload}
+                            accept="image/*"
+                            maxCount={8}
+                        >
+                            {fileList.length >= 8 ? null : uploadButton}
+                        </Upload>
                     </Form.Item>
                 </div>
-            </div>
 
-            {/* Property Specifications Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Property Specifications (Tags)</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Form.Item
-                        name={["specification", "structure"]}
-                        label="Structure"
-                        rules={[{ required: true, message: 'Please enter at least one structure' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., RCC Frame, Steel Frame" getPopupContainer={() => document.body} />
+                {/* Location Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2 flex items-center justify-between">
+                        Location
+                        <Button type="primary" onClick={() => setMapModalOpen(true)} size="small">Pick on Map</Button>
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Form.Item name={['location', 'address']} label="Address" rules={[{ required: true, message: 'Please enter the address' }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name={['location', 'city']} label="City" rules={[{ required: true, message: 'Please enter the city' }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name={['location', 'state']} label="State" rules={[{ required: true, message: 'Please enter the state' }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name={['location', 'zipCode']} label="Zip Code" rules={[{ required: true, message: 'Please enter the zip code' }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name={['location', 'latitude']} label="Latitude" rules={[{ required: true, message: 'Please enter the latitude' }]}>
+                            <InputNumber className="w-full" step={0.000001} />
+                        </Form.Item>
+                        <Form.Item name={['location', 'longitude']} label="Longitude" rules={[{ required: true, message: 'Please enter the longitude' }]}>
+                            <InputNumber className="w-full" step={0.000001} />
+                        </Form.Item>
+                    </div>
+                    {/* Hidden field for POIs from map */}
+                    <Form.Item name="locationPOIs" style={{ display: 'none' }} initialValue={mapPOIs}>
+                        <Input type="hidden" />
                     </Form.Item>
-                    <Form.Item
-                        name={["specification", "brickwork"]}
-                        label="Brickwork"
-                        rules={[{ required: true, message: 'Please enter at least one brickwork' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Red Brick, Fly Ash" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "windows"]}
-                        label="Windows"
-                        rules={[{ required: true, message: 'Please enter at least one window type' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., UPVC, Aluminum" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "externalFinish"]}
-                        label="External Finish"
-                        rules={[{ required: true, message: 'Please enter at least one external finish' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Paint, Stone Cladding" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "interiorFinish"]}
-                        label="Interior Finish"
-                        rules={[{ required: true, message: 'Please enter at least one interior finish' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Wallpaper, Paint, Tiles" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "doors"]}
-                        label="Doors"
-                        rules={[{ required: true, message: 'Please enter at least one door type' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Wooden, Steel, Glass" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "flooring"]}
-                        label="Flooring"
-                        rules={[{ required: true, message: 'Please enter at least one flooring type' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Marble, Tiles, Wood" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "kitchen"]}
-                        label="Kitchen"
-                        rules={[{ required: true, message: 'Please enter at least one kitchen feature' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Modular, Granite Counter" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "washroom"]}
-                        label="Washroom"
-                        rules={[{ required: true, message: 'Please enter at least one washroom feature' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Modern Fittings, Tiles" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "elevator"]}
-                        label="Elevator"
-                        rules={[{ required: true, message: 'Please enter elevator details' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., Passenger, Service, None" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "electricity"]}
-                        label="Electricity"
-                        rules={[{ required: true, message: 'Please enter electricity details' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., 3 Phase, Backup Power" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                    <Form.Item
-                        name={["specification", "waterSupply"]}
-                        label="Water Supply"
-                        rules={[{ required: true, message: 'Please enter water supply details' }]}
-                    >
-                        <Select mode="tags" placeholder="e.g., 24/7, Borewell, Municipal" getPopupContainer={() => document.body} />
-                    </Form.Item>
-                </div>
-            </div>
-
-            {/* Images Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Images</h3>
-                <Form.Item name="images" label="Images">
-                    <Upload
-                        name="image"
-                        listType="picture-card"
-                        fileList={fileList}
-                        onChange={handleImageUpload}
-                        customRequest={customUpload}
-                        accept="image/*"
-                        maxCount={8}
-                    >
-                        {fileList.length >= 8 ? null : uploadButton}
-                    </Upload>
-                </Form.Item>
-            </div>
-
-            {/* Location Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Location</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Form.Item name={['location', 'address']} label="Address" rules={[{ required: true, message: 'Please enter the address' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['location', 'city']} label="City" rules={[{ required: true, message: 'Please enter the city' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['location', 'state']} label="State" rules={[{ required: true, message: 'Please enter the state' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['location', 'zipCode']} label="Zip Code" rules={[{ required: true, message: 'Please enter the zip code' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['location', 'latitude']} label="Latitude" rules={[{ required: true, message: 'Please enter the latitude' }]}>
-                        <InputNumber className="w-full" step={0.000001} />
-                    </Form.Item>
-                    <Form.Item name={['location', 'longitude']} label="Longitude" rules={[{ required: true, message: 'Please enter the longitude' }]}>
-                        <InputNumber className="w-full" step={0.000001} />
-                    </Form.Item>
-                </div>
-            </div>
-
-            {/* Material Certifications Section */}
-            <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Material Certifications (Optional)</h3>
-                <Form.List name="materialCertifications">
-                    {(fields, { add, remove }) => (
-                        <div>
-                            {fields.map(({ key, name, ...restField }) => (
-                                <div className="grid grid-cols-12 gap-4 mb-4 items-end" key={key}>
-                                    <div className="col-span-2">
-                                        <Form.Item {...restField} name={[name, 'material']} label="Material">
-                                            <Input placeholder="e.g., Cement" />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="col-span-2">
-                                        <Form.Item {...restField} name={[name, 'brand']} label="Brand">
-                                            <Input placeholder="e.g., UltraTech" />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="col-span-2">
-                                        <Form.Item {...restField} name={[name, 'certificate']} label="Certificate">
-                                            <Input placeholder="e.g., ISO 9001:2015" />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="col-span-4">
-                                        <Form.Item {...restField} name={[name, 'description']} label="Description">
-                                            <Input placeholder="Description" />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="col-span-1">
-                                        <Form.Item {...restField} name={[name, 'verified']} label="Verified" valuePropName="checked">
-                                            <Switch />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="col-span-1">
-                                        <Button
-                                            danger
-                                            icon={<DeleteOutlined />}
-                                            onClick={() => remove(name)}
-                                            className="mb-6"
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                            <Button type="dashed" onClick={addCertification} block icon={<PlusOutlined />}>Add Certification</Button>
+                    {mapPOIs && mapPOIs.length > 0 && (
+                        <div className="mt-2">
+                            <strong>Nearby Places of Interest (auto-filled):</strong>
+                            <ul className="list-disc ml-6 text-sm">
+                                {mapPOIs.map((poi, idx) => (
+                                    <li key={idx}>{poi.name} ({poi.type})</li>
+                                ))}
+                            </ul>
                         </div>
                     )}
-                </Form.List>
-            </div>
+                </div>
 
-            {/* Form Actions */}
-            <div className="flex justify-end space-x-4 mt-6 pt-4 border-t border-gray-200">
-                <Button onClick={() => form.resetFields()}>
-                    Reset
-                </Button>
-                <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
-                </Button>
-            </div>
-        </Form>
+                {/* Material Certifications Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Material Certifications (Optional)</h3>
+                    <Form.List name="materialCertifications">
+                        {(fields, { add, remove }) => (
+                            <div>
+                                {fields.map(({ key, name, ...restField }) => (
+                                    <div className="grid grid-cols-12 gap-4 mb-4 items-end" key={key}>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'material']} label="Material">
+                                                <Input placeholder="e.g., Cement" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'brand']} label="Brand">
+                                                <Input placeholder="e.g., UltraTech" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'certificate']} label="Certificate">
+                                                <Input placeholder="e.g., ISO 9001:2015" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-4">
+                                            <Form.Item {...restField} name={[name, 'description']} label="Description">
+                                                <Input placeholder="Description" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-1">
+                                            <Form.Item {...restField} name={[name, 'verified']} label="Verified" valuePropName="checked">
+                                                <Switch />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-1">
+                                            <Button
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                                onClick={() => remove(name)}
+                                                className="mb-6"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                                <Button type="dashed" onClick={addCertification} block icon={<PlusOutlined />}>Add Certification</Button>
+                            </div>
+                        )}
+                    </Form.List>
+                </div>
+
+                {/* Nearby POIs Section */}
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Nearby Points of Interest (Optional)</h3>
+                    <Form.List name="pois">
+                        {(fields, { add, remove }) => (
+                            <div>
+                                {fields.map(({ key, name, ...restField }) => (
+                                    <div className="grid grid-cols-12 gap-4 mb-4 items-end" key={key}>
+                                        <div className="col-span-3">
+                                            <Form.Item {...restField} name={[name, 'name']} label="Name" rules={[{ required: true, message: 'Please enter POI name' }]}>
+                                                <Input placeholder="e.g., Central Park" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'type']} label="Type" rules={[{ required: true, message: 'Please select type' }]}>
+                                                <Select placeholder="Select type" getPopupContainer={() => document.body}>
+                                                    <Option value="school">School</Option>
+                                                    <Option value="park">Park</Option>
+                                                    <Option value="station">Station</Option>
+                                                    <Option value="restaurant">Restaurant</Option>
+                                                    <Option value="shop">Shop</Option>
+                                                    <Option value="hospital">Hospital</Option>
+                                                    <Option value="bank">Bank</Option>
+                                                    <Option value="gym">Gym</Option>
+                                                    <Option value="cinema">Cinema</Option>
+                                                    <Option value="other">Other</Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'latitude']} label="Latitude" rules={[{ required: true, message: 'Please enter latitude' }]}>
+                                                <InputNumber className="w-full" step={0.000001} placeholder="22.4736" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'longitude']} label="Longitude" rules={[{ required: true, message: 'Please enter longitude' }]}>
+                                                <InputNumber className="w-full" step={0.000001} placeholder="88.3607" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <Form.Item {...restField} name={[name, 'distance']} label="Distance (m)">
+                                                <InputNumber className="w-full" min={0} placeholder="500" />
+                                            </Form.Item>
+                                        </div>
+                                        <div className="col-span-1">
+                                            <Button
+                                                danger
+                                                icon={<DeleteOutlined />}
+                                                onClick={() => remove(name)}
+                                                className="mb-6"
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>Add POI</Button>
+                            </div>
+                        )}
+                    </Form.List>
+                </div>
+
+                {/* Form Actions */}
+                <div className="flex justify-end space-x-4 mt-6 pt-4 border-t border-gray-200">
+                    <Button onClick={() => form.resetFields()}>
+                        Reset
+                    </Button>
+                    <Button type="primary" htmlType="submit" loading={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
+                    </Button>
+                </div>
+            </Form>
+            <MapPicker
+                open={mapModalOpen}
+                onCancel={() => setMapModalOpen(false)}
+                onSelect={handleMapSelect}
+                initialLocation={form.getFieldValue('location')}
+            />
+        </>
     );
 }; 
