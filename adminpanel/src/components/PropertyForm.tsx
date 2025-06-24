@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, Divider, Row, Col, message } from 'antd';
-import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, UploadOutlined, MinusCircleOutlined, LoadingOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { cloudinaryService } from '../services/cloudinaryService';
 import MapPicker from './MapPicker';
+import POIMapPicker from './POIMapPicker';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -79,6 +80,8 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
     const [uploading, setUploading] = useState(false);
     const [mapModalOpen, setMapModalOpen] = useState(false);
     const [mapPOIs, setMapPOIs] = useState<any[]>([]);
+    const [poiMapModalOpen, setPoiMapModalOpen] = useState(false);
+    const [currentPOIIndex, setCurrentPOIIndex] = useState<number | null>(null);
 
     useEffect(() => {
         if (initialData) {
@@ -285,6 +288,47 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
         form.setFieldValue('pois', combinedPOIs);
         setMapPOIs(locationResult.pois || []);
         setMapModalOpen(false);
+    };
+
+    // Handler for POI map selection
+    const handlePOIMapSelect = (poiResult: any) => {
+        const existingPOIs = form.getFieldValue('pois') || [];
+
+        if (currentPOIIndex !== null) {
+            // Update existing POI
+            const updatedPOIs = [...existingPOIs];
+            updatedPOIs[currentPOIIndex] = {
+                ...updatedPOIs[currentPOIIndex],
+                latitude: poiResult.latitude,
+                longitude: poiResult.longitude,
+            };
+            form.setFieldValue('pois', updatedPOIs);
+        } else {
+            // Add new POI
+            const newPOI = {
+                name: poiResult.name,
+                type: poiResult.type,
+                latitude: poiResult.latitude,
+                longitude: poiResult.longitude,
+                distance: poiResult.distance || undefined,
+            };
+            form.setFieldValue('pois', [...existingPOIs, newPOI]);
+        }
+
+        setPoiMapModalOpen(false);
+        setCurrentPOIIndex(null);
+    };
+
+    // Open POI map picker for new POI
+    const openPOIMapPicker = () => {
+        setCurrentPOIIndex(null);
+        setPoiMapModalOpen(true);
+    };
+
+    // Open POI map picker for existing POI
+    const openPOIMapPickerForEdit = (index: number) => {
+        setCurrentPOIIndex(index);
+        setPoiMapModalOpen(true);
     };
 
     return (
@@ -630,7 +674,17 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
 
                 {/* Nearby POIs Section */}
                 <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">Nearby Points of Interest (Optional)</h3>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2 flex items-center justify-between">
+                        Nearby Points of Interest (Optional)
+                        <Button
+                            type="primary"
+                            icon={<EnvironmentOutlined />}
+                            onClick={openPOIMapPicker}
+                            size="small"
+                        >
+                            Add POI on Map
+                        </Button>
+                    </h3>
                     <Form.List name="pois">
                         {(fields, { add, remove }) => (
                             <div>
@@ -674,15 +728,33 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                         </div>
                                         <div className="col-span-1">
                                             <Button
+                                                type="default"
+                                                icon={<EnvironmentOutlined />}
+                                                onClick={() => openPOIMapPickerForEdit(name)}
+                                                size="small"
+                                                title="Pick location on map"
+                                                className="mb-6"
+                                            />
+                                        </div>
+                                        <div className="col-span-1">
+                                            <Button
                                                 danger
                                                 icon={<DeleteOutlined />}
                                                 onClick={() => remove(name)}
+                                                size="small"
                                                 className="mb-6"
                                             />
                                         </div>
                                     </div>
                                 ))}
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>Add POI</Button>
+                                <div className="flex space-x-2">
+                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                        Add POI Manually
+                                    </Button>
+                                    <Button type="primary" onClick={openPOIMapPicker} icon={<EnvironmentOutlined />}>
+                                        Add POI on Map
+                                    </Button>
+                                </div>
                             </div>
                         )}
                     </Form.List>
@@ -702,6 +774,15 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 open={mapModalOpen}
                 onCancel={() => setMapModalOpen(false)}
                 onSelect={handleMapSelect}
+                initialLocation={form.getFieldValue('location')}
+            />
+            <POIMapPicker
+                open={poiMapModalOpen}
+                onCancel={() => {
+                    setPoiMapModalOpen(false);
+                    setCurrentPOIIndex(null);
+                }}
+                onSelect={handlePOIMapSelect}
                 initialLocation={form.getFieldValue('location')}
             />
         </>

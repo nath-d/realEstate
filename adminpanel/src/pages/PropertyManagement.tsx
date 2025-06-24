@@ -730,175 +730,181 @@ const PropertyManagement: React.FC = () => {
                             <div>
                                 <Title level={4}>Specifications</Title>
                                 {viewingProperty.specifications.map((spec, index) => (
-                                    <div key={spec.id} className="space-y-3">
-                                        {index > 0 && <Divider />}
-                                        <div className="space-y-2">
-                                            <div>
-                                                <Text strong className="text-gray-700">Structure:</Text>
-                                                <div className="mt-1">
-                                                    {spec.structure && spec.structure.length > 0 ? (
-                                                        spec.structure.map((item, i) => (
-                                                            <Tag key={i} color="blue" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No structure specifications</Text>
-                                                    )}
+                                    <div key={spec.id} className="bg-gray-50 p-4 rounded-lg border">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {/* Left Column */}
+                                            <div className="space-y-3">
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Structure:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.structure && spec.structure.length > 0 ? (
+                                                            spec.structure.map((item, i) => (
+                                                                <Tag key={i} color="blue" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Brickwork:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.brickwork && spec.brickwork.length > 0 ? (
+                                                            spec.brickwork.map((item, i) => (
+                                                                <Tag key={i} color="green" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Windows:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.windows && spec.windows.length > 0 ? (
+                                                            spec.windows.map((item, i) => (
+                                                                <Tag key={i} color="orange" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">External Finish:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.externalFinish && spec.externalFinish.length > 0 ? (
+                                                            spec.externalFinish.map((item, i) => (
+                                                                <Tag key={i} color="purple" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Interior Finish:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.interiorFinish && spec.interiorFinish.length > 0 ? (
+                                                            spec.interiorFinish.map((item, i) => (
+                                                                <Tag key={i} color="cyan" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Doors:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.doors && spec.doors.length > 0 ? (
+                                                            spec.doors.map((item, i) => (
+                                                                <Tag key={i} color="magenta" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Brickwork:</Text>
-                                                <div className="mt-1">
-                                                    {spec.brickwork && spec.brickwork.length > 0 ? (
-                                                        spec.brickwork.map((item, i) => (
-                                                            <Tag key={i} color="green" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No brickwork specifications</Text>
-                                                    )}
+
+                                            {/* Right Column */}
+                                            <div className="space-y-3">
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Flooring:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.flooring && spec.flooring.length > 0 ? (
+                                                            spec.flooring.map((item, i) => (
+                                                                <Tag key={i} color="lime" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Windows:</Text>
-                                                <div className="mt-1">
-                                                    {spec.windows && spec.windows.length > 0 ? (
-                                                        spec.windows.map((item, i) => (
-                                                            <Tag key={i} color="orange" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No window specifications</Text>
-                                                    )}
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Kitchen:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.kitchen && spec.kitchen.length > 0 ? (
+                                                            spec.kitchen.map((item, i) => (
+                                                                <Tag key={i} color="volcano" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">External Finish:</Text>
-                                                <div className="mt-1">
-                                                    {spec.externalFinish && spec.externalFinish.length > 0 ? (
-                                                        spec.externalFinish.map((item, i) => (
-                                                            <Tag key={i} color="purple" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No external finish specifications</Text>
-                                                    )}
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Washroom:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.washroom && spec.washroom.length > 0 ? (
+                                                            spec.washroom.map((item, i) => (
+                                                                <Tag key={i} color="geekblue" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Interior Finish:</Text>
-                                                <div className="mt-1">
-                                                    {spec.interiorFinish && spec.interiorFinish.length > 0 ? (
-                                                        spec.interiorFinish.map((item, i) => (
-                                                            <Tag key={i} color="cyan" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No interior finish specifications</Text>
-                                                    )}
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Elevator:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.elevator && spec.elevator.length > 0 ? (
+                                                            spec.elevator.map((item, i) => (
+                                                                <Tag key={i} color="gold" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Doors:</Text>
-                                                <div className="mt-1">
-                                                    {spec.doors && spec.doors.length > 0 ? (
-                                                        spec.doors.map((item, i) => (
-                                                            <Tag key={i} color="magenta" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No door specifications</Text>
-                                                    )}
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Electricity:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.electricity && spec.electricity.length > 0 ? (
+                                                            spec.electricity.map((item, i) => (
+                                                                <Tag key={i} color="red" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Flooring:</Text>
-                                                <div className="mt-1">
-                                                    {spec.flooring && spec.flooring.length > 0 ? (
-                                                        spec.flooring.map((item, i) => (
-                                                            <Tag key={i} color="lime" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No flooring specifications</Text>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Kitchen:</Text>
-                                                <div className="mt-1">
-                                                    {spec.kitchen && spec.kitchen.length > 0 ? (
-                                                        spec.kitchen.map((item, i) => (
-                                                            <Tag key={i} color="volcano" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No kitchen specifications</Text>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Washroom:</Text>
-                                                <div className="mt-1">
-                                                    {spec.washroom && spec.washroom.length > 0 ? (
-                                                        spec.washroom.map((item, i) => (
-                                                            <Tag key={i} color="geekblue" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No washroom specifications</Text>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Elevator:</Text>
-                                                <div className="mt-1">
-                                                    {spec.elevator && spec.elevator.length > 0 ? (
-                                                        spec.elevator.map((item, i) => (
-                                                            <Tag key={i} color="gold" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No elevator specifications</Text>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Electricity:</Text>
-                                                <div className="mt-1">
-                                                    {spec.electricity && spec.electricity.length > 0 ? (
-                                                        spec.electricity.map((item, i) => (
-                                                            <Tag key={i} color="red" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No electricity specifications</Text>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Text strong className="text-gray-700">Water Supply:</Text>
-                                                <div className="mt-1">
-                                                    {spec.waterSupply && spec.waterSupply.length > 0 ? (
-                                                        spec.waterSupply.map((item, i) => (
-                                                            <Tag key={i} color="processing" className="mb-1 mr-1">
-                                                                {item}
-                                                            </Tag>
-                                                        ))
-                                                    ) : (
-                                                        <Text type="secondary">No water supply specifications</Text>
-                                                    )}
+                                                <div>
+                                                    <Text strong className="text-gray-700 text-sm">Water Supply:</Text>
+                                                    <div className="mt-1 flex flex-wrap gap-1">
+                                                        {spec.waterSupply && spec.waterSupply.length > 0 ? (
+                                                            spec.waterSupply.map((item, i) => (
+                                                                <Tag key={i} color="processing" className="text-xs">
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        ) : (
+                                                            <Text type="secondary" className="text-xs">None</Text>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -933,27 +939,27 @@ const PropertyManagement: React.FC = () => {
                         {viewingProperty && viewingProperty.pois && viewingProperty.pois.length > 0 && (
                             <div>
                                 <Title level={4}>Nearby Points of Interest</Title>
-                                <div className="grid grid-cols-1 gap-3">
-                                    {viewingProperty.pois.map((poi, index) => (
-                                        <div key={poi.id || index} className="bg-gray-50 p-3 rounded-lg border">
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex-1">
-                                                    <div className="font-semibold text-gray-800">{poi.name}</div>
-                                                    <div className="text-sm text-gray-600 flex items-center mt-1">
-                                                        <Tag color="blue" className="mr-2">{poi.type}</Tag>
+                                <div className="bg-gray-50 p-3 rounded-lg border">
+                                    <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
+                                        {viewingProperty.pois.map((poi, index) => (
+                                            <div key={poi.id || index} className="flex items-center justify-between p-2 bg-white rounded border">
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="font-medium text-gray-800 text-sm truncate">{poi.name}</div>
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <Tag color="blue" className="text-xs">{poi.type}</Tag>
                                                         {poi.distance && (
-                                                            <span className="text-gray-500">
-                                                                {poi.distance}m away
+                                                            <span className="text-xs text-gray-500">
+                                                                {poi.distance}m
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <div className="text-xs text-gray-500 mt-1">
-                                                        Coordinates: {poi.latitude.toFixed(6)}, {poi.longitude.toFixed(6)}
-                                                    </div>
+                                                </div>
+                                                <div className="text-xs text-gray-400 ml-2">
+                                                    {poi.latitude.toFixed(4)}, {poi.longitude.toFixed(4)}
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         )}
