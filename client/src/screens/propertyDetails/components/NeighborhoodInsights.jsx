@@ -140,9 +140,9 @@ const NeighborhoodInsights = ({ pois = [] }) => {
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-sm text-gray-600">
+                                        {/* <p className="text-sm text-gray-600">
                                             Coordinates: {poi.latitude.toFixed(4)}, {poi.longitude.toFixed(4)}
-                                        </p>
+                                        </p> */}
                                     </div>
                                 </div>
                             </motion.div>
@@ -150,7 +150,7 @@ const NeighborhoodInsights = ({ pois = [] }) => {
                     })}
                 </div>
 
-                <motion.div
+                {/* <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
@@ -173,7 +173,7 @@ const NeighborhoodInsights = ({ pois = [] }) => {
                             </div>
                         </div>
                     </div>
-                </motion.div>
+                </motion.div> */}
             </div>
         </section>
     );

@@ -494,13 +494,14 @@ const PropertyLocation = ({ location, pois = [] }) => {
                     </div>
                 </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-12">
-                    {/* Interactive Map Section */}
+                {/* Responsive grid: 3 columns on lg+, stacked on mobile/tablet */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    {/* Map section: sticky on large screens, takes 2 columns */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="bg-gradient-to-br from-[#1A332C] to-[#122620] rounded-3xl overflow-hidden shadow-2xl border border-[#E5BE90]/20"
+                        className="lg:col-span-2 bg-gradient-to-br from-[#1A332C] to-[#122620] rounded-3xl overflow-hidden shadow-2xl border border-[#E5BE90]/20 lg:sticky lg:top-32 h-full"
                     >
                         <div className="p-4 bg-gradient-to-r from-[#E5BE90]/10 to-transparent border-b border-[#E5BE90]/20">
                             <h3 className="text-lg font-semibold text-white flex items-center gap-2">
@@ -557,17 +558,17 @@ const PropertyLocation = ({ location, pois = [] }) => {
                         </div>
                     </motion.div>
 
-                    {/* Location Details */}
+                    {/* Details section: scrollable if content is long */}
                     <motion.div
                         variants={container}
                         initial="hidden"
                         whileInView="show"
                         viewport={{ once: true }}
-                        className="space-y-8"
+                        className="space-y-4 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto pr-2"
                     >
                         {/* Property Address */}
                         {location && (
-                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
+                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
                                 <h3 className="text-2xl font-bold mb-6 text-white">Property Address</h3>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-4">
@@ -575,9 +576,11 @@ const PropertyLocation = ({ location, pois = [] }) => {
                                             <FaMapMarkerAlt className="text-[#E5BE90]" />
                                         </div>
                                         <div>
-                                            <p className="text-gray-300">{location.address}</p>
-                                            <p className="text-gray-300">{location.city}, {location.state} {location.zipCode}</p>
-                                            <p className="text-gray-400 text-sm">Coordinates: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}</p>
+                                            <p className="text-gray-300">{location.address},</p>
+                                            {/* <p className="text-gray-300">{location.city}, {location.state} {location.zipCode}</p> */}
+                                            <p className="text-gray-300">{location.city}</p>
+
+                                            {/* <p className="text-gray-400 text-sm">Coordinates: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}</p> */}
                                         </div>
                                     </div>
                                 </div>
@@ -585,7 +588,7 @@ const PropertyLocation = ({ location, pois = [] }) => {
                         )}
 
                         {/* Nearby Amenities */}
-                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
+                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
                             <h3 className="text-2xl font-bold mb-6 text-white">Nearby Amenities</h3>
                             <div className="space-y-4">
                                 {locationInfo.nearbyAmenities.map((item, index) => (
@@ -600,7 +603,7 @@ const PropertyLocation = ({ location, pois = [] }) => {
                         </motion.div>
 
                         {/* Transportation */}
-                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
+                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
                             <h3 className="text-2xl font-bold mb-6 text-white">Transportation</h3>
                             <div className="space-y-4">
                                 {locationInfo.transportation.map((item, index) => (
@@ -615,7 +618,7 @@ const PropertyLocation = ({ location, pois = [] }) => {
                         </motion.div>
 
                         {/* Community Features */}
-                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
+                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
                             <h3 className="text-2xl font-bold mb-6 text-white">Community</h3>
                             <div className="space-y-4">
                                 {locationInfo.community.map((item, index) => (
@@ -630,8 +633,8 @@ const PropertyLocation = ({ location, pois = [] }) => {
                         </motion.div>
 
                         {/* POI Summary */}
-                        {pois.length > 0 && (
-                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8">
+                        {/* {pois.length > 0 && (
+                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
                                 <h3 className="text-2xl font-bold mb-6 text-white">Location Summary</h3>
                                 <div className="grid grid-cols-3 gap-4 text-center">
                                     <div className="bg-[#122620] rounded-lg p-4">
@@ -654,7 +657,7 @@ const PropertyLocation = ({ location, pois = [] }) => {
                                     </div>
                                 </div>
                             </motion.div>
-                        )}
+                        )} */}
                     </motion.div>
                 </div>
             </div>

@@ -192,8 +192,9 @@ const PropertyDetails = () => {
 
     return (
         <div className="min-h-screen bg-[#122620] text-white">
+            <Navbar />
             {/* Enhanced Sticky Header */}
-            <motion.div
+            {/* <motion.div
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrollPosition > 50
                     ? 'bg-[#122620]/95 backdrop-blur-md shadow-2xl'
                     : 'bg-transparent'
@@ -249,11 +250,11 @@ const PropertyDetails = () => {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </motion.div> */}
 
             {/* Main Content */}
-            <div className="pt-24">
-
+            {/* <div className="pt-24"> */}
+            <div className="">
                 <PropertyHero property={propertyData} />
                 <PropertyStats details={propertyData.details} />
 

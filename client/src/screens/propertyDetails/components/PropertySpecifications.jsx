@@ -122,6 +122,21 @@ const PropertySpecifications = ({ specifications }) => {
         }
     ];
 
+    // Create table data from specifications
+    const tableData = [
+        { category: "Structure & Brickwork", specifications: specifications?.structure || ["Not specified"] },
+        { category: "External Finish", specifications: specifications?.externalFinish || ["Not specified"] },
+        { category: "Interior Finish", specifications: specifications?.interiorFinish || ["Not specified"] },
+        { category: "Doors & Hardware", specifications: specifications?.doors || ["Not specified"] },
+        { category: "Windows", specifications: specifications?.windows || ["Not specified"] },
+        { category: "Flooring", specifications: specifications?.flooring || ["Not specified"] },
+        { category: "Kitchen Counter", specifications: specifications?.kitchen || ["Not specified"] },
+        { category: "Washroom", specifications: specifications?.washroom || ["Not specified"] },
+        { category: "Elevator", specifications: specifications?.elevator || ["Not specified"] },
+        { category: "Electricity", specifications: specifications?.electricity || ["Not specified"] },
+        { category: "Water Supply", specifications: specifications?.waterSupply || ["Not specified"] }
+    ];
+
     return (
         <section className="py-20 px-4 md:px-8">
             <div className="max-w-7xl mx-auto">
@@ -156,7 +171,7 @@ const PropertySpecifications = ({ specifications }) => {
                     </div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16 mb-20">
                     {defaultSpecifications.map((spec, index) => (
                         <SpecificationCard
                             key={index}
@@ -167,6 +182,88 @@ const PropertySpecifications = ({ specifications }) => {
                         />
                     ))}
                 </div>
+
+                {/* Specifications Table */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-gradient-to-br from-[#1A332C] to-[#122620] rounded-2xl overflow-hidden shadow-xl border border-[#E5BE90]/20"
+                >
+                    <div className="p-4 bg-gradient-to-r from-[#E5BE90]/10 to-transparent border-b border-[#E5BE90]/20">
+                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                            <FaClipboardList className="text-[#E5BE90]" />
+                            Complete Specifications Overview
+                        </h3>
+                        <p className="text-gray-400 text-xs mt-1">Detailed breakdown of all property specifications</p>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-[#122620]/50 border-b border-[#E5BE90]/20">
+                                    <th className="px-6 py-4 text-left text-[#E5BE90] font-semibold text-base tracking-wide">
+                                        Category
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-[#E5BE90] font-semibold text-base tracking-wide">
+                                        Specifications
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tableData.map((row, index) => (
+                                    <motion.tr
+                                        key={index}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className={`border-b border-[#E5BE90]/10 hover:bg-[#E5BE90]/5 transition-colors duration-300 ${index % 2 === 0 ? 'bg-[#1A332C]/30' : 'bg-[#122620]/30'
+                                            }`}
+                                    >
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-2 h-2 rounded-full bg-[#E5BE90] flex-shrink-0"></div>
+                                                <span className="text-white font-medium text-base">{row.category}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-wrap items-center">
+                                                {Array.isArray(row.specifications) ? (
+                                                    row.specifications.map((spec, specIndex) => (
+                                                        <div key={specIndex} className="flex items-center">
+                                                            <span className="text-gray-300 text-base leading-relaxed">
+                                                                {spec.length > 50 ? `${spec.substring(0, 50)}...` : spec}
+                                                            </span>
+                                                            {specIndex < row.specifications.length - 1 && (
+                                                                <span className="text-[#E5BE90] text-base mx-3">,</span>
+                                                            )}
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="flex items-center">
+                                                        <span className="text-gray-300 text-base leading-relaxed">
+                                                            {row.specifications.length > 50 ? `${row.specifications.substring(0, 50)}...` : row.specifications}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Table Footer */}
+                    <div className="p-3 bg-gradient-to-r from-transparent to-[#E5BE90]/5 border-t border-[#E5BE90]/20">
+                        <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span>Total Categories: {tableData.length}</span>
+                            <span>Last Updated: {new Date().toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
