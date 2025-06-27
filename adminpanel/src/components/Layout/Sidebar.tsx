@@ -1,4 +1,4 @@
-import { Layout, Menu, Button, Typography } from 'antd';
+import { Menu, Button, Typography } from 'antd';
 import {
     DashboardOutlined,
     HomeOutlined,
@@ -16,7 +16,6 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
-const { Sider } = Layout;
 const { Text } = Typography;
 
 interface SidebarProps {
@@ -30,80 +29,39 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
     const location = useLocation();
 
     const menuItems = [
-        {
-            key: 'dashboard',
-            icon: <DashboardOutlined />,
-            label: 'Dashboard',
-        },
-        {
-            key: 'properties',
-            icon: <HomeOutlined />,
-            label: 'Properties',
-        },
-        {
-            key: 'users',
-            icon: <UserOutlined />,
-            label: 'Users',
-        },
-        {
-            key: 'team',
-            icon: <TeamOutlined />,
-            label: 'Team',
-        },
-        {
-            key: 'analytics',
-            icon: <BarChartOutlined />,
-            label: 'Analytics',
-        },
-        {
-            key: 'orders',
-            icon: <ShoppingOutlined />,
-            label: 'Orders',
-        },
-        {
-            key: 'messages',
-            icon: <MessageOutlined />,
-            label: 'Messages',
-        },
-        {
-            key: 'files',
-            icon: <FileOutlined />,
-            label: 'Files',
-        },
-        {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: 'Settings',
-        },
+        { key: 'dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
+        { key: 'properties', icon: <HomeOutlined />, label: 'Properties' },
+        { key: 'users', icon: <UserOutlined />, label: 'Users' },
+        { key: 'team', icon: <TeamOutlined />, label: 'Team' },
+        { key: 'analytics', icon: <BarChartOutlined />, label: 'Analytics' },
+        { key: 'orders', icon: <ShoppingOutlined />, label: 'Orders' },
+        { key: 'messages', icon: <MessageOutlined />, label: 'Messages' },
+        { key: 'files', icon: <FileOutlined />, label: 'Files' },
+        { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
     ];
 
     const currentPath = location.pathname.split('/')[1] || 'dashboard';
 
     return (
-        <Sider
-            theme="light"
-            className={`h-screen border-r border-gray-200 flex flex-col shadow-sm transition-all duration-300 ${isMobile ? 'fixed z-50' : ''}`}
-            width={280}
-            collapsed={collapsed}
-            collapsible
-            trigger={null}
-            breakpoint="lg"
-            collapsedWidth={isMobile ? 0 : 80}
+        <aside
+            className={`
+                flex flex-col bg-white border-r border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] transition-all duration-300
+                ${isMobile ? 'fixed z-50 left-0 top-0' : 'sticky top-0 z-40'}
+                ${collapsed ? 'w-[80px] min-w-[80px]' : 'w-[280px] min-w-[80px]'}
+                h-screen
+            `}
+            style={{ minWidth: collapsed ? 80 : 280, width: collapsed ? 80 : 280 }}
         >
             {/* Logo/Brand Section */}
-            <div className="h-16 flex items-center justify-between border-b border-gray-200 flex-shrink-0 px-6">
+            <div className={`h-16 flex items-center justify-between border-b border-[#e2e8f0] flex-shrink-0 ${collapsed ? 'px-2' : 'px-6'}`}>
                 {!collapsed ? (
                     <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
                             <EnvironmentOutlined className="text-white text-lg" />
                         </div>
                         <div className="flex flex-col">
-                            <Text className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent m-0">
-                                Real Estate
-                            </Text>
-                            <Text className="text-xs text-gray-500 m-0">
-                                Admin Panel
-                            </Text>
+                            <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Real Estate</span>
+                            <span className="text-xs text-gray-500">Admin Panel</span>
                         </div>
                     </div>
                 ) : (
@@ -111,26 +69,23 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                         <EnvironmentOutlined className="text-white text-lg" />
                     </div>
                 )}
-
-                <Button
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => onCollapse(!collapsed)}
-                    className="text-gray-500 hover:text-blue-500 transition-colors"
-                    size="small"
-                />
+                {!collapsed && (
+                    <Button
+                        type="text"
+                        icon={<MenuFoldOutlined />}
+                        onClick={() => onCollapse(true)}
+                        className="text-gray-500 hover:text-blue-500 transition-colors"
+                        size="small"
+                    />
+                )}
             </div>
-
             {/* Navigation Menu */}
-            <div className="flex-1 overflow-y-auto py-4">
-                <div className="px-3 mb-4">
+            <div className="flex-1 py-4">
+                <div className={`${collapsed ? 'px-2' : 'px-3'} mb-4`}>
                     {!collapsed && (
-                        <Text className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            Navigation
-                        </Text>
+                        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Navigation</span>
                     )}
                 </div>
-
                 <Menu
                     mode="inline"
                     selectedKeys={[currentPath]}
@@ -141,27 +96,33 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                             onCollapse(true);
                         }
                     }}
-                    className="border-0 h-full text-gray-600"
-                    style={{
-                        backgroundColor: 'transparent',
-                    }}
+                    className="border-0 text-gray-600 bg-transparent"
+                    style={{ backgroundColor: 'transparent' }}
+                    inlineCollapsed={collapsed}
                 />
             </div>
-
             {/* Footer Section */}
             {!collapsed && (
-                <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-gray-50">
+                <div className="p-4 border-t border-[#e2e8f0] flex-shrink-0 bg-[#f8fafc]">
                     <div className="text-center">
-                        <Text className="text-xs text-gray-500 block">
-                            Version 1.0.0
-                        </Text>
-                        <Text className="text-xs text-gray-400 block mt-1">
-                            © 2024 Real Estate
-                        </Text>
+                        <span className="text-xs text-gray-500 block">Version 1.0.0</span>
+                        <span className="text-xs text-gray-400 block mt-1">© 2024 Real Estate</span>
                     </div>
                 </div>
             )}
-        </Sider>
+            {/* Collapsed State Toggle Button */}
+            {collapsed && (
+                <div className="p-2 border-t border-[#e2e8f0] flex-shrink-0">
+                    <Button
+                        type="text"
+                        icon={<MenuUnfoldOutlined />}
+                        onClick={() => onCollapse(false)}
+                        className="w-full text-gray-500 hover:text-blue-500 transition-colors"
+                        size="small"
+                    />
+                </div>
+            )}
+        </aside>
     );
 };
 

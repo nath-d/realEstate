@@ -22,468 +22,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Layout improvements */
-.ant-layout {
-  background: #f8fafc !important;
-}
+/* 3rd-party overrides (like Leaflet) and map styles remain below */
 
-.ant-layout-sider {
-  background: #ffffff !important;
-  border-right: 1px solid #e2e8f0 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  position: fixed !important;
-  left: 0 !important;
-  top: 0 !important;
-  height: 100vh !important;
-  z-index: 40 !important;
-  overflow: hidden !important;
-}
-
-.ant-layout-sider-collapsed {
-  width: 80px !important;
-}
-
-.ant-layout-sider-trigger {
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 48px !important;
-  background: #f8fafc !important;
-  border-top: 1px solid #e2e8f0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-}
-
-.ant-layout-sider-trigger:hover {
-  background: #f1f5f9 !important;
-  color: #3b82f6 !important;
-}
-
-.ant-layout-header {
-  background: #ffffff !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  padding: 0 24px !important;
-  height: 64px !important;
-  line-height: 64px !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 10 !important;
-}
-
-.ant-layout-content {
-  background: #f8fafc !important;
-  padding: 24px !important;
-  margin-left: 280px !important;
-  transition: margin-left 0.3s ease !important;
-  min-height: calc(100vh - 64px) !important;
-  overflow-y: auto !important;
-}
-
-.ant-layout-sider-collapsed+.ant-layout .ant-layout-content {
-  margin-left: 80px !important;
-}
-
-/* Sidebar improvements */
-.ant-menu {
-  background: transparent !important;
-  border: none !important;
-}
-
-.ant-menu-item {
-  margin: 4px 8px !important;
-  border-radius: 8px !important;
-  height: 44px !important;
-  line-height: 44px !important;
-  transition: all 0.2s ease !important;
-}
-
-.ant-menu-item:hover {
-  background-color: #f1f5f9 !important;
-  color: #3b82f6 !important;
-}
-
-.ant-menu-item-selected {
-  background-color: #3b82f6 !important;
-  color: #ffffff !important;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
-}
-
-.ant-menu-item-selected:hover {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-}
-
-/* Header improvements */
-.ant-layout-header .ant-btn {
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
-.ant-layout-header .ant-btn:hover {
-  background-color: #f1f5f9 !important;
-  color: #3b82f6 !important;
-}
-
-/* Card improvements */
-.ant-card {
-  border-radius: 12px !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-  background: #ffffff !important;
-}
-
-.ant-card-head {
-  border-bottom: 1px solid #e2e8f0 !important;
-  padding: 16px 24px !important;
-  background: #f8fafc !important;
-  border-radius: 12px 12px 0 0 !important;
-}
-
-.ant-card-head-title {
-  font-weight: 600 !important;
-  color: #1e293b !important;
-  font-size: 16px !important;
-}
-
-.ant-card-body {
-  padding: 24px !important;
-}
-
-/* Button improvements */
-.ant-btn {
-  border-radius: 8px !important;
-  font-weight: 500 !important;
-  height: 40px !important;
-  padding: 0 16px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  transition: all 0.2s ease !important;
-  border: 1px solid transparent !important;
-}
-
-.ant-btn-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-  border-color: #3b82f6 !important;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2) !important;
-}
-
-.ant-btn-primary:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-  border-color: #2563eb !important;
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
-  transform: translateY(-1px) !important;
-}
-
-.ant-btn-default {
-  background: #ffffff !important;
-  border-color: #d1d5db !important;
-  color: #374151 !important;
-}
-
-.ant-btn-default:hover {
-  background: #f9fafb !important;
-  border-color: #3b82f6 !important;
-  color: #3b82f6 !important;
-}
-
-.ant-btn-dangerous {
-  background: #ffffff !important;
-  border-color: #ef4444 !important;
-  color: #ef4444 !important;
-}
-
-.ant-btn-dangerous:hover {
-  background: #fef2f2 !important;
-  border-color: #dc2626 !important;
-  color: #dc2626 !important;
-}
-
-/* Form improvements */
-.ant-form-item {
-  margin-bottom: 20px !important;
-}
-
-.ant-form-item-label>label {
-  font-weight: 500 !important;
-  color: #374151 !important;
-  font-size: 14px !important;
-  margin-bottom: 8px !important;
-}
-
-.ant-input,
-.ant-input-number,
-.ant-select-selector,
-.ant-picker {
-  border-radius: 8px !important;
-  border: 1px solid #d1d5db !important;
-  height: 40px !important;
-  transition: all 0.2s ease !important;
-  background: #ffffff !important;
-}
-
-.ant-input:hover,
-.ant-input-number:hover,
-.ant-select-selector:hover,
-.ant-picker:hover {
-  border-color: #9ca3af !important;
-}
-
-.ant-input:focus,
-.ant-input-number:focus,
-.ant-select-focused .ant-select-selector,
-.ant-picker-focused {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-}
-
-.ant-textarea {
-  border-radius: 8px !important;
-  border: 1px solid #d1d5db !important;
-  transition: all 0.2s ease !important;
-}
-
-.ant-textarea:hover {
-  border-color: #9ca3af !important;
-}
-
-.ant-textarea:focus {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-}
-
-/* Table improvements */
-.ant-table {
-  border-radius: 12px !important;
-  overflow: hidden !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
-}
-
-.ant-table-thead>tr>th {
-  background: #f8fafc !important;
-  border-bottom: 2px solid #e2e8f0 !important;
-  font-weight: 600 !important;
-  color: #374151 !important;
-  padding: 16px !important;
-  font-size: 14px !important;
-}
-
-.ant-table-tbody>tr>td {
-  padding: 16px !important;
-  border-bottom: 1px solid #f1f5f9 !important;
-  background: #ffffff !important;
-}
-
-.ant-table-tbody>tr:hover>td {
-  background: #f8fafc !important;
-}
-
-.ant-table-tbody>tr:last-child>td {
-  border-bottom: none !important;
-}
-
-/* Modal improvements */
-.ant-modal {
-  border-radius: 16px !important;
-  overflow: hidden !important;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-}
-
-.ant-modal-header {
-  background: #f8fafc !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-  padding: 20px 24px !important;
-}
-
-.ant-modal-title {
-  font-weight: 600 !important;
-  color: #1e293b !important;
-  font-size: 18px !important;
-}
-
-.ant-modal-body {
-  padding: 24px !important;
-  background: #ffffff !important;
-}
-
-.ant-modal-footer {
-  background: #f8fafc !important;
-  border-top: 1px solid #e2e8f0 !important;
-  padding: 16px 24px !important;
-}
-
-/* Drawer improvements */
-.ant-drawer {
-  border-radius: 16px 0 0 16px !important;
-}
-
-.ant-drawer-header {
-  background: #f8fafc !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-  padding: 20px 24px !important;
-}
-
-.ant-drawer-title {
-  font-weight: 600 !important;
-  color: #1e293b !important;
-  font-size: 18px !important;
-}
-
-.ant-drawer-body {
-  background: #ffffff !important;
-  padding: 24px !important;
-}
-
-/* Tag improvements */
-.ant-tag {
-  border-radius: 6px !important;
-  font-weight: 500 !important;
-  font-size: 12px !important;
-  padding: 4px 8px !important;
-  border: none !important;
-}
-
-/* Badge improvements */
-.ant-badge-count {
-  background: #ef4444 !important;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3) !important;
-}
-
-/* Avatar improvements */
-.ant-avatar {
-  border: 2px solid #e2e8f0 !important;
-}
-
-/* Switch improvements */
-.ant-switch {
-  background: #d1d5db !important;
-}
-
-.ant-switch-checked {
-  background: #3b82f6 !important;
-}
-
-/* Upload improvements */
-.ant-upload-list-picture-card .ant-upload-list-item {
-  border-radius: 8px !important;
-  border: 1px solid #e2e8f0 !important;
-}
-
-.ant-upload.ant-upload-select-picture-card {
-  border-radius: 8px !important;
-  border: 2px dashed #d1d5db !important;
-  background: #f9fafb !important;
-}
-
-.ant-upload.ant-upload-select-picture-card:hover {
-  border-color: #3b82f6 !important;
-  background: #f0f9ff !important;
-}
-
-/* Alert improvements */
-.ant-alert {
-  border-radius: 8px !important;
-  border: 1px solid !important;
-}
-
-.ant-alert-success {
-  background: #f0fdf4 !important;
-  border-color: #bbf7d0 !important;
-}
-
-.ant-alert-error {
-  background: #fef2f2 !important;
-  border-color: #fecaca !important;
-}
-
-.ant-alert-warning {
-  background: #fffbeb !important;
-  border-color: #fed7aa !important;
-}
-
-.ant-alert-info {
-  background: #eff6ff !important;
-  border-color: #bfdbfe !important;
-}
-
-/* Descriptions improvements */
-.ant-descriptions-item-label {
-  font-weight: 600 !important;
-  color: #374151 !important;
-  background: #f8fafc !important;
-}
-
-.ant-descriptions-item-content {
-  color: #1e293b !important;
-}
-
-/* Divider improvements */
-.ant-divider {
-  border-color: #e2e8f0 !important;
-  margin: 24px 0 !important;
-}
-
-/* Typography improvements */
-.ant-typography h1,
-.ant-typography h2,
-.ant-typography h3,
-.ant-typography h4,
-.ant-typography h5 {
-  color: #1e293b !important;
-  font-weight: 600 !important;
-  margin-bottom: 16px !important;
-}
-
-.ant-typography h1 {
-  font-size: 32px !important;
-  line-height: 1.2 !important;
-}
-
-.ant-typography h2 {
-  font-size: 24px !important;
-  line-height: 1.3 !important;
-}
-
-.ant-typography h3 {
-  font-size: 20px !important;
-  line-height: 1.4 !important;
-}
-
-.ant-typography h4 {
-  font-size: 18px !important;
-  line-height: 1.4 !important;
-}
-
-/* Statistics improvements */
-.ant-statistic-title {
-  color: #6b7280 !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  margin-bottom: 8px !important;
-}
-
-.ant-statistic-content {
-  font-size: 24px !important;
-  font-weight: 600 !important;
-}
-
-/* Map component styles */
-.map-picker-modal .ant-modal-body {
-  padding: 0;
-}
-
-.poi-map-picker-modal .ant-modal-body {
-  padding: 0;
-}
-
-/* Leaflet map container styles */
 .leaflet-container {
   width: 100% !important;
   height: 100% !important;
@@ -492,14 +32,12 @@ body {
   border-radius: 8px;
 }
 
-/* Ensure map tiles load properly */
 .leaflet-tile {
   filter: none !important;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
 
-/* Optimize map performance */
 .leaflet-fade-anim .leaflet-tile,
 .leaflet-fade-anim .leaflet-popup {
   opacity: inherit;
@@ -509,7 +47,6 @@ body {
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Custom marker styles */
 .property-marker {
   background: transparent !important;
   border: none !important;
@@ -520,7 +57,6 @@ body {
   border: none !important;
 }
 
-/* Map loading overlay */
 .map-loading-overlay {
   position: absolute;
   top: 0;
@@ -535,7 +71,6 @@ body {
   border-radius: 8px;
 }
 
-/* Ensure map controls are properly positioned */
 .leaflet-control-container {
   z-index: 1000;
 }
@@ -558,7 +93,6 @@ body {
   color: #1890ff !important;
 }
 
-/* Optimize popup styling */
 .leaflet-popup-content-wrapper {
   border-radius: 8px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
@@ -575,139 +109,20 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Ensure proper map container sizing in modals */
 .ant-modal .leaflet-container {
   border-radius: 8px;
   overflow: hidden;
 }
 
-/* Fix for map container in flex layouts */
 .leaflet-container.leaflet-fade-anim {
   transition: opacity 0.3s linear;
 }
 
-/* Optimize tile loading */
 .leaflet-tile-pane {
   opacity: 1 !important;
 }
 
-/* Ensure smooth scrolling and zooming */
 .leaflet-container {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Responsive improvements */
-@media (max-width: 768px) {
-  .ant-layout-content {
-    padding: 16px !important;
-  }
-
-  .ant-card-body {
-    padding: 16px !important;
-  }
-
-  .ant-modal-body {
-    padding: 16px !important;
-  }
-
-  .ant-drawer-body {
-    padding: 16px !important;
-  }
-}
-
-/* Animation improvements */
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Loading states */
-.ant-spin-dot-item {
-  background-color: #3b82f6 !important;
-}
-
-/* Focus states for accessibility */
-.ant-btn:focus,
-.ant-input:focus,
-.ant-select-selector:focus {
-  outline: 2px solid #3b82f6 !important;
-  outline-offset: 2px !important;
-}
-
-/* User dropdown improvements */
-.user-dropdown .ant-dropdown-menu {
-  border-radius: 8px !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-  border: 1px solid #e2e8f0 !important;
-}
-
-.user-dropdown .ant-dropdown-menu-item {
-  padding: 8px 16px !important;
-  border-radius: 4px !important;
-  margin: 2px 8px !important;
-}
-
-.user-dropdown .ant-dropdown-menu-item:hover {
-  background-color: #f1f5f9 !important;
-}
-
-/* Custom table styles for better display */
-.custom-table .ant-table-thead>tr>th {
-  background-color: #f8fafc;
-  border-bottom: 2px solid #e2e8f0;
-  font-weight: 600;
-  color: #374151;
-}
-
-.custom-table .ant-table-tbody>tr:hover>td {
-  background-color: #f1f5f9;
-}
-
-/* Modern drawer styles */
-.modern-drawer .ant-drawer-header {
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.modern-drawer .ant-drawer-body {
-  background-color: #ffffff;
-}
-
-.property-description-textarea textarea {
-  min-height: 350px !important;
-  resize: vertical !important;
-  font-size: 1.1rem;
-  line-height: 1.7;
 }

@@ -169,7 +169,7 @@ const Dashboard: React.FC = () => {
             {/* Main Statistics */}
             <Row gutter={[16, 16]} className="mb-8">
                 <Col xs={24} sm={12} lg={6}>
-                    <Card className="text-center border-0 shadow-sm hover:shadow-md transition-shadow">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                         <Statistic
                             title="Total Properties"
                             value={stats.totalProperties}
@@ -184,7 +184,7 @@ const Dashboard: React.FC = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} lg={6}>
-                    <Card className="text-center border-0 shadow-sm hover:shadow-md transition-shadow">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                         <Statistic
                             title="For Sale"
                             value={stats.forSaleProperties}
@@ -199,7 +199,7 @@ const Dashboard: React.FC = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} lg={6}>
-                    <Card className="text-center border-0 shadow-sm hover:shadow-md transition-shadow">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                         <Statistic
                             title="For Rent"
                             value={stats.forRentProperties}
@@ -214,7 +214,7 @@ const Dashboard: React.FC = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} lg={6}>
-                    <Card className="text-center border-0 shadow-sm hover:shadow-md transition-shadow">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                         <Statistic
                             title="Total Value"
                             value={stats.totalValue}
@@ -234,13 +234,14 @@ const Dashboard: React.FC = () => {
             {/* Secondary Statistics */}
             <Row gutter={[16, 16]} className="mb-8">
                 <Col xs={24} sm={12} lg={8}>
-                    <Card className="border-0 shadow-sm">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full">
                         <div className="flex items-center justify-between mb-4">
                             <Title level={4} className="m-0">Portfolio Status</Title>
                             <Button
-                                type="link"
+                                type="primary"
                                 onClick={() => navigate('/properties')}
-                                className="p-0 text-blue-600"
+                                size="middle"
+                                className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                             >
                                 View All
                             </Button>
@@ -286,7 +287,7 @@ const Dashboard: React.FC = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} lg={8}>
-                    <Card className="border-0 shadow-sm">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full">
                         <div className="flex items-center justify-between mb-4">
                             <Title level={4} className="m-0">Featured Properties</Title>
                             <Tag color="gold" icon={<StarOutlined />}>
@@ -307,7 +308,7 @@ const Dashboard: React.FC = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} lg={8}>
-                    <Card className="border-0 shadow-sm">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full">
                         <Title level={4} className="mb-4">Average Price</Title>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-blue-600 mb-2">
@@ -329,15 +330,16 @@ const Dashboard: React.FC = () => {
                             <div className="flex items-center justify-between">
                                 <span>Recent Properties</span>
                                 <Button
-                                    type="link"
+                                    type="primary"
                                     onClick={() => navigate('/properties')}
-                                    className="p-0 text-blue-600"
+                                    size="middle"
+                                    className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                                 >
                                     View All
                                 </Button>
                             </div>
                         }
-                        className="border-0 shadow-sm"
+                        className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full"
                     >
                         <List
                             dataSource={stats.recentProperties}
@@ -398,15 +400,16 @@ const Dashboard: React.FC = () => {
                             <div className="flex items-center justify-between">
                                 <span>Top Properties by Value</span>
                                 <Button
-                                    type="link"
+                                    type="primary"
                                     onClick={() => navigate('/properties')}
-                                    className="p-0 text-blue-600"
+                                    size="middle"
+                                    className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                                 >
                                     View All
                                 </Button>
                             </div>
                         }
-                        className="border-0 shadow-sm"
+                        className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full"
                     >
                         <List
                             dataSource={stats.topProperties}
@@ -461,7 +464,7 @@ const Dashboard: React.FC = () => {
             {/* Quick Actions */}
             <Row gutter={[16, 16]}>
                 <Col xs={24}>
-                    <Card className="border-0 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <Title level={4} className="mb-2">Quick Actions</Title>
@@ -474,13 +477,16 @@ const Dashboard: React.FC = () => {
                                     type="primary"
                                     icon={<HomeOutlined />}
                                     onClick={() => navigate('/properties')}
+                                    className="rounded-[8px] font-medium h-12 px-6 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)] text-base"
                                     size="large"
                                 >
                                     View Properties
                                 </Button>
                                 <Button
+                                    type="primary"
                                     icon={<PlusOutlined />}
                                     onClick={() => navigate('/properties')}
+                                    className="rounded-[8px] font-medium h-12 px-6 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)] text-base"
                                     size="large"
                                 >
                                     Add Property

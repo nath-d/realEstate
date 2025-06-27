@@ -82,14 +82,14 @@ const SectionHeader = ({ title, subtitle, icon, action }: {
     icon: React.ReactNode;
     action?: React.ReactNode
 }) => (
-    <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+    <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#e2e8f0]">
         <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-[#eff6ff] rounded-lg flex items-center justify-center">
                 {icon}
             </div>
             <div>
-                <Title level={4} className="m-0 text-gray-800">{title}</Title>
-                {subtitle && <Text type="secondary" className="text-sm">{subtitle}</Text>}
+                <Title level={4} className="m-0 font-semibold text-[#1e293b] text-[16px]">{title}</Title>
+                {subtitle && <Text type="secondary" className="text-[#6b7280] text-sm">{subtitle}</Text>}
             </div>
         </div>
         {action && <div>{action}</div>}
@@ -415,7 +415,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 className="space-y-8"
             >
                 {/* Basic Information Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Basic Information"
                         subtitle="Enter the fundamental details about the property"
@@ -432,6 +432,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 <Input
                                     placeholder="Enter property title"
                                     size="large"
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -449,7 +450,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                         return Number(value.replace(/\$\s?|(,*)/g, ''));
                                     }) as any}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                     min={0}
                                 />
                             </Form.Item>
@@ -464,6 +465,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="Select property type"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 >
                                     <Option value="villa">Villa</Option>
                                     <Option value="apartment">Apartment</Option>
@@ -482,6 +484,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="Select status"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 >
                                     <Option value="for sale">For Sale</Option>
                                     <Option value="for rent">For Rent</Option>
@@ -502,7 +505,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Description Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Description"
                         subtitle="Provide a detailed description of the property"
@@ -516,7 +519,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                     >
                         <TextArea
                             placeholder="Describe the property features, amenities, unique selling points, neighborhood highlights, and any special characteristics that make this property stand out. Include details about the layout, finishes, outdoor spaces, and nearby attractions."
-                            className="property-description-textarea"
+                            className="min-h-[350px] resize-y text-base leading-relaxed p-4 border border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                             showCount
                             maxLength={2000}
                         />
@@ -524,7 +527,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Property Details Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Property Details"
                         subtitle="Specify the physical characteristics of the property"
@@ -542,7 +545,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="0"
                                     min={0}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -557,7 +560,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     min={0}
                                     step={0.5}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -571,7 +574,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="0"
                                     min={0}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -584,6 +587,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 <Input
                                     placeholder="e.g., 5000 sq ft"
                                     size="large"
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -596,6 +600,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 <Input
                                     placeholder="e.g., 2500 sq ft"
                                     size="large"
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -610,7 +615,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     min={1800}
                                     max={new Date().getFullYear()}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -618,7 +623,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Property Specifications Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Property Specifications"
                         subtitle="Add detailed specifications and features (use tags)"
@@ -637,6 +642,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., RCC Frame, Steel Frame"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -651,6 +657,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Red Brick, Fly Ash"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -665,6 +672,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., UPVC, Aluminum"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -679,6 +687,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Paint, Stone Cladding"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -693,6 +702,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Wallpaper, Paint, Tiles"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -707,6 +717,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Wooden, Steel, Glass"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -721,6 +732,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Marble, Tiles, Wood"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -735,6 +747,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Modular, Granite Counter"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -749,6 +762,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Modern Fittings, Tiles"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -763,6 +777,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., Passenger, Service, None"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -777,6 +792,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., 3 Phase, Backup Power"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -791,6 +807,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., 24/7, Borewell, Municipal"
                                     size="large"
                                     getPopupContainer={() => document.body}
+                                    className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -798,7 +815,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Images Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Property Images"
                         subtitle="Upload high-quality images of the property (max 8 images)"
@@ -814,7 +831,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             customRequest={customUpload}
                             accept="image/*"
                             maxCount={8}
-                            className="property-images-upload"
+                            className="property-images-upload border-[#d1d5db] rounded-lg"
                         >
                             {fileList.length >= 8 ? null : uploadButton}
                         </Upload>
@@ -822,7 +839,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Location Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Location Details"
                         subtitle="Specify the property location and coordinates"
@@ -833,6 +850,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 icon={<EnvironmentOutlined />}
                                 onClick={() => setMapModalOpen(true)}
                                 size="middle"
+                                className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                             >
                                 Pick on Map
                             </Button>
@@ -846,7 +864,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 label="Address"
                                 rules={[{ required: true, message: 'Please enter the address' }]}
                             >
-                                <Input placeholder="Enter full address" size="large" />
+                                <Input placeholder="Enter full address" size="large" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={12}>
@@ -855,7 +873,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 label="City"
                                 rules={[{ required: true, message: 'Please enter the city' }]}
                             >
-                                <Input placeholder="Enter city name" size="large" />
+                                <Input placeholder="Enter city name" size="large" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={12}>
@@ -864,7 +882,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 label="State"
                                 rules={[{ required: true, message: 'Please enter the state' }]}
                             >
-                                <Input placeholder="Enter state name" size="large" />
+                                <Input placeholder="Enter state name" size="large" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={12}>
@@ -873,7 +891,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 label="Zip Code"
                                 rules={[{ required: true, message: 'Please enter the zip code' }]}
                             >
-                                <Input placeholder="Enter zip code" size="large" />
+                                <Input placeholder="Enter zip code" size="large" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={12}>
@@ -886,7 +904,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., 22.4736"
                                     step={0.000001}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -900,7 +918,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     placeholder="e.g., 88.3607"
                                     step={0.000001}
                                     size="large"
-                                    className="w-full"
+                                    className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />
                             </Form.Item>
                         </Col>
@@ -915,7 +933,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             <Text strong className="text-blue-800">Nearby Places of Interest (auto-filled):</Text>
                             <div className="mt-2 flex flex-wrap gap-2">
                                 {mapPOIs.map((poi, idx) => (
-                                    <Tag key={idx} color="blue" className="text-xs">
+                                    <Tag key={idx} color="blue" className="text-xs rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                         {poi.name} ({poi.type})
                                     </Tag>
                                 ))}
@@ -925,7 +943,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Material Certifications Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Material Certifications"
                         subtitle="Add material certifications and quality documents (optional)"
@@ -936,7 +954,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                         {(fields, { add, remove }) => (
                             <div className="space-y-6">
                                 {fields.map(({ key, name, ...restField }) => (
-                                    <Card key={key} className="bg-gray-50 border border-gray-200" size="small">
+                                    <Card key={key} className="bg-[#f8fafc] border border-[#e2e8f0]" size="small">
                                         <div className="flex justify-between items-center mb-4">
                                             <Text strong className="text-gray-700">Certification #{name + 1}</Text>
                                             <Button
@@ -945,23 +963,24 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                                 icon={<DeleteOutlined />}
                                                 onClick={() => remove(name)}
                                                 size="small"
+                                                className="bg-white border-[#ef4444] text-[#ef4444] hover:bg-[#fef2f2] hover:border-[#dc2626] hover:text-[#dc2626]"
                                             />
                                         </div>
 
                                         <Row gutter={[16, 16]}>
                                             <Col xs={24} sm={12} md={6}>
                                                 <Form.Item {...restField} name={[name, 'material']} label="Material">
-                                                    <Input placeholder="e.g., Cement" size="middle" />
+                                                    <Input placeholder="e.g., Cement" size="middle" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} sm={12} md={6}>
                                                 <Form.Item {...restField} name={[name, 'brand']} label="Brand">
-                                                    <Input placeholder="e.g., UltraTech" size="middle" />
+                                                    <Input placeholder="e.g., UltraTech" size="middle" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} sm={12} md={6}>
                                                 <Form.Item {...restField} name={[name, 'certificate']} label="Certificate">
-                                                    <Input placeholder="e.g., ISO 9001:2015" size="middle" />
+                                                    <Input placeholder="e.g., ISO 9001:2015" size="middle" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} sm={12} md={6}>
@@ -971,7 +990,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                             </Col>
                                             <Col xs={24}>
                                                 <Form.Item {...restField} name={[name, 'description']} label="Description">
-                                                    <Input placeholder="Enter detailed description" size="middle" />
+                                                    <Input placeholder="Enter detailed description" size="middle" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -985,7 +1004,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                                 customRequest={customCertificationUpload}
                                                 accept="image/*"
                                                 maxCount={1}
-                                                className="certification-upload"
+                                                className="certification-upload border-[#d1d5db] rounded-lg"
                                             >
                                                 {(certificationImages[name] || []).length >= 1 ? null : certificationUploadButton(name)}
                                             </Upload>
@@ -999,7 +1018,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     block
                                     icon={<PlusOutlined />}
                                     size="large"
-                                    className="mt-4"
+                                    className="mt-4 border-[#d1d5db] text-[#374151] hover:border-[#3b82f6] hover:text-[#3b82f6]"
                                 >
                                     Add Material Certification
                                 </Button>
@@ -1009,7 +1028,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Nearby POIs Section */}
-                <Card className="shadow-sm border-0">
+                <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Nearby Points of Interest"
                         subtitle="Add nearby landmarks and amenities (optional)"
@@ -1020,6 +1039,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                 icon={<EnvironmentOutlined />}
                                 onClick={openPOIMapPicker}
                                 size="middle"
+                                className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                             >
                                 Add POI on Map
                             </Button>
@@ -1030,7 +1050,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                         {(fields, { add, remove }) => (
                             <div className="space-y-4">
                                 {fields.map(({ key, name, ...restField }) => (
-                                    <Card key={key} className="bg-gray-50 border border-gray-200" size="small">
+                                    <Card key={key} className="bg-[#f8fafc] border border-[#e2e8f0]" size="small">
                                         <div className="flex justify-between items-center mb-4">
                                             <Text strong className="text-gray-700">POI #{name + 1}</Text>
                                             <Space>
@@ -1040,6 +1060,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                                     onClick={() => openPOIMapPickerForEdit(name)}
                                                     size="small"
                                                     title="Pick location on map"
+                                                    className="bg-white border-[#d1d5db] text-[#374151] hover:bg-[#f9fafb] hover:border-[#3b82f6] hover:text-[#3b82f6]"
                                                 />
                                                 <Button
                                                     danger
@@ -1047,6 +1068,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                                     icon={<DeleteOutlined />}
                                                     onClick={() => remove(name)}
                                                     size="small"
+                                                    className="bg-white border-[#ef4444] text-[#ef4444] hover:bg-[#fef2f2] hover:border-[#dc2626] hover:text-[#dc2626]"
                                                 />
                                             </Space>
                                         </div>
@@ -1054,12 +1076,12 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                         <Row gutter={[16, 16]}>
                                             <Col xs={24} sm={12} md={6}>
                                                 <Form.Item {...restField} name={[name, 'name']} label="Name" rules={[{ required: true, message: 'Please enter POI name' }]}>
-                                                    <Input placeholder="e.g., Central Park" size="middle" />
+                                                    <Input placeholder="e.g., Central Park" size="middle" className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} sm={12} md={6}>
                                                 <Form.Item {...restField} name={[name, 'type']} label="Type" rules={[{ required: true, message: 'Please select type' }]}>
-                                                    <Select placeholder="Select type" size="middle" getPopupContainer={() => document.body}>
+                                                    <Select placeholder="Select type" size="middle" getPopupContainer={() => document.body} className="border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]">
                                                         <Option value="school">School</Option>
                                                         <Option value="park">Park</Option>
                                                         <Option value="station">Station</Option>
@@ -1075,17 +1097,17 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                             </Col>
                                             <Col xs={24} sm={12} md={4}>
                                                 <Form.Item {...restField} name={[name, 'latitude']} label="Latitude" rules={[{ required: true, message: 'Please enter latitude' }]}>
-                                                    <InputNumber placeholder="22.4736" step={0.000001} size="middle" className="w-full" />
+                                                    <InputNumber placeholder="22.4736" step={0.000001} size="middle" className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} sm={12} md={4}>
                                                 <Form.Item {...restField} name={[name, 'longitude']} label="Longitude" rules={[{ required: true, message: 'Please enter longitude' }]}>
-                                                    <InputNumber placeholder="88.3607" step={0.000001} size="middle" className="w-full" />
+                                                    <InputNumber placeholder="88.3607" step={0.000001} size="middle" className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} sm={12} md={4}>
                                                 <Form.Item {...restField} name={[name, 'distance']} label="Distance (m)">
-                                                    <InputNumber placeholder="500" min={0} size="middle" className="w-full" />
+                                                    <InputNumber placeholder="500" min={0} size="middle" className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]" />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -1098,7 +1120,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                         onClick={() => add()}
                                         icon={<PlusOutlined />}
                                         size="large"
-                                        className="flex-1"
+                                        className="flex-1 border-[#d1d5db] text-[#374151] hover:border-[#3b82f6] hover:text-[#3b82f6]"
                                     >
                                         Add POI Manually
                                     </Button>
@@ -1107,6 +1129,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                         onClick={openPOIMapPicker}
                                         icon={<EnvironmentOutlined />}
                                         size="large"
+                                        className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                                     >
                                         Add POI on Map
                                     </Button>
@@ -1117,11 +1140,12 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 </Card>
 
                 {/* Form Actions */}
-                <Card className="shadow-sm border-0 bg-gray-50">
+                <Card className="bg-[#f8fafc] border border-[#e2e8f0]">
                     <div className="flex justify-end space-x-4">
                         <Button
                             onClick={() => form.resetFields()}
                             size="large"
+                            className="bg-white border-[#d1d5db] text-[#374151] hover:bg-[#f9fafb] hover:border-[#3b82f6] hover:text-[#3b82f6]"
                         >
                             Reset Form
                         </Button>
@@ -1131,6 +1155,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             loading={isSubmitting}
                             size="large"
                             icon={<DollarOutlined />}
+                            className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                         >
                             {isSubmitting ? 'Submitting...' : 'Submit Property'}
                         </Button>

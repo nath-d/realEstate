@@ -522,7 +522,7 @@ const PropertyManagement: React.FC = () => {
                         icon={<EyeOutlined />}
                         onClick={() => handleView(record)}
                         size="small"
-                        className="bg-blue-600 hover:bg-blue-700 shadow-sm border-0"
+                        className="rounded-[8px] font-medium h-8 px-3 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)] text-sm"
                     >
                         View
                     </Button>
@@ -531,7 +531,7 @@ const PropertyManagement: React.FC = () => {
                         icon={<EditOutlined />}
                         onClick={() => handleEdit(record)}
                         size="small"
-                        className="border-gray-300 hover:border-blue-500 hover:text-blue-600 shadow-sm"
+                        className="rounded-[8px] font-medium h-8 px-3 flex items-center justify-center gap-2 bg-white border-[#d1d5db] text-[#374151] hover:bg-[#f9fafb] hover:border-[#3b82f6] hover:text-[#3b82f6] text-sm"
                     >
                         Edit
                     </Button>
@@ -541,7 +541,7 @@ const PropertyManagement: React.FC = () => {
                         icon={<DeleteOutlined />}
                         onClick={() => handleDelete(record.id)}
                         size="small"
-                        className="border-red-300 hover:border-red-500 shadow-sm"
+                        className="rounded-[8px] font-medium h-8 px-3 flex items-center justify-center gap-2 bg-white border-[#ef4444] text-[#ef4444] hover:bg-[#fef2f2] hover:border-[#dc2626] hover:text-[#dc2626] text-sm"
                     >
                         Delete
                     </Button>
@@ -568,7 +568,7 @@ const PropertyManagement: React.FC = () => {
                         icon={<PlusOutlined />}
                         onClick={() => setIsModalVisible(true)}
                         size="large"
-                        className="bg-blue-600 hover:bg-blue-700 shadow-md"
+                        className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                     >
                         Add Property
                     </Button>
@@ -752,7 +752,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.structure && spec.structure.length > 0 ? (
                                                             spec.structure.map((item, i) => (
-                                                                <Tag key={i} color="blue" className="text-xs">
+                                                                <Tag key={i} color="blue" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -766,7 +766,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.brickwork && spec.brickwork.length > 0 ? (
                                                             spec.brickwork.map((item, i) => (
-                                                                <Tag key={i} color="green" className="text-xs">
+                                                                <Tag key={i} color="green" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -780,7 +780,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.windows && spec.windows.length > 0 ? (
                                                             spec.windows.map((item, i) => (
-                                                                <Tag key={i} color="orange" className="text-xs">
+                                                                <Tag key={i} color="orange" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -794,7 +794,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.externalFinish && spec.externalFinish.length > 0 ? (
                                                             spec.externalFinish.map((item, i) => (
-                                                                <Tag key={i} color="purple" className="text-xs">
+                                                                <Tag key={i} color="purple" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -808,7 +808,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.interiorFinish && spec.interiorFinish.length > 0 ? (
                                                             spec.interiorFinish.map((item, i) => (
-                                                                <Tag key={i} color="cyan" className="text-xs">
+                                                                <Tag key={i} color="cyan" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -822,7 +822,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.doors && spec.doors.length > 0 ? (
                                                             spec.doors.map((item, i) => (
-                                                                <Tag key={i} color="magenta" className="text-xs">
+                                                                <Tag key={i} color="magenta" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -840,7 +840,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.flooring && spec.flooring.length > 0 ? (
                                                             spec.flooring.map((item, i) => (
-                                                                <Tag key={i} color="lime" className="text-xs">
+                                                                <Tag key={i} color="lime" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -854,7 +854,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.kitchen && spec.kitchen.length > 0 ? (
                                                             spec.kitchen.map((item, i) => (
-                                                                <Tag key={i} color="volcano" className="text-xs">
+                                                                <Tag key={i} color="volcano" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -868,7 +868,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.washroom && spec.washroom.length > 0 ? (
                                                             spec.washroom.map((item, i) => (
-                                                                <Tag key={i} color="geekblue" className="text-xs">
+                                                                <Tag key={i} color="geekblue" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -882,7 +882,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.elevator && spec.elevator.length > 0 ? (
                                                             spec.elevator.map((item, i) => (
-                                                                <Tag key={i} color="gold" className="text-xs">
+                                                                <Tag key={i} color="gold" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -896,7 +896,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.electricity && spec.electricity.length > 0 ? (
                                                             spec.electricity.map((item, i) => (
-                                                                <Tag key={i} color="red" className="text-xs">
+                                                                <Tag key={i} color="red" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -910,7 +910,7 @@ const PropertyManagement: React.FC = () => {
                                                     <div className="mt-1 flex flex-wrap gap-1">
                                                         {spec.waterSupply && spec.waterSupply.length > 0 ? (
                                                             spec.waterSupply.map((item, i) => (
-                                                                <Tag key={i} color="processing" className="text-xs">
+                                                                <Tag key={i} color="processing" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">
                                                                     {item}
                                                                 </Tag>
                                                             ))
@@ -959,7 +959,7 @@ const PropertyManagement: React.FC = () => {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="font-medium text-gray-800 text-sm truncate">{poi.name}</div>
                                                     <div className="flex items-center gap-2 mt-1">
-                                                        <Tag color="blue" className="text-xs">{poi.type}</Tag>
+                                                        <Tag color="blue" className="rounded-[6px] font-medium text-[12px] px-2 py-1 border-0">{poi.type}</Tag>
                                                         {poi.distance && (
                                                             <span className="text-xs text-gray-500">
                                                                 {poi.distance}m
@@ -1012,7 +1012,7 @@ const PropertyManagement: React.FC = () => {
                                     setIsDrawerVisible(false);
                                     handleEdit(viewingProperty);
                                 }}
-                                className="flex-1"
+                                className="flex-1 rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
                             >
                                 Edit Property
                             </Button>
@@ -1023,7 +1023,7 @@ const PropertyManagement: React.FC = () => {
                                     setIsDrawerVisible(false);
                                     handleDelete(viewingProperty.id);
                                 }}
-                                className="flex-1"
+                                className="flex-1 rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 bg-white border-[#ef4444] text-[#ef4444] hover:bg-[#fef2f2] hover:border-[#dc2626] hover:text-[#dc2626]"
                             >
                                 Delete Property
                             </Button>
