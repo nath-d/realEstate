@@ -1,10 +1,11 @@
-import { Layout, Avatar, Dropdown, Space, Badge, Button } from 'antd';
+import { Layout, Avatar, Dropdown, Space, Badge, Button, Typography } from 'antd';
 import type { MenuProps } from 'antd';
 import { UserOutlined, BellOutlined, SettingOutlined, LogoutOutlined, MenuOutlined } from '@ant-design/icons';
 import Sidebar from './Sidebar';
 import { useState, useEffect } from 'react';
 
 const { Content, Header } = Layout;
+const { Text } = Typography;
 
 interface MainLayoutProps {
     children: React.ReactNode;
@@ -50,39 +51,74 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     ];
 
     return (
-        <Layout className="min-h-screen h-screen overflow-hidden bg-gray-50">
+        <Layout className="min-h-screen bg-gray-50">
             <Sidebar collapsed={collapsed} onCollapse={setCollapsed} isMobile={isMobile} />
-            <Layout className="h-full overflow-auto">
-                <Header className="bg-white px-6 flex items-center justify-between border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-                    <div className="flex items-center space-x-4">
-                        {isMobile && (
-                            <Button
-                                type="text"
-                                icon={<MenuOutlined />}
-                                onClick={() => setCollapsed(!collapsed)}
-                                className="text-gray-500 hover:text-blue-500"
-                            />
-                        )}
-                        <div className="text-lg font-semibold text-gray-700">Dashboard</div>
-                    </div>
-                    <div className="flex items-center space-x-6">
-                        <Badge count={5} size="small">
-                            <BellOutlined className="text-xl text-gray-600 hover:text-blue-500 transition-colors cursor-pointer" />
-                        </Badge>
-                        <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
-                            <Space className="cursor-pointer px-3 rounded-lg transition-colors border-gray-200">
-                                <Avatar
-                                    icon={<UserOutlined />}
-                                    className="bg-blue-500"
+            <Layout className="min-h-screen">
+                <Header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+                    <div className="flex items-center justify-between h-full px-6">
+                        <div className="flex items-center space-x-4">
+                            {isMobile && (
+                                <Button
+                                    type="text"
+                                    icon={<MenuOutlined />}
+                                    onClick={() => setCollapsed(!collapsed)}
+                                    className="text-gray-500 hover:text-blue-500 transition-colors"
+                                    size="large"
                                 />
-                                <span className="text-sm font-medium text-gray-700 hidden sm:inline">Admin User</span>
-                            </Space>
-                        </Dropdown>
+                            )}
+                            <div className="flex flex-col">
+                                <Text className="text-lg font-semibold text-gray-800 m-0">
+                                    Real Estate Admin
+                                </Text>
+                                <Text className="text-sm text-gray-500 m-0">
+                                    Property Management Dashboard
+                                </Text>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                            <Badge count={3} size="small" className="cursor-pointer">
+                                <Button
+                                    type="text"
+                                    icon={<BellOutlined />}
+                                    className="text-gray-600 hover:text-blue-500 transition-colors"
+                                    size="large"
+                                />
+                            </Badge>
+
+                            <Dropdown
+                                menu={{ items: userMenuItems }}
+                                placement="bottomRight"
+                                trigger={['click']}
+                                overlayClassName="user-dropdown"
+                            >
+                                <Space className="cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <Avatar
+                                        icon={<UserOutlined />}
+                                        className="bg-gradient-to-r from-blue-500 to-indigo-600"
+                                        size="default"
+                                    />
+                                    <div className="hidden sm:flex flex-col items-start">
+                                        <Text className="text-sm font-medium text-gray-700 m-0">
+                                            Admin User
+                                        </Text>
+                                        <Text className="text-xs text-gray-500 m-0">
+                                            Administrator
+                                        </Text>
+                                    </div>
+                                </Space>
+                            </Dropdown>
+                        </div>
                     </div>
                 </Header>
-                <Content className="p-4 sm:p-6">
-                    <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 h-full border border-gray-100">
-                        {children}
+
+                <Content className="bg-gray-50 overflow-auto">
+                    <div className="p-6">
+                        <div className="w-full">
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 min-h-[calc(100vh-120px)]">
+                                {children}
+                            </div>
+                        </div>
                     </div>
                 </Content>
             </Layout>

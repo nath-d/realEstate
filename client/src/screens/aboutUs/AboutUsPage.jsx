@@ -60,7 +60,7 @@ const AboutUsPage = () => {
         <div className="min-h-screen bg-[#F4EBD0]">
             <Navbar />
             {/* Hero Section */}
-            <section className="relative h-[60vh] bg-[#122620] overflow-hidden">
+            <section className="relative h-[70vh] bg-[#122620] overflow-hidden">
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{

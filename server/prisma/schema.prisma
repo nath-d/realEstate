@@ -114,6 +114,7 @@ model MaterialCertification {
     certificate String
     description String   @db.Text
     verified    Boolean  @default(false)
+    imageUrl    String? // URL for the material image
     propertyId  Int
     property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now())

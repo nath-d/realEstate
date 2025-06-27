@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, message, Modal, Alert, Spin, Table, Image, Tag, Space, Drawer, Descriptions, Divider, Typography } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, HomeOutlined, DollarOutlined, EnvironmentOutlined } from '@ant-design/icons';
-import { PiBedDuotone, PiBathtubDuotone, PiCarDuotone, PiHouseDuotone, PiBuildingDuotone, PiCalendarBlankDuotone } from "react-icons/pi";
+import { PiBedDuotone, PiBathtubDuotone, PiCarDuotone, PiCalendarBlankDuotone } from "react-icons/pi";
 
 import { PropertyForm } from '../components/PropertyForm';
 import type { PropertyFormData } from '../components/PropertyForm';
@@ -55,6 +55,7 @@ interface Property {
         certificate: string;
         description: string;
         verified: boolean;
+        imageUrl?: string;
     }>;
     pois: Array<{
         id: number;
@@ -169,6 +170,7 @@ const PropertyManagement: React.FC = () => {
                             certificate: cert.certificate,
                             description: cert.description,
                             verified: !!cert.verified,
+                            imageUrl: cert.imageUrl || null,
                         })),
                     },
                     pois: {
@@ -256,6 +258,7 @@ const PropertyManagement: React.FC = () => {
                             certificate: cert.certificate,
                             description: cert.description,
                             verified: !!cert.verified,
+                            imageUrl: cert.imageUrl || null,
                         })),
                     },
                     pois: {
@@ -548,69 +551,78 @@ const PropertyManagement: React.FC = () => {
     ];
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            <div className="mb-8 flex justify-between items-center">
-                <div>
-                    <Title level={2} className="mb-2 text-gray-800">Property Management</Title>
-                    <Text type="secondary" className="text-gray-600">Manage your real estate properties</Text>
+        <div className="h-full">
+            {/* Header Section */}
+            <div className="p-6 pb-4">
+                <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <Title level={2} className="mb-2 text-gray-800">
+                            Property Management
+                        </Title>
+                        <Text type="secondary" className="text-gray-600">
+                            Manage, edit, and organize your real estate properties
+                        </Text>
+                    </div>
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => setIsModalVisible(true)}
+                        size="large"
+                        className="bg-blue-600 hover:bg-blue-700 shadow-md"
+                    >
+                        Add Property
+                    </Button>
                 </div>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={() => setIsModalVisible(true)}
-                    size="large"
-                    className="bg-blue-600 hover:bg-blue-700 shadow-md"
-                >
-                    Add Property
-                </Button>
             </div>
 
+            {/* Content Section */}
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <Spin size="large" />
                 </div>
             ) : error ? (
-                <Alert
-                    message="Error"
-                    description={error}
-                    type="error"
-                    showIcon
-                    className="mb-6"
-                />
+                <div className="px-6">
+                    <Alert
+                        message="Error"
+                        description={error}
+                        type="error"
+                        showIcon
+                        className="mb-6"
+                    />
+                </div>
             ) : (
-                <Card className="shadow-lg border-0 rounded-xl overflow-hidden">
-                    <div className="p-2 bg-white">
-                        <Table
-                            columns={columns}
-                            dataSource={properties}
-                            rowKey="id"
-                            pagination={{
-                                pageSize: 10,
-                                showSizeChanger: true,
-                                showQuickJumper: true,
-                                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} properties`,
-                                className: "mt-6",
-                                itemRender: (page, type, originalElement) => {
-                                    if (type === 'page') {
-                                        return (
-                                            <span className="px-3 py-2 rounded-md hover:bg-blue-50 transition-colors">
-                                                {page}
-                                            </span>
-                                        );
-                                    }
-                                    return originalElement;
+                <div className="w-full">
+                    <Table
+                        columns={columns}
+                        dataSource={properties}
+                        rowKey="id"
+                        pagination={{
+                            pageSize: 10,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} properties`,
+                            className: "mt-6",
+                            itemRender: (page, type, originalElement) => {
+                                if (type === 'page') {
+                                    return (
+                                        <span className="px-3 py-2 rounded-md hover:bg-blue-50 transition-colors">
+                                            {page}
+                                        </span>
+                                    );
                                 }
-                            }}
-                            scroll={{ x: 1200 }}
-                            loading={loading}
-                            className="custom-table"
-                            rowClassName="hover:bg-blue-50 transition-all duration-200 border-b border-gray-100"
-                            size="middle"
-                        />
-                    </div>
-                </Card>
+                                return originalElement;
+                            }
+                        }}
+                        scroll={{ x: 1200 }}
+                        loading={loading}
+                        className="custom-table"
+                        rowClassName="hover:bg-blue-50 transition-all duration-200 border-b border-gray-100"
+                        size="middle"
+                    />
+                </div>
             )}
 
+            {/* Add/Edit Property Modal */}
             <Modal
                 title={
                     <div className="flex items-center space-x-3">
@@ -645,6 +657,7 @@ const PropertyManagement: React.FC = () => {
                 </div>
             </Modal>
 
+            {/* Property Details Drawer */}
             <Drawer
                 title={
                     <div className="flex items-center space-x-3">

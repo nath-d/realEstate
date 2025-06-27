@@ -350,17 +350,30 @@ const PropertyDetails = () => {
                 </div>
             </div>
 
-            {/* Enhanced Floating Contact Button */}
-            <motion.button
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setShowMortgageCalculator(true)}
-                className="fixed bottom-6 right-6 bg-[#D4AF37] text-[#122620] p-6 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
-            >
-                <FaCalculator className="text-3xl" />
-            </motion.button>
+            {/* Enhanced Floating Contact Buttons */}
+            <div className="fixed bottom-6 right-6 flex flex-col space-y-4 z-50">
+                <motion.button
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowMortgageCalculator(true)}
+                    className="bg-[#D4AF37] text-[#122620] p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
+                >
+                    <FaCalculator className="text-2xl" />
+                </motion.button>
+
+                <motion.button
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowScheduleVisit(true)}
+                    className="bg-[#D4AF37] text-[#122620] p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
+                >
+                    <FaPhone className="text-2xl" />
+                </motion.button>
+            </div>
 
             {/* Modals */}
             {showMortgageCalculator && (

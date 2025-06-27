@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
 @layer base {
     :root {
         --font-source-serif: 'Source Serif 4', serif;
