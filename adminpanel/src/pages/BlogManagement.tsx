@@ -86,7 +86,15 @@ const BlogManagement: React.FC = () => {
     return (
         <Card title="Blog Management" extra={<Button type="primary" onClick={handleAdd}>Add Blog</Button>}>
             <Table columns={columns} dataSource={blogs} rowKey="id" loading={loading} />
-            <Modal open={modalVisible} onCancel={() => setModalVisible(false)} footer={null} destroyOnClose>
+            <Modal
+                open={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                footer={null}
+                destroyOnClose
+                width={1600}
+                style={{ top: 20, bottom: 20 }}
+                bodyStyle={{ height: 'calc(100vh - 80px)', padding: '24px' }}
+            >
                 <BlogForm initialValues={editingBlog || undefined} onSubmit={handleFormSubmit} />
             </Modal>
         </Card>

@@ -135,65 +135,112 @@ const BlogForm: React.FC<BlogFormProps> = ({ initialValues, onSubmit }) => {
     );
 
     return (
-        <Form form={form} layout="vertical" onFinish={handleFinish}>
-            <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-                <Input />
-            </Form.Item>
-            <Form.Item name="content" label="Content" rules={[{ required: true }]}>
-                <Input.TextArea rows={6} />
-            </Form.Item>
-            <Form.Item name="excerpt" label="Excerpt">
-                <Input.TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name="featuredImage" label="Featured Image">
-                <Upload
-                    name="featuredImage"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={handleImageUpload}
-                    customRequest={customUpload}
-                    accept="image/*"
-                    maxCount={1}
-                    className="featured-image-upload"
-                    onRemove={() => {
-                        setFileList([]);
-                        form.setFieldValue('featuredImage', undefined);
-                        return true;
-                    }}
-                >
-                    {fileList.length >= 1 ? null : uploadButton}
-                </Upload>
-            </Form.Item>
-            <Form.Item name="status" label="Status" rules={[{ required: true }]}>
-                <Select>
-                    <Option value="draft">Draft</Option>
-                    <Option value="published">Published</Option>
-                </Select>
-            </Form.Item>
-            <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category' }]}>
-                <Select placeholder="Select category" loading={categories.length === 0}>
-                    {categories.map((cat: any) => (
-                        <Option key={cat.id} value={cat.id}>{cat.name}</Option>
-                    ))}
-                </Select>
-            </Form.Item>
-            <Form.Item name="authorId" label="Author" rules={[{ required: true }]}>
-                <Select>
-                    {authors.map(a => <Option key={a.id} value={a.id}>{a.name}</Option>)}
-                </Select>
-            </Form.Item>
-            <Form.Item name="tags" label="Tags">
-                <Select mode="tags" />
-            </Form.Item>
-            <Form.Item name="metaTitle" label="Meta Title">
-                <Input />
-            </Form.Item>
-            <Form.Item name="metaDescription" label="Meta Description">
-                <Input.TextArea rows={2} />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit">Save</Button>
-            </Form.Item>
+        <Form form={form} layout="vertical" onFinish={handleFinish} className="blog-form">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 h-full">
+                {/* Main Content Column */}
+                <div className="xl:col-span-3 space-y-4">
+                    <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+                        <Input size="large" placeholder="Enter blog title" />
+                    </Form.Item>
+
+                    <Form.Item name="content" label="Content" rules={[{ required: true }]}>
+                        <Input.TextArea
+                            rows={20}
+                            placeholder="Write your blog content here..."
+                            className="min-h-[500px] resize-y"
+                            style={{
+                                fontSize: '16px',
+                                lineHeight: '1.6',
+                                fontFamily: 'Inter, system-ui, sans-serif'
+                            }}
+                        />
+                    </Form.Item>
+
+                    <Form.Item name="excerpt" label="Excerpt">
+                        <Input.TextArea
+                            rows={4}
+                            placeholder="Brief summary of the blog post..."
+                            maxLength={300}
+                            showCount
+                        />
+                    </Form.Item>
+                </div>
+
+                {/* Sidebar Column */}
+                <div className="space-y-4 mr-2 mt-7">
+                    <div className="bg-gray-50 p-6 rounded-lg">
+                        <Form.Item name="featuredImage" label="Featured Image">
+                            <Upload
+                                name="featuredImage"
+                                listType="picture-card"
+                                fileList={fileList}
+                                onChange={handleImageUpload}
+                                customRequest={customUpload}
+                                accept="image/*"
+                                maxCount={1}
+                                className="featured-image-upload"
+                                onRemove={() => {
+                                    setFileList([]);
+                                    form.setFieldValue('featuredImage', undefined);
+                                    return true;
+                                }}
+                            >
+                                {fileList.length >= 1 ? null : uploadButton}
+                            </Upload>
+                        </Form.Item>
+                    </div>
+
+                    <div className="bg-gray-50 p-6 rounded-lg space-y-6">
+                        <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+                            <Select size="large">
+                                <Option value="draft">Draft</Option>
+                                <Option value="published">Published</Option>
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category' }]}>
+                            <Select placeholder="Select category" loading={categories.length === 0} size="large">
+                                {categories.map((cat: any) => (
+                                    <Option key={cat.id} value={cat.id}>{cat.name}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item name="authorId" label="Author" rules={[{ required: true }]}>
+                            <Select size="large">
+                                {authors.map(a => <Option key={a.id} value={a.id}>{a.name}</Option>)}
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item name="tags" label="Tags">
+                            <Select mode="tags" size="large" placeholder="Add tags..." />
+                        </Form.Item>
+                    </div>
+
+                    {/* <div className="bg-gray-50 p-6 rounded-lg space-y-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">SEO Settings</h3>
+
+                        <Form.Item name="metaTitle" label="Meta Title">
+                            <Input size="large" placeholder="SEO title for search engines" />
+                        </Form.Item>
+
+                        <Form.Item name="metaDescription" label="Meta Description">
+                            <Input.TextArea
+                                rows={4}
+                                placeholder="SEO description for search engines"
+                                maxLength={160}
+                                showCount
+                            />
+                        </Form.Item>
+                    </div> */}
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" size="large" block>
+                            {initialValues ? 'Update Blog' : 'Create Blog'}
+                        </Button>
+                    </Form.Item>
+                </div>
+            </div>
         </Form>
     );
 };
