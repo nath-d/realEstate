@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './pages/Dashboard';
 import PropertyManagement from './pages/PropertyManagement';
+import BlogManagement from './pages/BlogManagement';
+import AuthorManagement from './pages/AuthorManagement';
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/properties" element={<PropertyManagement />} />
+          <Route path="/blogs" element={<BlogManagement />} />
+          <Route path="/authors" element={<AuthorManagement />} />
           {/* Add more routes here as needed */}
         </Routes>
       </MainLayout>

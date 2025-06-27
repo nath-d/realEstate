@@ -126,3 +126,49 @@ body {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
+
+/* Featured Image Upload Styles */
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item {
+  width: 200px;
+  height: 150px;
+  border-radius: 8px;
+  border: 2px dashed #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img {
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.featured-image-upload .ant-upload.ant-upload-select-picture-card {
+  width: 200px;
+  height: 150px;
+  border-radius: 8px;
+  border: 2px dashed #d9d9d9;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.featured-image-upload .ant-upload.ant-upload-select-picture-card:hover {
+  border-color: #1890ff;
+  background: #f0f8ff;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-actions {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon {
+  color: white;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon:hover {
+  color: #ff4d4f;
+}

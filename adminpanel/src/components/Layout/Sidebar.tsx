@@ -12,6 +12,9 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     EnvironmentOutlined,
+    BookOutlined,
+    TagsOutlined,
+    UserAddOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
@@ -31,6 +34,15 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
     const menuItems = [
         { key: 'dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
         { key: 'properties', icon: <HomeOutlined />, label: 'Properties' },
+        {
+            key: 'blog',
+            icon: <BookOutlined />,
+            label: 'Blog Management',
+            children: [
+                { key: 'blogs', icon: <BookOutlined />, label: 'Blog Posts' },
+                { key: 'authors', icon: <UserAddOutlined />, label: 'Authors' },
+            ]
+        },
         { key: 'users', icon: <UserOutlined />, label: 'Users' },
         { key: 'team', icon: <TeamOutlined />, label: 'Team' },
         { key: 'analytics', icon: <BarChartOutlined />, label: 'Analytics' },

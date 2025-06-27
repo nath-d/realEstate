@@ -1,68 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../homepage/components/Navbar';
 import Footer from '../homepage/components/Footer';
+import blogService from '../../services/blogService';
 
 const BlogsPage = () => {
     const navigate = useNavigate();
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [blogs, setBlogs] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const categories = [
-        'all',
-        'market trends',
-        'investment',
-        'design',
-        'sustainability',
-        'technology'
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const [blogsData, categoriesData] = await Promise.all([
+                    blogService.getBlogs(),
+                    blogService.getCategories()
+                ]);
 
-    const blogPosts = [
-        {
-            id: 1,
-            title: "The Future of Real Estate: Smart Homes and Sustainability",
-            excerpt: "Discover how smart technology and sustainable practices are shaping the future of real estate. From energy-efficient designs to automated home systems, learn how these innovations are transforming the way we live and invest in properties.",
-            image: "https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            date: "March 15, 2024",
-            category: "technology",
-            readTime: "5 min read"
-        },
-        {
-            id: 2,
-            title: "Investment Strategies for Real Estate in 2024",
-            excerpt: "Learn about the most promising real estate investment opportunities and market trends. Our experts analyze current market conditions and provide insights into emerging opportunities for both residential and commercial properties.",
-            image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80",
-            date: "March 10, 2024",
-            category: "investment",
-            readTime: "7 min read"
-        },
-        {
-            id: 3,
-            title: "Luxury Living: Design Trends for Modern Homes",
-            excerpt: "Explore the latest interior design trends that are transforming luxury homes. From minimalist aesthetics to sustainable materials, discover how modern design is redefining luxury living spaces.",
-            image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
-            date: "March 5, 2024",
-            category: "design",
-            readTime: "4 min read"
-        },
-        {
-            id: 4,
-            title: "Sustainable Real Estate: Building for the Future",
-            excerpt: "How sustainable practices are becoming the new standard in real estate development. Learn about green building certifications, eco-friendly materials, and energy-efficient designs.",
-            image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            date: "March 1, 2024",
-            category: "sustainability",
-            readTime: "6 min read"
-        }
-    ];
+                // Filter only published blogs
+                const publishedBlogs = blogsData.filter(blog => blog.status === 'published');
+                setBlogs(publishedBlogs);
+                setCategories(categoriesData);
+            } catch (err) {
+                console.error('Error fetching blogs:', err);
+                setError('Failed to load blogs');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const filteredPosts = selectedCategory === 'all'
-        ? blogPosts
-        : blogPosts.filter(post => post.category === selectedCategory);
+        ? blogs
+        : blogs.filter(post => post.category?.name?.toLowerCase() === selectedCategory.toLowerCase());
 
     const handleBlogClick = (postId) => {
         navigate(`/blogs/${postId}`);
     };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-[#F4EBD0]">
+                <Navbar />
+                <div className="container mx-auto px-4 py-20">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#122620] mx-auto"></div>
+                        <p className="mt-4 text-[#122620]">Loading blogs...</p>
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-[#F4EBD0]">
+                <Navbar />
+                <div className="container mx-auto px-4 py-20">
+                    <div className="text-center">
+                        <p className="text-red-600">{error}</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="mt-4 px-4 py-2 bg-[#122620] text-white rounded-lg hover:bg-[#122620]/80"
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-[#F4EBD0]">
@@ -90,86 +115,82 @@ const BlogsPage = () => {
 
                 {/* Categories */}
                 <div className="flex flex-wrap justify-center gap-4 mb-12">
+                    <button
+                        onClick={() => setSelectedCategory('all')}
+                        className={`px-6 py-2 rounded-full transition-colors ${selectedCategory === 'all'
+                            ? 'bg-[#122620] text-white'
+                            : 'bg-white text-[#122620] hover:bg-[#122620]/10'
+                            }`}
+                    >
+                        All
+                    </button>
                     {categories.map((category) => (
                         <button
-                            key={category}
-                            onClick={() => setSelectedCategory(category)}
-                            className={`px-6 py-2 rounded-full transition-colors ${selectedCategory === category
+                            key={category.id}
+                            onClick={() => setSelectedCategory(category.name)}
+                            className={`px-6 py-2 rounded-full transition-colors ${selectedCategory === category.name
                                 ? 'bg-[#122620] text-white'
                                 : 'bg-white text-[#122620] hover:bg-[#122620]/10'
                                 }`}
                         >
-                            {category.charAt(0).toUpperCase() + category.slice(1)}
+                            {category.name}
                         </button>
                     ))}
                 </div>
 
                 {/* Blog Posts Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredPosts.map((post) => (
-                        <motion.div
-                            key={post.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                            className="bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer"
-                            onClick={() => handleBlogClick(post.id)}
-                        >
-                            <div className="relative h-64">
-                                <img
-                                    src={post.image}
-                                    alt={post.title}
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute top-4 left-4">
-                                    <span className="bg-[#122620] text-white px-3 py-1 rounded-full text-sm">
-                                        {post.category}
-                                    </span>
+                {filteredPosts.length === 0 ? (
+                    <div className="text-center py-12">
+                        <p className="text-[#122620]/60 text-lg">No blogs found in this category.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredPosts.map((post) => (
+                            <motion.div
+                                key={post.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                                className="bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer"
+                                onClick={() => handleBlogClick(post.id)}
+                            >
+                                <div className="relative h-64">
+                                    <img
+                                        src={post.featuredImage || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1973&q=80"}
+                                        alt={post.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute top-4 left-4">
+                                        <span className="bg-[#122620] text-white px-3 py-1 rounded-full text-sm">
+                                            {post.category?.name || 'Uncategorized'}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="p-6">
-                                <div className="flex justify-between items-center mb-3">
-                                    <span className="text-sm text-[#122620]/60">{post.date}</span>
-                                    <span className="text-sm text-[#122620]/60">{post.readTime}</span>
+                                <div className="p-6">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <span className="text-sm text-[#122620]/60">{formatDate(post.createdAt)}</span>
+                                        <span className="text-sm text-[#122620]/60">By {post.author?.name || 'Unknown'}</span>
+                                    </div>
+                                    <h3 className="text-xl font-semibold text-[#122620] mb-3">
+                                        {post.title}
+                                    </h3>
+                                    <p className="text-[#122620]/80 mb-4 line-clamp-3">
+                                        {post.excerpt || post.content.substring(0, 150) + '...'}
+                                    </p>
+                                    <button
+                                        className="text-[#122620] font-medium hover:text-[#122620]/80 transition-colors"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleBlogClick(post.id);
+                                        }}
+                                    >
+                                        Read More →
+                                    </button>
                                 </div>
-                                <h3 className="text-xl font-semibold text-[#122620] mb-3">
-                                    {post.title}
-                                </h3>
-                                <p className="text-[#122620]/80 mb-4 line-clamp-3">
-                                    {post.excerpt}
-                                </p>
-                                <button
-                                    className="text-[#122620] font-medium hover:text-[#122620]/80 transition-colors"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleBlogClick(post.id);
-                                    }}
-                                >
-                                    Read More →
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-
-                {/* Pagination */}
-                {/* <div className="flex justify-center mt-12 gap-2">
-                    <button className="px-4 py-2 rounded-lg bg-white text-[#122620] hover:bg-[#122620]/10">
-                        Previous
-                    </button>
-                    <button className="px-4 py-2 rounded-lg bg-[#122620] text-white">
-                        1
-                    </button>
-                    <button className="px-4 py-2 rounded-lg bg-white text-[#122620] hover:bg-[#122620]/10">
-                        2
-                    </button>
-                    <button className="px-4 py-2 rounded-lg bg-white text-[#122620] hover:bg-[#122620]/10">
-                        3
-                    </button>
-                    <button className="px-4 py-2 rounded-lg bg-white text-[#122620] hover:bg-[#122620]/10">
-                        Next
-                    </button>
-                </div> */}
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
             </div>
             <Footer />
         </div>
