@@ -4,63 +4,11 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaTwitter, Fa
 import Navbar from '../homepage/components/Navbar';
 import Footer from '../homepage/components/Footer';
 import ContactMap from './components/ContactMap';
+import ContactForm from '../../components/ContactForm';
 import './styles/fonts.css';
 
 const ContactUsPage = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-
-        try {
-            const response = await fetch('http://localhost:3000/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to send message');
-            }
-
-            setSubmitStatus('success');
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                subject: '',
-                message: ''
-            });
-
-            // Reset status after 5 seconds
-            setTimeout(() => setSubmitStatus(null), 5000);
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            setSubmitStatus('error');
-            setTimeout(() => setSubmitStatus(null), 5000);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
     const contactInfo = [
         {
@@ -235,7 +183,7 @@ const ContactUsPage = () => {
                     </motion.div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
-                        {/* Contact Form */}
+                        {/* Contact Form Trigger */}
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -246,105 +194,23 @@ const ContactUsPage = () => {
                             <h3 className="heading-primary text-2xl font-bold text-white mb-6">
                                 Send Us a Message
                             </h3>
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-white mb-2 font-medium">Name *</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleInputChange}
-                                            required
-                                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors"
-                                            placeholder="Your full name"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-white mb-2 font-medium">Email *</label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleInputChange}
-                                            required
-                                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors"
-                                            placeholder="your.email@example.com"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-white mb-2 font-medium">Phone</label>
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors"
-                                            placeholder="+1 (555) 123-4567"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-white mb-2 font-medium">Subject *</label>
-                                        <select
-                                            name="subject"
-                                            value={formData.subject}
-                                            onChange={handleInputChange}
-                                            required
-                                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white focus:border-[#D6AD60] focus:outline-none transition-colors"
-                                        >
-                                            <option value="">Select a subject</option>
-                                            <option value="general">General Inquiry</option>
-                                            <option value="property">Property Information</option>
-                                            <option value="viewing">Schedule Viewing</option>
-                                            <option value="support">Customer Support</option>
-                                            <option value="partnership">Partnership</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-white mb-2 font-medium">Message *</label>
-                                    <textarea
-                                        name="message"
-                                        value={formData.message}
-                                        onChange={handleInputChange}
-                                        required
-                                        rows="6"
-                                        className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors resize-none"
-                                        placeholder="Tell us how we can help you..."
-                                    ></textarea>
-                                </div>
-                                <motion.button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="w-full bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-lg hover:bg-[#E5BE90] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                                >
-                                    {isSubmitting ? 'Sending...' : 'Send Message'}
-                                </motion.button>
-
-                                {submitStatus === 'success' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="bg-green-500 text-white p-4 rounded-lg text-center"
-                                    >
-                                        Thank you! Your message has been sent successfully. We'll get back to you soon.
-                                    </motion.div>
-                                )}
-
-                                {submitStatus === 'error' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="bg-red-500 text-white p-4 rounded-lg text-center"
-                                    >
-                                        Sorry! There was an error sending your message. Please try again.
-                                    </motion.div>
-                                )}
-                            </form>
+                            <p className="text-[#D6AD60] mb-8">
+                                Have a question or want to learn more about our properties? Send us a message and we'll get back to you as soon as possible.
+                            </p>
+                            <ContactForm
+                                // isOpen={isContactFormOpen}
+                                // onClose={() => setIsContactFormOpen(false)}
+                                title="Send Us a Message"
+                                subtitle="We'd love to hear from you"
+                            />
+                            <motion.button
+                                onClick={() => setIsContactFormOpen(true)}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="w-full bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-lg hover:bg-[#E5BE90] transition-all duration-300 shadow-lg"
+                            >
+                                Open Contact Form
+                            </motion.button>
                         </motion.div>
 
                         {/* Office Info with Map */}
@@ -437,6 +303,14 @@ const ContactUsPage = () => {
                     </motion.div>
                 </div>
             </section>
+
+            {/* Reusable Contact Form */}
+            <ContactForm
+                isOpen={isContactFormOpen}
+                onClose={() => setIsContactFormOpen(false)}
+                title="Send Us a Message"
+                subtitle="We'd love to hear from you"
+            />
 
             <Footer />
         </div>
