@@ -27,17 +27,8 @@ async function testBlogAPI() {
         console.log(`   Drafts: ${statsResponse.data.drafts}`);
         console.log('');
 
-        // Test 3: Get categories
-        console.log('3. Testing GET /blogs/categories');
-        const categoriesResponse = await axios.get(`${API_BASE}/categories`);
-        console.log(`✅ Found ${categoriesResponse.data.length} categories`);
-        categoriesResponse.data.forEach(cat => {
-            console.log(`   - ${cat.name} (${cat._count?.blogs || 0} blogs)`);
-        });
-        console.log('');
-
-        // Test 4: Get authors
-        console.log('4. Testing GET /blogs/authors');
+        // Test 3: Get authors
+        console.log('3. Testing GET /blogs/authors');
         const authorsResponse = await axios.get(`${API_BASE}/authors`);
         console.log(`✅ Found ${authorsResponse.data.length} authors`);
         authorsResponse.data.forEach(author => {
@@ -45,27 +36,18 @@ async function testBlogAPI() {
         });
         console.log('');
 
-        // Test 5: Get specific blog by ID
+        // Test 4: Get specific blog by ID
         if (blogsResponse.data.length > 0) {
-            console.log('5. Testing GET /blogs/:id');
+            console.log('4. Testing GET /blogs/:id');
             const blogId = blogsResponse.data[0].id;
             const blogResponse = await axios.get(`${API_BASE}/${blogId}`);
             console.log(`✅ Retrieved blog: "${blogResponse.data.title}"`);
             console.log(`   Author: ${blogResponse.data.author.name}`);
-            console.log(`   Category: ${blogResponse.data.category.name}`);
             console.log(`   Status: ${blogResponse.data.status}`);
             console.log('');
 
-            // Test 6: Get specific category
-            console.log('6. Testing GET /blogs/categories/:id');
-            const categoryId = blogResponse.data.category.id;
-            const categoryResponse = await axios.get(`${API_BASE}/categories/${categoryId}`);
-            console.log(`✅ Retrieved category: "${categoryResponse.data.name}"`);
-            console.log(`   Description: ${categoryResponse.data.description || 'No description'}`);
-            console.log('');
-
-            // Test 7: Get specific author
-            console.log('7. Testing GET /blogs/authors/:id');
+            // Test 5: Get specific author
+            console.log('5. Testing GET /blogs/authors/:id');
             const authorId = blogResponse.data.author.id;
             const authorResponse = await axios.get(`${API_BASE}/authors/${authorId}`);
             console.log(`✅ Retrieved author: "${authorResponse.data.name}"`);
@@ -77,7 +59,6 @@ async function testBlogAPI() {
         console.log('🎉 All API tests passed successfully!');
         console.log('\n📊 Summary:');
         console.log(`   - ${blogsResponse.data.length} blogs available`);
-        console.log(`   - ${categoriesResponse.data.length} categories available`);
         console.log(`   - ${authorsResponse.data.length} authors available`);
         console.log(`   - ${statsResponse.data.total} total blog posts`);
         console.log(`   - ${statsResponse.data.views} total blog views`);

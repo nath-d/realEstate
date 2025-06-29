@@ -95,9 +95,6 @@ const BlogPost = () => {
                     className="mb-12"
                 >
                     <div className="flex items-center gap-4 mb-4">
-                        <span className="bg-[#122620] text-white px-3 py-1 rounded-full text-sm">
-                            {blogPost.category?.name || 'Uncategorized'}
-                        </span>
                         <span className="text-[#122620]/60">{formatDate(blogPost.createdAt)}</span>
                         <span className="text-[#122620]/60">By {blogPost.author?.name || 'Unknown'}</span>
                     </div>

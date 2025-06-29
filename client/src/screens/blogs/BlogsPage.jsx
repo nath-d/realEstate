@@ -7,9 +7,7 @@ import blogService from '../../services/blogService';
 
 const BlogsPage = () => {
     const navigate = useNavigate();
-    const [selectedCategory, setSelectedCategory] = useState('all');
     const [blogs, setBlogs] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -17,15 +15,11 @@ const BlogsPage = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const [blogsData, categoriesData] = await Promise.all([
-                    blogService.getBlogs(),
-                    blogService.getCategories()
-                ]);
+                const blogsData = await blogService.getBlogs();
 
                 // Filter only published blogs
                 const publishedBlogs = blogsData.filter(blog => blog.status === 'published');
                 setBlogs(publishedBlogs);
-                setCategories(categoriesData);
             } catch (err) {
                 console.error('Error fetching blogs:', err);
                 setError('Failed to load blogs');
@@ -36,10 +30,6 @@ const BlogsPage = () => {
 
         fetchData();
     }, []);
-
-    const filteredPosts = selectedCategory === 'all'
-        ? blogs
-        : blogs.filter(post => post.category?.name?.toLowerCase() === selectedCategory.toLowerCase());
 
     const handleBlogClick = (postId) => {
         navigate(`/blogs/${postId}`);
@@ -113,39 +103,14 @@ const BlogsPage = () => {
                     </div>
                 </div>
 
-                {/* Categories */}
-                <div className="flex flex-wrap justify-center gap-4 mb-12">
-                    <button
-                        onClick={() => setSelectedCategory('all')}
-                        className={`px-6 py-2 rounded-full transition-colors ${selectedCategory === 'all'
-                            ? 'bg-[#122620] text-white'
-                            : 'bg-white text-[#122620] hover:bg-[#122620]/10'
-                            }`}
-                    >
-                        All
-                    </button>
-                    {categories.map((category) => (
-                        <button
-                            key={category.id}
-                            onClick={() => setSelectedCategory(category.name)}
-                            className={`px-6 py-2 rounded-full transition-colors ${selectedCategory === category.name
-                                ? 'bg-[#122620] text-white'
-                                : 'bg-white text-[#122620] hover:bg-[#122620]/10'
-                                }`}
-                        >
-                            {category.name}
-                        </button>
-                    ))}
-                </div>
-
                 {/* Blog Posts Grid */}
-                {filteredPosts.length === 0 ? (
+                {blogs.length === 0 ? (
                     <div className="text-center py-12">
-                        <p className="text-[#122620]/60 text-lg">No blogs found in this category.</p>
+                        <p className="text-[#122620]/60 text-lg">No blogs found.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredPosts.map((post) => (
+                        {blogs.map((post) => (
                             <motion.div
                                 key={post.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -160,11 +125,6 @@ const BlogsPage = () => {
                                         alt={post.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute top-4 left-4">
-                                        <span className="bg-[#122620] text-white px-3 py-1 rounded-full text-sm">
-                                            {post.category?.name || 'Uncategorized'}
-                                        </span>
-                                    </div>
                                 </div>
                                 <div className="p-6">
                                     <div className="flex justify-between items-center mb-3">

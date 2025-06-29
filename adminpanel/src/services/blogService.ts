@@ -54,12 +54,6 @@ export const getStats = async () => {
     return response.data;
 };
 
-// Blog Categories
-export const getCategories = async () => {
-    const response = await axios.get(`${API_BASE_URL}/categories`);
-    return response.data;
-};
-
 // Default export with all functions
 const blogService = {
     getBlogs,
@@ -71,8 +65,7 @@ const blogService = {
     createAuthor,
     updateAuthor,
     deleteAuthor,
-    getStats,
-    getCategories
+    getStats
 };
 
 export default blogService; 

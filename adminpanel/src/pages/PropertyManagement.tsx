@@ -78,6 +78,8 @@ const PropertyManagement: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
     const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
+    const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
+    const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(null);
 
     useEffect(() => {
         fetchProperties();
@@ -539,9 +541,12 @@ const PropertyManagement: React.FC = () => {
                         type="default"
                         danger
                         icon={<DeleteOutlined />}
-                        onClick={() => handleDelete(record.id)}
                         size="small"
                         className="rounded-[8px] font-medium h-8 px-3 flex items-center justify-center gap-2 bg-white border-[#ef4444] text-[#ef4444] hover:bg-[#fef2f2] hover:border-[#dc2626] hover:text-[#dc2626] text-sm"
+                        onClick={() => {
+                            setPropertyToDelete(record);
+                            setDeleteConfirmVisible(true);
+                        }}
                     >
                         Delete
                     </Button>
@@ -1021,7 +1026,8 @@ const PropertyManagement: React.FC = () => {
                                 icon={<DeleteOutlined />}
                                 onClick={() => {
                                     setIsDrawerVisible(false);
-                                    handleDelete(viewingProperty.id);
+                                    setPropertyToDelete(viewingProperty);
+                                    setDeleteConfirmVisible(true);
                                 }}
                                 className="flex-1 rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 bg-white border-[#ef4444] text-[#ef4444] hover:bg-[#fef2f2] hover:border-[#dc2626] hover:text-[#dc2626]"
                             >
@@ -1031,6 +1037,57 @@ const PropertyManagement: React.FC = () => {
                     </div>
                 )}
             </Drawer>
+
+            {/* Delete Confirmation Modal */}
+            <Modal
+                title={
+                    <div className="flex items-center space-x-2">
+                        <DeleteOutlined className="text-red-500" />
+                        <span>Delete Property</span>
+                    </div>
+                }
+                open={deleteConfirmVisible}
+                onCancel={() => {
+                    setDeleteConfirmVisible(false);
+                    setPropertyToDelete(null);
+                }}
+                onOk={() => {
+                    if (propertyToDelete) {
+                        handleDelete(propertyToDelete.id);
+                    }
+                    setDeleteConfirmVisible(false);
+                    setPropertyToDelete(null);
+                }}
+                okText="Yes, Delete"
+                cancelText="Cancel"
+                okType="danger"
+                width={500}
+            >
+                <div className="space-y-4">
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex items-start space-x-3">
+                            <DeleteOutlined className="text-red-500 text-lg mt-0.5" />
+                            <div>
+                                <h4 className="text-red-800 font-semibold mb-2">Warning: This action cannot be undone</h4>
+                                <p className="text-red-700 text-sm">
+                                    You are about to permanently delete the property "{propertyToDelete?.title}".
+                                    This will remove all associated data including:
+                                </p>
+                                <ul className="text-red-700 text-sm mt-2 space-y-1">
+                                    <li>• Property images and media files</li>
+                                    <li>• Property specifications and details</li>
+                                    <li>• Location information and coordinates</li>
+                                    <li>• Material certifications</li>
+                                    <li>• Nearby points of interest</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <p className="text-gray-600">
+                        Are you absolutely sure you want to proceed with this deletion?
+                    </p>
+                </div>
+            </Modal>
         </div>
     );
 };

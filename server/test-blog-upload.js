@@ -49,7 +49,6 @@ async function testUpload() {
                 featuredImage: response.data.data.url,
                 status: 'published',
                 authorId: 1,
-                categoryId: 1,
                 tags: ['test', 'image'],
                 metaTitle: 'Test Blog',
                 metaDescription: 'Test blog description'

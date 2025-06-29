@@ -43,76 +43,6 @@ export class BlogController {
         }
     }
 
-    // Category CRUD - must come before :id route
-    @Post('categories')
-    async createCategory(@Body() data: any) {
-        try {
-            return await this.blogService.createCategory(data);
-        } catch (error) {
-            throw new HttpException(
-                error.message || 'Failed to create category',
-                HttpStatus.BAD_REQUEST
-            );
-        }
-    }
-
-    @Get('categories')
-    async getAllCategories() {
-        try {
-            return await this.blogService.getAllCategories();
-        } catch (error) {
-            throw new HttpException(
-                error.message || 'Failed to fetch categories',
-                HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-    }
-
-    @Get('categories/:id')
-    async getCategoryById(@Param('id') id: string) {
-        try {
-            return await this.blogService.getCategoryById(Number(id));
-        } catch (error) {
-            if (error instanceof HttpException) {
-                throw error;
-            }
-            throw new HttpException(
-                error.message || 'Failed to fetch category',
-                HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-    }
-
-    @Put('categories/:id')
-    async updateCategory(@Param('id') id: string, @Body() data: any) {
-        try {
-            return await this.blogService.updateCategory(Number(id), data);
-        } catch (error) {
-            if (error instanceof HttpException) {
-                throw error;
-            }
-            throw new HttpException(
-                error.message || 'Failed to update category',
-                HttpStatus.BAD_REQUEST
-            );
-        }
-    }
-
-    @Delete('categories/:id')
-    async deleteCategory(@Param('id') id: string) {
-        try {
-            return await this.blogService.deleteCategory(Number(id));
-        } catch (error) {
-            if (error instanceof HttpException) {
-                throw error;
-            }
-            throw new HttpException(
-                error.message || 'Failed to delete category',
-                HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-    }
-
     // Author CRUD - must come before :id route
     @Post('authors')
     async createAuthor(@Body() data: any) {
@@ -178,7 +108,7 @@ export class BlogController {
             }
             throw new HttpException(
                 error.message || 'Failed to delete author',
-                HttpStatus.INTERNAL_SERVER_ERROR
+                HttpStatus.BAD_REQUEST
             );
         }
     }
@@ -224,7 +154,7 @@ export class BlogController {
             }
             throw new HttpException(
                 error.message || 'Failed to delete blog',
-                HttpStatus.INTERNAL_SERVER_ERROR
+                HttpStatus.BAD_REQUEST
             );
         }
     }

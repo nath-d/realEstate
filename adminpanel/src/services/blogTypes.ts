@@ -6,6 +6,9 @@ export interface BlogAuthor {
     avatar?: string;
     createdAt: string;
     updatedAt: string;
+    _count?: {
+        blogs: number;
+    };
 }
 
 export interface Blog {
@@ -22,6 +25,9 @@ export interface Blog {
     metaDescription?: string;
     createdAt: string;
     updatedAt: string;
+    _count?: {
+        views: number;
+    };
 }
 
 export interface CreateBlogData {

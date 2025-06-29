@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Form, Input, Button, Select, Upload, message } from 'antd';
 import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { getAuthors } from '../services/blogService';
-import { getCategories } from '../services/blogService';
 import { cloudinaryService } from '../services/cloudinaryService';
 import type { BlogAuthor, CreateBlogData } from '../services/blogTypes';
 import type { UploadFile } from 'antd/es/upload/interface';
@@ -17,13 +16,11 @@ interface BlogFormProps {
 const BlogForm: React.FC<BlogFormProps> = ({ initialValues, onSubmit }) => {
     const [form] = Form.useForm();
     const [authors, setAuthors] = React.useState<BlogAuthor[]>([]);
-    const [categories, setCategories] = React.useState<any[]>([]);
     const [fileList, setFileList] = React.useState<UploadFile[]>([]);
     const [uploading, setUploading] = React.useState(false);
 
     useEffect(() => {
         getAuthors().then(setAuthors);
-        getCategories().then(setCategories);
     }, []);
 
     useEffect(() => {
@@ -195,14 +192,6 @@ const BlogForm: React.FC<BlogFormProps> = ({ initialValues, onSubmit }) => {
                             <Select size="large">
                                 <Option value="draft">Draft</Option>
                                 <Option value="published">Published</Option>
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item name="categoryId" label="Category" rules={[{ required: true, message: 'Please select a category' }]}>
-                            <Select placeholder="Select category" loading={categories.length === 0} size="large">
-                                {categories.map((cat: any) => (
-                                    <Option key={cat.id} value={cat.id}>{cat.name}</Option>
-                                ))}
                             </Select>
                         </Form.Item>
 

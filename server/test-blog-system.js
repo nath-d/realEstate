@@ -9,7 +9,6 @@ const testBlogData = {
     excerpt: "This is a test excerpt for the blog post.",
     featuredImage: "https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     status: "published",
-    categoryId: 1,
     authorId: 1,
     tags: ["test", "real-estate"],
     metaTitle: "Test Blog Post - Real Estate",
@@ -128,26 +127,8 @@ async function runTests() {
         console.log('❌ Blog creation failed - Blog system not implemented');
     }
 
-    // Test 4: Test category CRUD operations
-    console.log('\n4. Testing category CRUD operations...');
-    const createCategoryResult = await testEndpoint('/blogs/categories', 'POST', testCategoryData);
-    if (createCategoryResult.success) {
-        console.log('✅ Category created successfully');
-        const categoryId = createCategoryResult.data.id;
-
-        // Test getting categories
-        const getCategoriesResult = await testEndpoint('/blogs/categories');
-        if (getCategoriesResult.success) {
-            console.log('✅ Categories retrieved successfully');
-        } else {
-            console.log('❌ Failed to retrieve categories');
-        }
-    } else {
-        console.log('❌ Category creation failed - Blog system not implemented');
-    }
-
-    // Test 5: Test author CRUD operations
-    console.log('\n5. Testing author CRUD operations...');
+    // Test 4: Test author CRUD operations
+    console.log('\n4. Testing author CRUD operations...');
     const createAuthorResult = await testEndpoint('/blogs/authors', 'POST', testAuthorData);
     if (createAuthorResult.success) {
         console.log('✅ Author created successfully');
@@ -164,8 +145,8 @@ async function runTests() {
         console.log('❌ Author creation failed - Blog system not implemented');
     }
 
-    // Test 6: Test blog statistics
-    console.log('\n6. Testing blog statistics...');
+    // Test 5: Test blog statistics
+    console.log('\n5. Testing blog statistics...');
     const statsResult = await testEndpoint('/blogs/stats');
     if (statsResult.success) {
         console.log('✅ Blog statistics retrieved successfully');
@@ -174,8 +155,8 @@ async function runTests() {
         console.log('❌ Failed to retrieve blog statistics');
     }
 
-    // Test 7: Test recent and featured blogs
-    console.log('\n7. Testing recent and featured blogs...');
+    // Test 6: Test recent and featured blogs
+    console.log('\n6. Testing recent and featured blogs...');
     const recentResult = await testEndpoint('/blogs/recent');
     if (recentResult.success) {
         console.log('✅ Recent blogs retrieved successfully');

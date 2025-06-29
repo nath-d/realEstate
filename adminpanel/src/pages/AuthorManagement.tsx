@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, Modal, Form, Input, message } from 'antd';
+import { Card, Button, Table, Modal, Form, Input, message, Popconfirm, Tag } from 'antd';
 import { getAuthors, createAuthor, updateAuthor, deleteAuthor } from '../services/blogService';
 import type { BlogAuthor, CreateAuthorData } from '../services/blogTypes';
 
@@ -38,10 +38,14 @@ const AuthorManagement: React.FC = () => {
     const handleDelete = async (id: number) => {
         try {
             await deleteAuthor(id);
-            message.success('Author deleted');
+            message.success('Author deleted successfully');
             fetchAuthors();
-        } catch {
-            message.error('Failed to delete author');
+        } catch (error: any) {
+            if (error.response?.status === 400) {
+                message.error('Cannot delete author with associated blogs');
+            } else {
+                message.error('Failed to delete author');
+            }
         }
     };
 
@@ -66,12 +70,34 @@ const AuthorManagement: React.FC = () => {
         { title: 'Email', dataIndex: 'email', key: 'email' },
         { title: 'Bio', dataIndex: 'bio', key: 'bio' },
         {
+            title: 'Blogs',
+            key: 'blogs',
+            render: (_: any, record: BlogAuthor) => (
+                <Tag color={(record._count?.blogs || 0) > 0 ? 'blue' : 'default'}>
+                    {record._count?.blogs || 0} blogs
+                </Tag>
+            )
+        },
+        {
             title: 'Actions',
             key: 'actions',
             render: (_: any, record: BlogAuthor) => (
                 <>
                     <Button onClick={() => handleEdit(record)} type="link">Edit</Button>
-                    <Button onClick={() => handleDelete(record.id)} type="link" danger>Delete</Button>
+                    <Popconfirm
+                        title="Delete Author"
+                        description={
+                            (record._count?.blogs || 0) > 0
+                                ? `This author has ${record._count?.blogs || 0} associated blog(s). Deleting the author will also delete all associated blogs. Are you sure?`
+                                : "Are you sure you want to delete this author?"
+                        }
+                        onConfirm={() => handleDelete(record.id)}
+                        okText="Yes"
+                        cancelText="No"
+                        okType="danger"
+                    >
+                        <Button type="link" danger>Delete</Button>
+                    </Popconfirm>
                 </>
             )
         },

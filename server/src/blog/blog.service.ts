@@ -10,7 +10,6 @@ export class BlogService {
         return this.prisma.blog.create({
             data,
             include: {
-                category: true,
                 author: true,
                 views: true
             }
@@ -21,7 +20,6 @@ export class BlogService {
         return this.prisma.blog.findMany({
             ...params,
             include: {
-                category: true,
                 author: true,
                 views: true
             },
@@ -35,7 +33,6 @@ export class BlogService {
         const blog = await this.prisma.blog.findUnique({
             where: { id },
             include: {
-                category: true,
                 author: true,
                 views: true
             }
@@ -52,7 +49,6 @@ export class BlogService {
             where: { id },
             data,
             include: {
-                category: true,
                 author: true,
                 views: true
             }
@@ -60,57 +56,25 @@ export class BlogService {
     }
 
     async deleteBlog(id: number) {
-        const blog = await this.prisma.blog.findUnique({ where: { id } });
-        if (!blog) throw new NotFoundException('Blog not found');
-
-        return this.prisma.blog.delete({ where: { id } });
-    }
-
-    // Category CRUD
-    async createCategory(data: any) {
-        return this.prisma.blogCategory.create({ data });
-    }
-
-    async getAllCategories() {
-        return this.prisma.blogCategory.findMany({
-            include: {
-                _count: {
-                    select: {
-                        blogs: true
-                    }
-                }
-            }
-        });
-    }
-
-    async getCategoryById(id: number) {
-        const category = await this.prisma.blogCategory.findUnique({
+        const blog = await this.prisma.blog.findUnique({
             where: { id },
             include: {
-                blogs: true,
                 _count: {
                     select: {
-                        blogs: true
+                        views: true
                     }
                 }
             }
         });
-        if (!category) throw new NotFoundException('Category not found');
-        return category;
-    }
 
-    async updateCategory(id: number, data: any) {
-        const category = await this.prisma.blogCategory.findUnique({ where: { id } });
-        if (!category) throw new NotFoundException('Category not found');
+        if (!blog) throw new NotFoundException('Blog not found');
 
-        return this.prisma.blogCategory.update({ where: { id }, data });
-    }
+        // Check if blog has associated views
+        if (blog._count.views > 0) {
+            console.log(`Deleting blog with ${blog._count.views} associated views (will be cascaded)`);
+        }
 
-    async deleteCategory(id: number) {
-        const category = await this.prisma.blogCategory.findUnique({ where: { id } });
-        if (!category) throw new NotFoundException('Category not found');
-
-        return this.prisma.blogCategory.delete({ where: { id } });
+        return this.prisma.blog.delete({ where: { id } });
     }
 
     // Author CRUD
@@ -154,8 +118,24 @@ export class BlogService {
     }
 
     async deleteAuthor(id: number) {
-        const author = await this.prisma.blogAuthor.findUnique({ where: { id } });
+        const author = await this.prisma.blogAuthor.findUnique({
+            where: { id },
+            include: {
+                _count: {
+                    select: {
+                        blogs: true
+                    }
+                }
+            }
+        });
+
         if (!author) throw new NotFoundException('Author not found');
+
+        // Check if author has associated blogs
+        if (author._count.blogs > 0) {
+            // With cascade delete, this will now work, but we can provide a warning
+            console.log(`Deleting author with ${author._count.blogs} associated blogs (will be cascaded)`);
+        }
 
         return this.prisma.blogAuthor.delete({ where: { id } });
     }
@@ -168,7 +148,6 @@ export class BlogService {
     async getBlogStats() {
         const total = await this.prisma.blog.count();
         const views = await this.prisma.blogView.count();
-        const categories = await this.prisma.blogCategory.count();
         const authors = await this.prisma.blogAuthor.count();
         const published = await this.prisma.blog.count({
             where: { status: 'published' }
@@ -180,7 +159,6 @@ export class BlogService {
         return {
             total,
             views,
-            categories,
             authors,
             published,
             drafts

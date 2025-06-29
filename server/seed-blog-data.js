@@ -6,48 +6,6 @@ async function seedBlogData() {
     try {
         console.log('🌱 Seeding blog data...');
 
-        // Create categories
-        const categories = await Promise.all([
-            prisma.blogCategory.upsert({
-                where: { slug: 'real-estate-tips' },
-                update: {},
-                create: {
-                    name: 'Real Estate Tips',
-                    slug: 'real-estate-tips',
-                    description: 'Tips and advice for buying, selling, and investing in real estate'
-                }
-            }),
-            prisma.blogCategory.upsert({
-                where: { slug: 'market-insights' },
-                update: {},
-                create: {
-                    name: 'Market Insights',
-                    slug: 'market-insights',
-                    description: 'Analysis and insights into real estate market trends'
-                }
-            }),
-            prisma.blogCategory.upsert({
-                where: { slug: 'property-investment' },
-                update: {},
-                create: {
-                    name: 'Property Investment',
-                    slug: 'property-investment',
-                    description: 'Guides and strategies for real estate investment'
-                }
-            }),
-            prisma.blogCategory.upsert({
-                where: { slug: 'home-improvement' },
-                update: {},
-                create: {
-                    name: 'Home Improvement',
-                    slug: 'home-improvement',
-                    description: 'Tips for improving and maintaining your property'
-                }
-            })
-        ]);
-
-        console.log('✅ Categories created:', categories.length);
-
         // Create authors
         const authors = await Promise.all([
             prisma.blogAuthor.upsert({
@@ -131,7 +89,6 @@ async function seedBlogData() {
                     excerpt: 'Essential tips and advice for first-time home buyers to navigate the complex process of purchasing their first property.',
                     featuredImage: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=400&fit=crop',
                     status: 'published',
-                    categoryId: categories[0].id,
                     authorId: authors[0].id,
                     tags: ['first-time buyer', 'home buying', 'mortgage', 'real estate tips'],
                     metaTitle: '10 Essential Tips for First-Time Home Buyers - Real Estate Guide',
@@ -165,7 +122,6 @@ async function seedBlogData() {
                     excerpt: 'Analysis of key trends shaping the 2024 real estate market, including technology, sustainability, and remote work impacts.',
                     featuredImage: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop',
                     status: 'published',
-                    categoryId: categories[1].id,
                     authorId: authors[1].id,
                     tags: ['market trends', '2024', 'real estate market', 'investment'],
                     metaTitle: '2024 Real Estate Market Trends - Market Analysis',
@@ -201,7 +157,6 @@ async function seedBlogData() {
                     excerpt: 'A comprehensive beginner\'s guide to real estate investment, covering different property types and key considerations.',
                     featuredImage: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&h=400&fit=crop',
                     status: 'published',
-                    categoryId: categories[2].id,
                     authorId: authors[2].id,
                     tags: ['investment', 'real estate investment', 'rental properties', 'beginner guide'],
                     metaTitle: 'Real Estate Investment Guide for Beginners',

@@ -134,16 +134,6 @@ model POI {
     updatedAt  DateTime @updatedAt
 }
 
-model BlogCategory {
-    id          Int      @id @default(autoincrement())
-    name        String   @unique
-    slug        String   @unique
-    description String?
-    blogs       Blog[]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-}
-
 model BlogAuthor {
     id        Int      @id @default(autoincrement())
     name      String
@@ -156,28 +146,26 @@ model BlogAuthor {
 }
 
 model Blog {
-    id              Int          @id @default(autoincrement())
+    id              Int        @id @default(autoincrement())
     title           String
-    content         String       @db.Text
+    content         String     @db.Text
     excerpt         String?
     featuredImage   String?
-    status          String       @default("draft") // draft, published
-    categoryId      Int
-    category        BlogCategory @relation(fields: [categoryId], references: [id])
+    status          String     @default("draft") // draft, published
     authorId        Int
-    author          BlogAuthor   @relation(fields: [authorId], references: [id])
+    author          BlogAuthor @relation(fields: [authorId], references: [id], onDelete: Cascade)
     tags            String[]
     metaTitle       String?
     metaDescription String?
     views           BlogView[]
-    createdAt       DateTime     @default(now())
-    updatedAt       DateTime     @updatedAt
+    createdAt       DateTime   @default(now())
+    updatedAt       DateTime   @updatedAt
 }
 
 model BlogView {
     id        Int      @id @default(autoincrement())
     blogId    Int
-    blog      Blog     @relation(fields: [blogId], references: [id])
+    blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
     ip        String
     createdAt DateTime @default(now())
 }
