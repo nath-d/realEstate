@@ -1,8 +1,74 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPhone, FaEnvelope, FaWhatsapp, FaLinkedin, FaUser } from 'react-icons/fa';
 
 const PropertyAgent = ({ agent }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        subject: 'Property Inquiry',
+        message: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        try {
+            const response = await fetch('http://localhost:3000/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    subject: formData.subject || 'Property Inquiry',
+                    message: formData.message || 'I am interested in this property and would like more information.'
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit contact form');
+            }
+
+            setSubmitStatus('success');
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                subject: 'Property Inquiry',
+                message: ''
+            });
+
+            // Reset success message after 3 seconds
+            setTimeout(() => {
+                setSubmitStatus(null);
+            }, 3000);
+        } catch (error) {
+            console.error('Error submitting contact form:', error);
+            setSubmitStatus('error');
+
+            // Reset error message after 3 seconds
+            setTimeout(() => {
+                setSubmitStatus(null);
+            }, 3000);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <section className="py-20 relative overflow-hidden">
             {/* Decorative Elements */}
@@ -113,44 +179,82 @@ const PropertyAgent = ({ agent }) => {
                             >
                                 <h4 className="text-2xl font-bold text-white mb-6">Schedule a Viewing</h4>
 
-                                <form className="space-y-4">
+                                {/* Success/Error Messages */}
+                                {submitStatus === 'success' && (
+                                    <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                                        <p className="text-green-400 text-sm">Thank you! Your message has been sent successfully. We'll get back to you soon.</p>
+                                    </div>
+                                )}
+
+                                {submitStatus === 'error' && (
+                                    <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                                        <p className="text-red-400 text-sm">Sorry, there was an error sending your message. Please try again.</p>
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
                                         <input
                                             type="text"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
                                             placeholder="Your Name"
+                                            required
                                             className="w-full bg-[#1A332C] border border-[#E5BE90]/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#E5BE90] transition-colors"
                                         />
                                     </div>
                                     <div>
                                         <input
                                             type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
                                             placeholder="Your Email"
+                                            required
                                             className="w-full bg-[#1A332C] border border-[#E5BE90]/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#E5BE90] transition-colors"
                                         />
                                     </div>
                                     <div>
                                         <input
                                             type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
                                             placeholder="Your Phone"
                                             className="w-full bg-[#1A332C] border border-[#E5BE90]/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#E5BE90] transition-colors"
                                         />
                                     </div>
                                     <div>
+                                        <input
+                                            type="text"
+                                            name="subject"
+                                            value={formData.subject}
+                                            onChange={handleInputChange}
+                                            placeholder="Subject"
+                                            className="w-full bg-[#1A332C] border border-[#E5BE90]/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#E5BE90] transition-colors"
+                                        />
+                                    </div>
+                                    <div>
                                         <textarea
+                                            name="message"
+                                            value={formData.message}
+                                            onChange={handleInputChange}
                                             placeholder="Message"
                                             rows="4"
+                                            required
                                             className="w-full bg-[#1A332C] border border-[#E5BE90]/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#E5BE90] transition-colors"
                                         ></textarea>
                                     </div>
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className="w-full inline-block bg-transparent border-2 border-[#E5BE90] text-[#E5BE90] px-8 py-4 rounded-none hover:bg-[#E5BE90] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
-
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full inline-block bg-transparent border-2 border-[#E5BE90] text-[#E5BE90] px-8 py-4 rounded-none hover:bg-[#E5BE90] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Request Viewing
+                                        {isSubmitting ? 'Sending...' : 'Request Viewing'}
                                     </motion.button>
-
                                 </form>
 
                                 <div className="mt-8 space-y-4">
