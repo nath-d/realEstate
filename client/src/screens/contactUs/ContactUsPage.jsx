@@ -29,9 +29,19 @@ const ContactUsPage = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate form submission
-        setTimeout(() => {
-            setIsSubmitting(false);
+        try {
+            const response = await fetch('http://localhost:3000/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send message');
+            }
+
             setSubmitStatus('success');
             setFormData({
                 name: '',
@@ -43,7 +53,13 @@ const ContactUsPage = () => {
 
             // Reset status after 5 seconds
             setTimeout(() => setSubmitStatus(null), 5000);
-        }, 2000);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitStatus('error');
+            setTimeout(() => setSubmitStatus(null), 5000);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const contactInfo = [
@@ -316,6 +332,16 @@ const ContactUsPage = () => {
                                         className="bg-green-500 text-white p-4 rounded-lg text-center"
                                     >
                                         Thank you! Your message has been sent successfully. We'll get back to you soon.
+                                    </motion.div>
+                                )}
+
+                                {submitStatus === 'error' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="bg-red-500 text-white p-4 rounded-lg text-center"
+                                    >
+                                        Sorry! There was an error sending your message. Please try again.
                                     </motion.div>
                                 )}
                             </form>

@@ -4,6 +4,8 @@ import Dashboard from './pages/Dashboard';
 import PropertyManagement from './pages/PropertyManagement';
 import BlogManagement from './pages/BlogManagement';
 import AuthorManagement from './pages/AuthorManagement';
+import ContactFormManagement from './pages/ContactFormManagement';
+import ScheduleVisitManagement from './pages/ScheduleVisitManagement';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/properties" element={<PropertyManagement />} />
           <Route path="/blogs" element={<BlogManagement />} />
           <Route path="/authors" element={<AuthorManagement />} />
+          <Route path="/contact-forms" element={<ContactFormManagement />} />
+          <Route path="/schedule-visits" element={<ScheduleVisitManagement />} />
           {/* Add more routes here as needed */}
         </Routes>
       </MainLayout>

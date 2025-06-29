@@ -19,11 +19,62 @@ const ScheduleVisit = ({ property, onClose }) => {
         '04:00 PM', '05:00 PM'
     ]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you would typically send the form data to your backend
-        console.log('Scheduling visit:', formData);
-        onClose();
+
+        // Convert 12-hour time (e.g., "10:00 AM") to 24-hour format (e.g., "10:00")
+        function to24Hour(time12h) {
+            if (!time12h) return '';
+            const [time, modifier] = time12h.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (modifier === 'PM' && hours !== '12') hours = String(Number(hours) + 12);
+            if (modifier === 'AM' && hours === '12') hours = '00';
+            return `${hours.padStart(2, '0')}:${minutes}`;
+        }
+
+        // Build ISO string for preferredDate
+        const isoDateTime = formData.date && formData.time
+            ? `${formData.date}T${to24Hour(formData.time)}:00Z`
+            : '';
+
+        try {
+            const scheduleData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                preferredDate: isoDateTime,
+                preferredTime: formData.time,
+                message: formData.message,
+                preferredContact: formData.preferredContact,
+                propertyTitle: property.title,
+                propertyId: property.id
+            };
+
+            // Debug: log the data being sent
+            console.log('Submitting scheduleData:', scheduleData);
+
+            const response = await fetch('http://localhost:3000/schedule-visit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(scheduleData),
+            });
+
+            if (!response.ok) {
+                // Try to log the error response body
+                const errorText = await response.text();
+                console.error('Backend error response:', errorText);
+                throw new Error('Failed to schedule visit');
+            }
+
+            // Show success message or handle success
+            alert('Visit scheduled successfully! We will contact you soon.');
+            onClose();
+        } catch (error) {
+            console.error('Error scheduling visit:', error);
+            alert('Failed to schedule visit. Please try again.');
+        }
     };
 
     const handleInputChange = (e) => {

@@ -15,6 +15,7 @@ import {
     BookOutlined,
     TagsOutlined,
     UserAddOutlined,
+    CalendarOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
@@ -41,6 +42,15 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
             children: [
                 { key: 'blogs', icon: <BookOutlined />, label: 'Blog Posts' },
                 { key: 'authors', icon: <UserAddOutlined />, label: 'Authors' },
+            ]
+        },
+        {
+            key: 'forms',
+            icon: <FileOutlined />,
+            label: 'Form Submissions',
+            children: [
+                { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
+                { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Schedule Visits' },
             ]
         },
         { key: 'users', icon: <UserOutlined />, label: 'Users' },

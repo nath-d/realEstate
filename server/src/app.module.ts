@@ -6,9 +6,11 @@ import { PropertyModule } from './property/property.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { UploadModule } from './upload/upload.module';
 import { BlogModule } from './blog/blog.module';
+import { ContactModule } from './contact/contact.module';
+import { ScheduleVisitModule } from './schedule-visit/schedule-visit.module';
 
 @Module({
-    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule],
+    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule],
     controllers: [AppController],
     providers: [AppService],
 })

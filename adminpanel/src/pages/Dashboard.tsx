@@ -42,6 +42,18 @@ interface DashboardStats {
     averagePrice: number;
     recentProperties: Property[];
     topProperties: Property[];
+    contactForms: {
+        total: number;
+        new: number;
+        read: number;
+        responded: number;
+    };
+    scheduleVisits: {
+        total: number;
+        pending: number;
+        confirmed: number;
+        completed: number;
+    };
 }
 
 const Dashboard: React.FC = () => {
@@ -54,7 +66,19 @@ const Dashboard: React.FC = () => {
         totalValue: 0,
         averagePrice: 0,
         recentProperties: [],
-        topProperties: []
+        topProperties: [],
+        contactForms: {
+            total: 0,
+            new: 0,
+            read: 0,
+            responded: 0
+        },
+        scheduleVisits: {
+            total: 0,
+            pending: 0,
+            confirmed: 0,
+            completed: 0
+        }
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -69,13 +93,20 @@ const Dashboard: React.FC = () => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch('http://localhost:3000/properties');
-
-            if (!response.ok) {
+            // Fetch properties
+            const propertiesResponse = await fetch('http://localhost:3000/properties');
+            if (!propertiesResponse.ok) {
                 throw new Error('Failed to fetch properties');
             }
+            const properties: Property[] = await propertiesResponse.json();
 
-            const properties: Property[] = await response.json();
+            // Fetch contact form stats
+            const contactStatsResponse = await fetch('http://localhost:3000/contact/stats');
+            const contactStats = contactStatsResponse.ok ? await contactStatsResponse.json() : { total: 0, new: 0, read: 0, responded: 0 };
+
+            // Fetch schedule visit stats
+            const scheduleStatsResponse = await fetch('http://localhost:3000/schedule-visit/stats');
+            const scheduleStats = scheduleStatsResponse.ok ? await scheduleStatsResponse.json() : { total: 0, pending: 0, confirmed: 0, completed: 0 };
 
             // Calculate statistics
             const totalProperties = properties.length;
@@ -105,7 +136,9 @@ const Dashboard: React.FC = () => {
                 totalValue,
                 averagePrice,
                 recentProperties,
-                topProperties
+                topProperties,
+                contactForms: contactStats,
+                scheduleVisits: scheduleStats
             });
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
@@ -317,6 +350,116 @@ const Dashboard: React.FC = () => {
                             <Text type="secondary">
                                 Per property
                             </Text>
+                        </div>
+                    </Card>
+                </Col>
+            </Row>
+
+            {/* Form Submissions Statistics */}
+            <Row gutter={[16, 16]} className="mb-8">
+                <Col xs={24} sm={12} lg={12}>
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full">
+                        <div className="flex items-center justify-between mb-4">
+                            <Title level={4} className="m-0">Contact Forms</Title>
+                            <Button
+                                type="primary"
+                                onClick={() => navigate('/contact-forms')}
+                                size="middle"
+                                className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
+                            >
+                                View All
+                            </Button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>New</Text>
+                                    <Text strong>{stats.contactForms.new}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.contactForms.total > 0 ? (stats.contactForms.new / stats.contactForms.total) * 100 : 0}
+                                    strokeColor="#3b82f6"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Read</Text>
+                                    <Text strong>{stats.contactForms.read}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.contactForms.total > 0 ? (stats.contactForms.read / stats.contactForms.total) * 100 : 0}
+                                    strokeColor="#f59e0b"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Responded</Text>
+                                    <Text strong>{stats.contactForms.responded}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.contactForms.total > 0 ? (stats.contactForms.responded / stats.contactForms.total) * 100 : 0}
+                                    strokeColor="#10b981"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                        </div>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} lg={12}>
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full">
+                        <div className="flex items-center justify-between mb-4">
+                            <Title level={4} className="m-0">Schedule Visits</Title>
+                            <Button
+                                type="primary"
+                                onClick={() => navigate('/schedule-visits')}
+                                size="middle"
+                                className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
+                            >
+                                View All
+                            </Button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Pending</Text>
+                                    <Text strong>{stats.scheduleVisits.pending}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.scheduleVisits.total > 0 ? (stats.scheduleVisits.pending / stats.scheduleVisits.total) * 100 : 0}
+                                    strokeColor="#f59e0b"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Confirmed</Text>
+                                    <Text strong>{stats.scheduleVisits.confirmed}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.scheduleVisits.total > 0 ? (stats.scheduleVisits.confirmed / stats.scheduleVisits.total) * 100 : 0}
+                                    strokeColor="#3b82f6"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Completed</Text>
+                                    <Text strong>{stats.scheduleVisits.completed}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.scheduleVisits.total > 0 ? (stats.scheduleVisits.completed / stats.scheduleVisits.total) * 100 : 0}
+                                    strokeColor="#10b981"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
                         </div>
                     </Card>
                 </Col>
