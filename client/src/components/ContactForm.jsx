@@ -51,7 +51,7 @@ const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = 
             // Reset status after 5 seconds
             setTimeout(() => {
                 setSubmitStatus(null);
-                onClose(); // Close the form after successful submission
+                if (onClose) onClose(); // Only call onClose if it exists
             }, 3000);
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -63,7 +63,7 @@ const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = 
     };
 
     const handleClose = () => {
-        if (!isSubmitting) {
+        if (!isSubmitting && onClose) {
             setFormData({
                 name: '',
                 email: '',
@@ -76,26 +76,28 @@ const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = 
         }
     };
 
-    if (!isOpen) return null;
+    // If isOpen is explicitly false, don't render (modal mode)
+    if (isOpen === false) return null;
 
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-[#1A332C] rounded-xl p-8 shadow-xl border border-[#D6AD60]/20 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            >
-                {/* Header */}
-                <div className="flex justify-between items-start mb-6">
-                    <div>
-                        <h3 className="text-2xl font-bold text-white mb-2">
-                            {title}
-                        </h3>
-                        <p className="text-[#D6AD60] text-sm">
-                            {subtitle}
-                        </p>
-                    </div>
+    // Form content
+    const formContent = (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className={`bg-[#1A332C] rounded-xl p-8 shadow-xl border border-[#D6AD60]/20 ${isOpen ? 'w-full max-w-2xl max-h-[90vh] overflow-y-auto' : 'w-full'}`}
+        >
+            {/* Header */}
+            <div className="flex justify-between items-start mb-6">
+                <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                        {title}
+                    </h3>
+                    <p className="text-[#D6AD60] text-sm">
+                        {subtitle}
+                    </p>
+                </div>
+                {isOpen && onClose && (
                     <button
                         onClick={handleClose}
                         disabled={isSubmitting}
@@ -103,132 +105,144 @@ const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = 
                     >
                         <FaTimes size={24} />
                     </button>
-                </div>
-
-                {/* Success/Error Messages */}
-                {submitStatus === 'success' && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-green-500 text-white p-4 rounded-lg text-center mb-6"
-                    >
-                        Thank you! Your message has been sent successfully. We'll get back to you soon.
-                    </motion.div>
                 )}
+            </div>
 
-                {submitStatus === 'error' && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-500 text-white p-4 rounded-lg text-center mb-6"
-                    >
-                        Sorry! There was an error sending your message. Please try again.
-                    </motion.div>
-                )}
+            {/* Success/Error Messages */}
+            {submitStatus === 'success' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-green-500 text-white p-4 rounded-lg text-center mb-6"
+                >
+                    Thank you! Your message has been sent successfully. We'll get back to you soon.
+                </motion.div>
+            )}
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-white mb-2 font-medium flex items-center">
-                                <FaUser className="mr-2 text-[#D6AD60]" />
-                                Name *
-                            </label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                required
-                                disabled={isSubmitting}
-                                className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
-                                placeholder="Your full name"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-white mb-2 font-medium flex items-center">
-                                <FaEnvelope className="mr-2 text-[#D6AD60]" />
-                                Email *
-                            </label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                required
-                                disabled={isSubmitting}
-                                className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
-                                placeholder="your.email@example.com"
-                            />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-white mb-2 font-medium flex items-center">
-                                <FaPhone className="mr-2 text-[#D6AD60]" />
-                                Phone
-                            </label>
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                disabled={isSubmitting}
-                                className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
-                                placeholder="+1 (555) 123-4567"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-white mb-2 font-medium flex items-center">
-                                <FaFileAlt className="mr-2 text-[#D6AD60]" />
-                                Subject *
-                            </label>
-                            <select
-                                name="subject"
-                                value={formData.subject}
-                                onChange={handleInputChange}
-                                required
-                                disabled={isSubmitting}
-                                className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
-                            >
-                                <option value="">Select a subject</option>
-                                <option value="general">General Inquiry</option>
-                                <option value="property">Property Information</option>
-                                <option value="viewing">Schedule Viewing</option>
-                                <option value="support">Customer Support</option>
-                                <option value="partnership">Partnership</option>
-                            </select>
-                        </div>
-                    </div>
+            {submitStatus === 'error' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-500 text-white p-4 rounded-lg text-center mb-6"
+                >
+                    Sorry! There was an error sending your message. Please try again.
+                </motion.div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-white mb-2 font-medium flex items-center">
-                            <FaComments className="mr-2 text-[#D6AD60]" />
-                            Message *
+                            <FaUser className="mr-2 text-[#D6AD60]" />
+                            Name *
                         </label>
-                        <textarea
-                            name="message"
-                            value={formData.message}
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
                             onChange={handleInputChange}
                             required
                             disabled={isSubmitting}
-                            rows="6"
-                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors resize-none disabled:opacity-50"
-                            placeholder="Tell us how we can help you..."
-                        ></textarea>
+                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
+                            placeholder="Your full name"
+                        />
                     </div>
-                    <motion.button
-                        type="submit"
+                    <div>
+                        <label className="block text-white mb-2 font-medium flex items-center">
+                            <FaEnvelope className="mr-2 text-[#D6AD60]" />
+                            Email *
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isSubmitting}
+                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
+                            placeholder="your.email@example.com"
+                        />
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-white mb-2 font-medium flex items-center">
+                            <FaPhone className="mr-2 text-[#D6AD60]" />
+                            Phone
+                        </label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            disabled={isSubmitting}
+                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
+                            placeholder="+1 (555) 123-4567"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-white mb-2 font-medium flex items-center">
+                            <FaFileAlt className="mr-2 text-[#D6AD60]" />
+                            Subject *
+                        </label>
+                        <select
+                            name="subject"
+                            value={formData.subject}
+                            onChange={handleInputChange}
+                            required
+                            disabled={isSubmitting}
+                            className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
+                        >
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="property">Property Information</option>
+                            <option value="viewing">Schedule Viewing</option>
+                            <option value="support">Customer Support</option>
+                            <option value="partnership">Partnership</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label className="block text-white mb-2 font-medium flex items-center">
+                        <FaComments className="mr-2 text-[#D6AD60]" />
+                        Message *
+                    </label>
+                    <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        required
                         disabled={isSubmitting}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-lg hover:bg-[#E5BE90] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                    >
-                        {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </motion.button>
-                </form>
-            </motion.div>
-        </div>
+                        rows="6"
+                        className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors resize-none disabled:opacity-50"
+                        placeholder="Tell us how we can help you..."
+                    ></textarea>
+                </div>
+                <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-lg hover:bg-[#E5BE90] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                </motion.button>
+            </form>
+        </motion.div>
     );
+
+    // If isOpen is true, render as modal
+    if (isOpen) {
+        return (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                {formContent}
+            </div>
+        );
+    }
+
+    // Otherwise render as inline form
+    return formContent;
 };
 
 export default ContactForm; 

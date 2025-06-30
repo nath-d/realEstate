@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
 import Navbar from '../homepage/components/Navbar';
@@ -8,8 +8,6 @@ import ContactForm from '../../components/ContactForm';
 import './styles/fonts.css';
 
 const ContactUsPage = () => {
-    const [isContactFormOpen, setIsContactFormOpen] = useState(false);
-
     const contactInfo = [
         {
             icon: <FaPhone className="text-3xl" />,
@@ -183,7 +181,7 @@ const ContactUsPage = () => {
                     </motion.div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
-                        {/* Contact Form Trigger */}
+                        {/* Contact Form */}
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -191,26 +189,10 @@ const ContactUsPage = () => {
                             viewport={{ once: true }}
                             className="bg-[#1A332C] rounded-xl p-8 shadow-xl border border-[#D6AD60]/20"
                         >
-                            <h3 className="heading-primary text-2xl font-bold text-white mb-6">
-                                Send Us a Message
-                            </h3>
-                            <p className="text-[#D6AD60] mb-8">
-                                Have a question or want to learn more about our properties? Send us a message and we'll get back to you as soon as possible.
-                            </p>
                             <ContactForm
-                                // isOpen={isContactFormOpen}
-                                // onClose={() => setIsContactFormOpen(false)}
                                 title="Send Us a Message"
                                 subtitle="We'd love to hear from you"
                             />
-                            <motion.button
-                                onClick={() => setIsContactFormOpen(true)}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="w-full bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-lg hover:bg-[#E5BE90] transition-all duration-300 shadow-lg"
-                            >
-                                Open Contact Form
-                            </motion.button>
                         </motion.div>
 
                         {/* Office Info with Map */}
@@ -303,14 +285,6 @@ const ContactUsPage = () => {
                     </motion.div>
                 </div>
             </section>
-
-            {/* Reusable Contact Form */}
-            <ContactForm
-                isOpen={isContactFormOpen}
-                onClose={() => setIsContactFormOpen(false)}
-                title="Send Us a Message"
-                subtitle="We'd love to hear from you"
-            />
 
             <Footer />
         </div>
