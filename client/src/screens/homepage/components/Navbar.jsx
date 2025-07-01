@@ -45,11 +45,13 @@ const Navbar = () => {
                             Sign In
                         </button> */}
 
-                        <button
-                            className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-2.5 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
-                        >
-                            Sign in
-                        </button>
+                        <Link to="/login">
+                            <button
+                                className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-2.5 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
+                            >
+                                Sign in
+                            </button>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -84,9 +86,11 @@ const Navbar = () => {
                             <span className="absolute bottom-0 left-4 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-2rem)]"></span>
                         </Link>
                         <div className="px-4 py-3">
-                            <button className="w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
-                                Sign In
-                            </button>
+                            <Link to="/login">
+                                <button className="w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
+                                    Sign In
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -1,30 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
-
-// Trust Indicator Card Component
-const TrustIndicatorCard = ({ icon, value, label }) => {
-    return (
-        <motion.div
-            className="relative group"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-        >
-            <div className="border-2 border-[#D6AD60] absolute inset-0 bg-gradient-to-tl from-[#D6AD60]/20 to-transparent rounded-2xl transform transition-transform duration-500 group-hover:scale-110"></div>
-            <div className="relative p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#D6AD60]/30 flex items-center justify-center transform transition-transform duration-500 group-hover:rotate-12">
-                    {icon}
-                </div>
-                <h4 className="text-5xl font-source-serif text-[#D6AD60] mb-3 font-bold">{value}</h4>
-                <p className="text-[#122620] font-montserrat text-base font-medium">{label}</p>
-            </div>
-        </motion.div>
-    );
-};
+import { FaQuoteLeft, FaStar, FaArrowLeft, FaArrowRight, FaSmile, FaUsers, FaRedo, FaHeart } from 'react-icons/fa';
 
 const Testimonials = () => {
     const sectionRef = useRef(null);
     const controls = useAnimation();
     const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+    const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
     useEffect(() => {
         if (isInView) {
@@ -38,9 +20,9 @@ const Testimonials = () => {
             name: "Rajesh Kumar",
             role: "Homeowner",
             image: "/person1.jpeg",
-
             quote: "Finding our dream home was a breeze with ProjectEstate. The team's dedication and attention to detail made the entire process smooth and enjoyable. We couldn't be happier with our new home!",
-            rating: 3
+            rating: 5,
+            location: "Mumbai, Maharashtra"
         },
         {
             id: 2,
@@ -48,7 +30,8 @@ const Testimonials = () => {
             role: "Property Investor",
             image: "/person2.jpeg",
             quote: "As an investor, I need a platform I can trust. ProjectEstate has consistently delivered quality properties and excellent service. Their market insights have been invaluable for my investment decisions.",
-            rating: 2
+            rating: 5,
+            location: "Delhi, NCR"
         },
         {
             id: 3,
@@ -56,7 +39,8 @@ const Testimonials = () => {
             role: "First-time Buyer",
             image: "/person1.jpeg",
             quote: "Being a first-time homebuyer, I was nervous about the process. The team at ProjectEstate guided me through every step, making it less daunting. Their expertise and patience were truly appreciated.",
-            rating: 5
+            rating: 5,
+            location: "Bangalore, Karnataka"
         },
         {
             id: 4,
@@ -64,7 +48,8 @@ const Testimonials = () => {
             role: "Property Seller",
             image: "/person3.jpeg",
             quote: "Selling my property through ProjectEstate was the best decision. They handled everything professionally and got me a great deal in record time. Highly recommend their services!",
-            rating: 4.5
+            rating: 5,
+            location: "Pune, Maharashtra"
         },
         {
             id: 5,
@@ -72,59 +57,27 @@ const Testimonials = () => {
             role: "Real Estate Developer",
             image: "/person1.jpeg",
             quote: "Working with ProjectEstate has been a game-changer for our projects. Their platform has helped us reach the right buyers and streamline our sales process significantly.",
-            rating: 4
+            rating: 5,
+            location: "Hyderabad, Telangana"
         }
     ];
 
-    // Optimized: Only duplicate once if needed
-    const duplicatedTestimonials = [...testimonials, ...testimonials];
-
     const renderStars = (rating) => {
         return [...Array(5)].map((_, index) => (
-            <svg
+            <FaStar
                 key={index}
-                className={`w-5 h-5 ${index < rating ? 'text-[#D6AD60]' : 'text-gray-300'}`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
+                className={`w-4 h-4 ${index < rating ? 'text-[#D6AD60] fill-current' : 'text-gray-300'}`}
+            />
         ));
     };
 
-    // Optimized testimonial card component to reduce re-renders
-    const TestimonialCard = React.memo(({ testimonial }) => {
-        return (
-            <motion.div
-                className="flex-shrink-0 w-[350px] bg-white p-6 rounded-lg shadow-lg mr-2"
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-            >
-                <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
-                        <img
-                            src={testimonial.image}
-                            alt={testimonial.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy" // Add lazy loading
-                        />
-                    </div>
-                    <div>
-                        <h4 className="text-lg font-montserrat font-semibold text-[#122620]">{testimonial.name}</h4>
-                        <p className="text-[#122620]/70 font-montserrat text-sm">{testimonial.role}</p>
-                    </div>
-                </div>
+    const nextTestimonial = () => {
+        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    };
 
-                <div className="flex mb-3">
-                    {renderStars(testimonial.rating)}
-                </div>
-
-                <blockquote className="text-[#122620]/80 font-montserrat italic text-sm">
-                    "{testimonial.quote.substring(0, 150)}..."
-                </blockquote>
-            </motion.div>
-        );
-    });
+    const prevTestimonial = () => {
+        setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    };
 
     // Trust Indicators Data
     const trustIndicators = [
@@ -132,59 +85,49 @@ const Testimonials = () => {
             id: 1,
             value: "98%",
             label: "Satisfaction Rate",
-            icon: (
-                <svg className="w-8 h-8 text-[#122620]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                </svg>
-            )
+            description: "Client satisfaction score",
+            icon: <FaSmile className="w-8 h-8 text-[#122620]" />
         },
         {
             id: 2,
             value: "4.9/5",
             label: "Average Rating",
-            icon: (
-                <svg className="w-8 h-8 text-[#122620]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                </svg>
-            )
+            description: "From verified reviews",
+            icon: <FaStar className="w-8 h-8 text-[#122620]" />
         },
         {
             id: 3,
             value: "10K+",
             label: "Happy Clients",
-            icon: (
-                <svg className="w-8 h-8 text-[#122620]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-            )
+            description: "Successfully served",
+            icon: <FaUsers className="w-8 h-8 text-[#122620]" />
         },
         {
             id: 4,
             value: "85%",
             label: "Repeat Clients",
-            icon: (
-                <svg className="w-8 h-8 text-[#122620]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-            )
+            description: "Choose us again",
+            icon: <FaRedo className="w-8 h-8 text-[#122620]" />
         }
     ];
 
     return (
         <section
             ref={sectionRef}
-            className="py-20 bg-[#F4EBD0] relative overflow-hidden h-screen"
+            className="py-20 bg-gradient-to-br from-[#F4EBD0] via-[#F8F2E0] to-[#F4EBD0] relative overflow-hidden"
         >
             {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-[#122620]/10"></div>
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-[#122620]/10"></div>
-            <div className="absolute top-1/4 -left-20 w-40 h-40 rounded-full bg-[#D6AD60]/5"></div>
-            <div className="absolute bottom-1/4 -right-20 w-40 h-40 rounded-full bg-[#D6AD60]/5"></div>
+            <div className="absolute inset-0 bg-[#D6AD60]/5 opacity-30"></div>
 
-            <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                {/* Header */}
+            {/* Floating Elements */}
+            <div className="absolute top-20 left-10 w-32 h-32 bg-[#D6AD60]/10 rounded-full blur-xl"></div>
+            <div className="absolute bottom-20 right-10 w-40 h-40 bg-[#122620]/5 rounded-full blur-xl"></div>
+            <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-[#D6AD60]/8 rounded-full blur-lg"></div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                {/* Header - Keeping the existing style */}
                 <motion.div
-                    className="text-center mb-16"
+                    className="text-center mb-20"
                     initial={{ opacity: 0, y: 20 }}
                     animate={controls}
                     variants={{
@@ -195,129 +138,198 @@ const Testimonials = () => {
                         }
                     }}
                 >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="text-center mb-16"
-                    >
-                        <div className="flex justify-center mb-6">
-                            {/* <div className="w-20 h-20 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                                <FaHome className="text-[#E5BE90] text-4xl" />
-                            </div> */}
-                        </div>
-                        <h2 className="text-6xl font-bold mb-4 text-[#122620] font-source-serif">Client Testimonials</h2>
-                        <div className="flex justify-center items-center gap-4">
-                            <div className="flex justify-center items-center gap-4">
-                                <motion.span
-                                    initial={{ width: 0 }}
-                                    whileInView={{ width: 120 }}
-                                    transition={{ duration: 0.8 }}
-                                    className="h-0.5 bg-[#D6AD60]"
-                                ></motion.span>
-                                <p className="text-[#122620]/80">What our clients say about us</p>
-                                <motion.span
-                                    initial={{ width: 0 }}
-                                    whileInView={{ width: 120 }}
-                                    transition={{ duration: 0.8 }}
-                                    className="h-0.5 bg-[#D6AD60]"
-                                ></motion.span>
-                            </div>
-                        </div>
-                    </motion.div>
-                </motion.div>
-
-                {/* Optimized Infinite Scrolling Testimonials */}
-                <motion.div
-                    className="relative overflow-hidden py-10"
-                    initial={{ opacity: 0 }}
-                    animate={controls}
-                    variants={{
-                        visible: {
-                            opacity: 1,
-                            transition: { duration: 0.6, delay: 0.2 }
-                        }
-                    }}
-                >
-                    <div className="relative">
-                        {/* First row - scrolling left */}
-                        <div className="flex mb-6 overflow-hidden">
-                            <motion.div
-                                className="flex"
-                                animate={{
-                                    x: [0, -1000],
-                                }}
-                                transition={{
-                                    x: {
-                                        repeat: Infinity,
-                                        repeatType: "loop",
-                                        duration: 40, // Slower duration for better performance
-                                        ease: "linear",
-                                    }
-                                }}
-                            >
-                                {duplicatedTestimonials.map((testimonial, index) => (
-                                    <TestimonialCard
-                                        key={`left-${testimonial.id}-${index}`}
-                                        testimonial={testimonial}
-                                    />
-                                ))}
-                            </motion.div>
-                        </div>
-
-                        {/* Second row - scrolling right */}
-                        {/* <div className="flex overflow-hidden">
-                            <motion.div
-                                className="flex"
-                                animate={{
-                                    x: [-1000, 0],
-                                }}
-                                transition={{
-                                    x: {
-                                        repeat: Infinity,
-                                        repeatType: "loop",
-                                        duration: 40, // Slower duration for better performance
-                                        ease: "linear",
-                                    }
-                                }}
-                            >
-                                {duplicatedTestimonials.map((testimonial, index) => (
-                                    <TestimonialCard
-                                        key={`right-${testimonial.id}-${index}`}
-                                        testimonial={testimonial}
-                                    />
-                                ))}
-                            </motion.div>
-                        </div> */}
+                    <h2 className="text-6xl font-bold mb-4 text-[#122620] font-source-serif">Client Testimonials</h2>
+                    <div className="flex justify-center items-center gap-4">
+                        <motion.span
+                            initial={{ width: 0 }}
+                            whileInView={{ width: 120 }}
+                            transition={{ duration: 0.8 }}
+                            className="h-0.5 bg-[#D6AD60]"
+                        ></motion.span>
+                        <p className="text-[#122620]/80">What our clients say about us</p>
+                        <motion.span
+                            initial={{ width: 0 }}
+                            whileInView={{ width: 120 }}
+                            transition={{ duration: 0.8 }}
+                            className="h-0.5 bg-[#D6AD60]"
+                        ></motion.span>
                     </div>
                 </motion.div>
 
-                {/* Trust Indicators */}
+                {/* Main Testimonial Display */}
                 <motion.div
-                    className="mt-16"
-                    initial={{ opacity: 0, y: 20 }}
+                    className="mb-20"
+                    initial={{ opacity: 0, y: 30 }}
                     animate={controls}
                     variants={{
                         visible: {
                             opacity: 1,
                             y: 0,
-                            transition: { duration: 0.6, delay: 0.4, ease: [0.6, -0.05, 0.01, 0.99] }
+                            transition: { duration: 0.8, delay: 0.2 }
                         }
                     }}
                 >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-                        {trustIndicators.map((indicator) => (
-                            <TrustIndicatorCard
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+                            {/* Background Quote Icon */}
+                            <div className="absolute top-8 right-8 text-[#D6AD60]/10">
+                                <FaQuoteLeft size={80} />
+                            </div>
+
+                            {/* Quote Icon */}
+                            <div className="absolute top-8 left-8 text-[#D6AD60]">
+                                <FaQuoteLeft size={24} />
+                            </div>
+
+                            {/* Testimonial Content */}
+                            <div className="relative z-10">
+                                <motion.div
+                                    key={currentTestimonial}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="text-center"
+                                >
+                                    <p className="text-lg md:text-xl text-[#122620]/80 leading-relaxed mb-8 italic">
+                                        "{testimonials[currentTestimonial].quote}"
+                                    </p>
+
+                                    {/* Rating */}
+                                    <div className="flex justify-center mb-6">
+                                        {renderStars(testimonials[currentTestimonial].rating)}
+                                    </div>
+
+                                    {/* Author Info */}
+                                    <div className="flex items-center justify-center space-x-4">
+                                        <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-[#D6AD60]/20">
+                                            <img
+                                                src={testimonials[currentTestimonial].image}
+                                                alt={testimonials[currentTestimonial].name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="text-left">
+                                            <h4 className="text-xl font-bold text-[#122620]">
+                                                {testimonials[currentTestimonial].name}
+                                            </h4>
+                                            <p className="text-[#D6AD60] font-medium">
+                                                {testimonials[currentTestimonial].role}
+                                            </p>
+                                            <p className="text-[#122620]/60 text-sm">
+                                                {testimonials[currentTestimonial].location}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+
+                                {/* Navigation Dots */}
+                                <div className="flex justify-center mt-8 space-x-2">
+                                    {testimonials.map((_, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentTestimonial(index)}
+                                            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial
+                                                ? 'bg-[#D6AD60] w-8'
+                                                : 'bg-[#D6AD60]/30 hover:bg-[#D6AD60]/50'
+                                                }`}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Navigation Arrows */}
+                                <button
+                                    onClick={prevTestimonial}
+                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#D6AD60] hover:bg-[#D6AD60] hover:text-white transition-all duration-300"
+                                >
+                                    <FaArrowLeft size={16} />
+                                </button>
+                                <button
+                                    onClick={nextTestimonial}
+                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#D6AD60] hover:bg-[#D6AD60] hover:text-white transition-all duration-300"
+                                >
+                                    <FaArrowRight size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Trust Indicators - Redesigned */}
+                <motion.div
+                    className="mt-20"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={controls}
+                    variants={{
+                        visible: {
+                            opacity: 1,
+                            y: 0,
+                            transition: { duration: 0.8, delay: 0.4 }
+                        }
+                    }}
+                >
+                    <div className="text-center mb-12">
+                        <h3 className="text-3xl font-bold text-[#122620] mb-4">Why Clients Trust Us</h3>
+                        <p className="text-[#122620]/70 max-w-2xl mx-auto">
+                            Our commitment to excellence and client satisfaction has earned us the trust of thousands of families across India.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                        {trustIndicators.map((indicator, index) => (
+                            <motion.div
                                 key={indicator.id}
-                                icon={indicator.icon}
-                                value={indicator.value}
-                                label={indicator.label}
-                            />
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                viewport={{ once: true }}
+                                className="group"
+                            >
+                                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2 border border-[#D6AD60]/10">
+                                    <div className="text-center">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#D6AD60]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                            {indicator.icon}
+                                        </div>
+                                        <div className="text-3xl font-bold text-[#D6AD60] mb-2">
+                                            {indicator.value}
+                                        </div>
+                                        <h4 className="text-lg font-semibold text-[#122620] mb-1">
+                                            {indicator.label}
+                                        </h4>
+                                        <p className="text-sm text-[#122620]/60">
+                                            {indicator.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </motion.div>
                         ))}
                     </div>
                 </motion.div>
+
+                {/* Call to Action */}
+                <motion.div
+                    className="mt-20 text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <div className="bg-gradient-to-r from-[#122620] to-[#1A332C] rounded-3xl p-8 md:p-12 text-white">
+                        <h3 className="text-3xl font-bold mb-4">Ready to Find Your Dream Home?</h3>
+                        <p className="text-[#D6AD60] mb-8 max-w-2xl mx-auto">
+                            Join thousands of satisfied clients who have found their perfect home with ProjectEstate.
+                        </p>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-xl hover:bg-[#E5BE90] transition-all duration-300 shadow-lg"
+                        >
+                            Start Your Journey Today
+                        </motion.button>
+                    </div>
+                </motion.div>
             </div>
-        </section>
+        </section >
     );
 };
 

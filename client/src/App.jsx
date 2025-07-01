@@ -8,6 +8,9 @@ import AboutUsPage from './screens/aboutUs/AboutUsPage'
 import ContactUsPage from './screens/contactUs/ContactUsPage'
 import BlogsPage from './screens/blogs/BlogsPage'
 import BlogPost from './screens/blogs/BlogPost'
+import LoginPage from './screens/login/LoginPage'
+import SignupPage from './screens/signup/SignupPage'
+import ForgotPasswordPage from './screens/forgotPassword/ForgotPasswordPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +27,9 @@ function App() {
           <Route path='/contact' element={<ContactUsPage />} />
           <Route path='/blogs' element={<BlogsPage />} />
           <Route path='/blogs/:id' element={<BlogPost />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         </Routes>
       </BrowserRouter>
     </>
