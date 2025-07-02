@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from './email.service';
+import { MarketingService } from '../services/marketing.service';
 import * as bcrypt from 'bcryptjs';
 import { LoginDto, SignupDto, ForgotPasswordDto, ResetPasswordDto, ChangePasswordDto, UpdateProfileDto } from './dto/auth.dto';
 import { User } from '@prisma/client';
@@ -18,6 +19,7 @@ export class AuthService {
         private prisma: PrismaService,
         private jwtService: JwtService,
         private emailService: EmailService,
+        private marketingService: MarketingService,
     ) { }
 
     async validateUser(email: string, password: string): Promise<any> {
@@ -91,15 +93,23 @@ export class AuthService {
             },
         });
 
-        // Generate verification token
-        const verificationToken = randomBytes(32).toString('hex');
+        // Don't send verification email automatically - user will request it from profile
+        // Just create the user with email verification set to false
         await this.prisma.user.update({
             where: { id: user.id },
-            data: { emailVerificationToken: verificationToken },
+            data: {
+                emailVerificationToken: null,
+                passwordResetExpires: null,
+            },
         });
 
-        // Send verification email
-        await this.emailService.sendVerificationEmail(user.email, verificationToken);
+        // Send welcome email with PDF attachment
+        try {
+            await this.marketingService.sendWelcomeEmailWithPdf(user.email, user.firstName);
+        } catch (error) {
+            // Don't fail signup if marketing email fails
+            console.error('Failed to send welcome email:', error);
+        }
 
         const payload = { email: user.email, sub: user.id, role: user.role };
         const token = this.jwtService.sign(payload);
@@ -214,20 +224,17 @@ export class AuthService {
             };
         }
 
-        // Generate reset token
-        const resetToken = randomBytes(32).toString('hex');
-        const resetExpires = new Date(Date.now() + 3600000); // 1 hour
+        // Generate and send password reset OTP
+        const resetOTP = await this.emailService.sendPasswordResetOTP(email);
+        const otpExpires = new Date(Date.now() + 600000); // 10 minutes
 
         await this.prisma.user.update({
             where: { id: user.id },
             data: {
-                passwordResetToken: resetToken,
-                passwordResetExpires: resetExpires,
+                passwordResetToken: resetOTP,
+                passwordResetExpires: otpExpires,
             },
         });
-
-        // Send reset email
-        await this.emailService.sendPasswordResetEmail(email, resetToken);
 
         return {
             success: true,
@@ -248,7 +255,7 @@ export class AuthService {
         });
 
         if (!user) {
-            throw new BadRequestException('Invalid or expired reset token');
+            throw new BadRequestException('Invalid or expired reset code');
         }
 
         // Hash new password
@@ -370,13 +377,18 @@ export class AuthService {
         };
     }
 
-    async verifyEmail(token: string) {
+    async verifyEmail(otp: string) {
         const user = await this.prisma.user.findFirst({
-            where: { emailVerificationToken: token },
+            where: {
+                emailVerificationToken: otp,
+                passwordResetExpires: {
+                    gt: new Date(),
+                },
+            },
         });
 
         if (!user) {
-            throw new BadRequestException('Invalid verification token');
+            throw new BadRequestException('Invalid or expired verification code');
         }
 
         await this.prisma.user.update({
@@ -384,12 +396,44 @@ export class AuthService {
             data: {
                 isEmailVerified: true,
                 emailVerificationToken: null,
+                passwordResetExpires: null,
             },
         });
 
         return {
             success: true,
             message: 'Email verified successfully',
+        };
+    }
+
+    async sendVerificationOtp(email: string) {
+        const user = await this.prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            throw new BadRequestException('User not found');
+        }
+
+        if (user.isEmailVerified) {
+            throw new BadRequestException('Email is already verified');
+        }
+
+        // Generate and send verification OTP
+        const verificationOTP = await this.emailService.sendVerificationOTP(email);
+        const otpExpires = new Date(Date.now() + 600000); // 10 minutes
+
+        await this.prisma.user.update({
+            where: { id: user.id },
+            data: {
+                emailVerificationToken: verificationOTP,
+                passwordResetExpires: otpExpires, // Reusing this field for OTP expiry
+            },
+        });
+
+        return {
+            success: true,
+            message: 'Verification code sent successfully',
         };
     }
 

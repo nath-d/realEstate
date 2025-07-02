@@ -1,183 +1,148 @@
-# Email Setup Guide - Loops.so
+# Email Setup Guide - Nodemailer with Gmail SMTP
 
-This guide will help you set up email functionality for the Real Estate Platform using Loops.so.
+This guide explains how to set up email functionality using Nodemailer with Gmail SMTP for sending OTP verification codes and password reset emails.
 
-## Why Loops.so?
+## Features
 
-- ✅ **Simpler setup** - No domain configuration needed
-- ✅ **Better UI/UX** - Beautiful dashboard and email builder
-- ✅ **Built-in templates** - Drag-and-drop email editor
-- ✅ **Transactional + Marketing** - Both in one platform
-- ✅ **Free tier** - 2,500 emails/month
-- ✅ **No sandbox restrictions** - Works with any email immediately
-- ✅ **Better analytics** - Visual email performance tracking
+- ✅ **Email Verification**: 6-digit OTP sent during signup
+- ✅ **Password Reset**: 6-digit OTP for secure password reset
+- ✅ **Welcome Emails**: Sent to new newsletter subscribers
+- ✅ **Marketing Emails**: Property alerts and newsletters
+- ✅ **Completely Free**: No third-party service costs
+- ✅ **Self-Contained**: No external dependencies
 
-## Loops.so Setup
+## Setup Instructions
 
-### 1. Create Loops Account
-1. Go to [loops.so](https://loops.so) and sign up
-2. Choose the **Free plan** (2,500 emails/month)
-3. Verify your email address
+### 1. Gmail Account Setup
 
-### 2. Create Workspace
-1. After signing up, create a new workspace
-2. Name it "Real Estate Platform" or similar
-3. Choose your workspace settings
+1. **Enable 2-Factor Authentication**
+   - Go to your Google Account settings
+   - Navigate to Security → 2-Step Verification
+   - Enable 2-factor authentication
 
-### 3. Get API Key
-1. Go to **Settings > API Keys**
-2. Copy your **API Key**
-3. Note your **Workspace ID** (if needed)
+2. **Generate App Password**
+   - Go to https://myaccount.google.com/apppasswords
+   - Select "Mail" as the app
+   - Generate a 16-character app password
+   - Copy this password (you'll need it for the environment variables)
 
-### 4. Set Up Email Templates
-1. Go to **Templates** in your Loops dashboard
-2. Create the following templates:
-   - **email-verification** - For signup verification
-   - **password-reset** - For password reset emails
-   - **property-alert** - For property notifications
-   - **welcome-email** - For new subscribers
-   - **newsletter** - For marketing emails
+### 2. Environment Variables
 
-### 5. Configure Environment Variables
-1. Copy `env.example` to `.env` if you haven't already
-2. Add your Loops credentials:
-   ```
-   LOOPS_API_KEY="your-loops-api-key"
-   ```
+Add these variables to your `.env` file:
 
-### 6. Test Email Functionality
-1. Start the server: `npm run start:dev`
-2. Try signing up with a new email address
-3. Check your email for the verification link
-4. Try the "Forgot Password" feature
-5. Check your email for the password reset link
-
-## Email Features Included
-
-### ✅ Transactional Emails
-- **Email verification** - Sent when users sign up
-- **Password reset** - Sent when users request password reset
-- **Professional templates** with your branding
-
-### ✅ Marketing Emails (Ready to Use)
-- **Property alerts** - Notify users of new matching properties
-- **Newsletters** - Send marketing content to subscribers
-- **Welcome emails** - For new subscribers
-- **Promotional emails** - Special offers and announcements
-
-### ✅ Email Templates
-- **Drag-and-drop editor** in Loops dashboard
-- **Professional branding** with your platform name
-- **Clear call-to-action buttons**
-- **Security notices** and expiration warnings
-
-## Using Marketing Features
-
-### Send Property Alerts
-```typescript
-// In your property service
-await this.emailService.sendPropertyAlert(userEmail, matchingProperties);
+```env
+# Email Configuration (Gmail SMTP)
+EMAIL_USER="your-email@gmail.com"
+EMAIL_PASSWORD="your-gmail-app-password"
 ```
 
-### Subscribe to Newsletter
-```typescript
-// When user subscribes
-await this.emailService.subscribeToNewsletter(email, firstName, lastName);
-```
+**Important**: 
+- Use your actual Gmail address for `EMAIL_USER`
+- Use the 16-character app password (not your regular Gmail password) for `EMAIL_PASSWORD`
+- Never commit your actual credentials to version control
 
-### Send Marketing Emails
-```typescript
-// In your marketing service
-await this.emailService.sendMarketingEmail(
-    userEmail,
-    "New Properties in Your Area!",
-    marketingHtmlContent
-);
-```
+### 3. Email Addresses Used
 
-## Loops Dashboard Features
+The system uses your Gmail address for all email types:
+- **From Address**: Your Gmail address (e.g., `your-email@gmail.com`)
+- **Verification Emails**: Sent to new users during signup
+- **Password Reset**: Sent when users request password reset
+- **Welcome Emails**: Sent to newsletter subscribers
+- **Marketing Emails**: Property alerts and newsletters
 
-### 📧 Email Templates
-- **Visual editor** - Drag and drop components
-- **Variables** - Use {{verificationUrl}}, {{firstName}}, etc.
-- **Responsive design** - Works on all devices
-- **Preview mode** - Test emails before sending
+## How It Works
 
-### 📊 Analytics
-- **Open rates** - Track email engagement
-- **Click rates** - Monitor link clicks
-- **Delivery rates** - Ensure emails reach inboxes
-- **Bounce tracking** - Handle failed deliveries
+### Email Verification Flow
+1. User signs up with email and password
+2. System generates a 6-digit OTP
+3. OTP is sent via email with 10-minute expiry
+4. User enters OTP on verification page
+5. Email is marked as verified
 
-### 👥 Contact Management
-- **Subscriber lists** - Manage newsletter subscribers
-- **Contact properties** - Store user data
-- **Segmentation** - Target specific user groups
-- **Unsubscribe handling** - Automatic compliance
+### Password Reset Flow
+1. User requests password reset
+2. System generates a 6-digit OTP
+3. OTP is sent via email with 10-minute expiry
+4. User enters OTP and new password
+5. Password is updated
+
+### OTP Security Features
+- **6-digit codes**: Easy to enter, hard to guess
+- **10-minute expiry**: Short window for security
+- **One-time use**: Each OTP can only be used once
+- **Rate limiting**: Built into the email service
+
+## Email Templates
+
+All emails use professional HTML templates with:
+- 🏠 Real Estate Platform branding
+- Responsive design
+- Clear call-to-action buttons
+- Security notices and expiry information
+- Professional styling and colors
 
 ## Troubleshooting
 
-### Common Issues:
-1. **"Invalid API key"**: Make sure you're using the correct API key from Loops dashboard
-2. **"Event not found"**: Create the email templates in Loops dashboard first
-3. **Emails not sending**: Check server logs for detailed error messages
-4. **Template variables**: Make sure template variables match your Loops templates
+### Common Issues
 
-### Testing in Development:
-- **No sandbox restrictions** - Works with any email immediately
-- **Template testing** - Use Loops dashboard to test templates
-- **Real-time logs** - Check Loops dashboard for delivery status
+1. **"Invalid credentials" error**
+   - Ensure 2-factor authentication is enabled
+   - Use the app password, not your regular password
+   - Check that the email address is correct
 
-## Production Setup
+2. **Emails not sending**
+   - Verify Gmail SMTP settings
+   - Check firewall/network restrictions
+   - Ensure app password is correctly generated
 
-### For Production:
-1. **Upgrade plan** if needed (free tier: 2,500 emails/month)
-2. **Set up custom domain** for better deliverability
-3. **Monitor email analytics** in Loops dashboard
-4. **Set up webhooks** for delivery tracking
+3. **OTP not working**
+   - Check if OTP has expired (10 minutes)
+   - Verify the OTP was entered correctly
+   - Check server logs for email sending errors
 
-### Recommended Plan:
-- **Free tier**: Good for development and small projects
-- **Pro plan**: $29/month for 50,000 emails (recommended for production)
-- **Enterprise**: Custom pricing for large volumes
+### Gmail Limitations
+
+- **Daily sending limit**: 500 emails per day for regular Gmail accounts
+- **Rate limiting**: Gmail may throttle if sending too many emails quickly
+- **Spam filters**: Ensure proper email content to avoid spam folder
+
+## Production Considerations
+
+For production use, consider:
+- **Domain verification**: Verify your domain with Gmail for better deliverability
+- **Email service upgrade**: Consider Gmail Workspace for higher limits
+- **Monitoring**: Set up email delivery monitoring
+- **Backup service**: Consider having a backup email service
+
+## API Endpoints
+
+### Email Verification
+- `POST /auth/signup` - Sends verification OTP
+- `POST /auth/verify-email` - Verifies OTP and marks email as verified
+
+### Password Reset
+- `POST /auth/forgot-password` - Sends password reset OTP
+- `POST /auth/reset-password` - Resets password using OTP
+
+### Marketing
+- `POST /marketing/subscribe` - Sends welcome email
+- `POST /marketing/property-alert` - Sends property alerts
+- `POST /marketing/newsletter` - Sends newsletters
 
 ## Security Notes
 
-- Never commit your `.env` file to version control
-- Use environment variables for all sensitive information
-- Regularly rotate your API keys
-- Monitor email delivery rates and bounces
-- Comply with email regulations (CAN-SPAM, GDPR)
+- OTPs expire after 10 minutes
+- Each OTP can only be used once
+- Failed attempts are logged
+- Email addresses are validated before sending
+- No sensitive information is stored in emails
 
-## Next Steps
+## Migration from Third-Party Services
 
-1. **Set up Loops account** following the steps above
-2. **Create email templates** in Loops dashboard
-3. **Test email functionality** with signup and password reset
-4. **Implement marketing features** like property alerts
-5. **Monitor email performance** in Loops dashboard
-6. **Scale up** as your user base grows
+This implementation replaces:
+- ❌ Resend.com
+- ❌ Mailgun
+- ❌ Loops.so
+- ❌ AWS SES
 
-## Template Variables
-
-Use these variables in your Loops templates:
-
-### Email Verification
-- `{{verificationUrl}}` - The verification link
-- `{{platformName}}` - "Real Estate Platform"
-- `{{frontendUrl}}` - Your frontend URL
-
-### Password Reset
-- `{{resetUrl}}` - The password reset link
-- `{{platformName}}` - "Real Estate Platform"
-- `{{frontendUrl}}` - Your frontend URL
-
-### Property Alerts
-- `{{properties}}` - Array of property objects
-- `{{propertyCount}}` - Number of properties
-- `{{platformName}}` - "Real Estate Platform"
-
-### Welcome Email
-- `{{firstName}}` - User's first name
-- `{{platformName}}` - "Real Estate Platform"
-- `{{frontendUrl}}` - Your frontend URL 
+With a simple, free, and self-contained Nodemailer solution. 

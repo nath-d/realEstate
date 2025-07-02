@@ -16,6 +16,7 @@ import {
     TagsOutlined,
     UserAddOutlined,
     CalendarOutlined,
+    FilePdfOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
@@ -44,6 +45,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                 { key: 'authors', icon: <UserAddOutlined />, label: 'Authors' },
             ]
         },
+        { key: 'pdfs', icon: <FileOutlined />, label: 'PDF Management' },
         {
             key: 'forms',
             icon: <FileOutlined />,

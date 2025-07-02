@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
 
 const ForgotPasswordPage = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -18,7 +19,11 @@ const ForgotPasswordPage = () => {
             const result = await authService.forgotPassword(email);
 
             if (result.success) {
-                setMessage(result.message || 'Password reset email sent successfully!');
+                setMessage(result.message || 'Password reset code sent successfully! Check your email for the 6-digit code.');
+                // Redirect to reset password page after a short delay
+                setTimeout(() => {
+                    navigate('/reset-password');
+                }, 2000);
             } else {
                 setError(result.error);
             }
@@ -50,7 +55,7 @@ const ForgotPasswordPage = () => {
                         Forgot Password
                     </h2>
                     <p className="text-[#D6AD60]/80 font-montserrat text-sm tracking-wide">
-                        Enter your email to reset your password
+                        Enter your email to receive a reset code
                     </p>
                 </div>
 
@@ -100,7 +105,7 @@ const ForgotPasswordPage = () => {
                                         Sending...
                                     </div>
                                 ) : (
-                                    'Send Reset Link'
+                                    'Send Reset Code'
                                 )}
                             </button>
                         </div>

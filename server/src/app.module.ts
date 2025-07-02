@@ -9,10 +9,12 @@ import { BlogModule } from './blog/blog.module';
 import { ContactModule } from './contact/contact.module';
 import { ScheduleVisitModule } from './schedule-visit/schedule-visit.module';
 import { AuthModule } from './auth/auth.module';
+import { PDFManagementService } from './services/pdf-management.service';
+import { PDFManagementController } from './services/pdf-management.controller';
 
 @Module({
     imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule],
-    controllers: [AppController],
-    providers: [AppService],
+    controllers: [AppController, PDFManagementController],
+    providers: [AppService, PDFManagementService],
 })
 export class AppModule { }

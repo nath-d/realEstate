@@ -10,6 +10,10 @@ const ProfilePage = () => {
     const [editForm, setEditForm] = useState({});
     const [isUpdating, setIsUpdating] = useState(false);
     const [message, setMessage] = useState('');
+    const [showVerifyEmail, setShowVerifyEmail] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [isSendingOtp, setIsSendingOtp] = useState(false);
 
     useEffect(() => {
         loadUserProfile();
@@ -91,6 +95,70 @@ const ProfilePage = () => {
         authService.logout();
     };
 
+    const handleSendVerificationOtp = async () => {
+        setIsSendingOtp(true);
+        try {
+            const token = authService.getToken();
+            const response = await fetch('http://localhost:3000/auth/send-verification-otp', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage('Verification code sent to your email!');
+                setShowVerifyEmail(true);
+                setTimeout(() => setMessage(''), 5000);
+            } else {
+                setMessage(data.message || 'Failed to send verification code');
+            }
+        } catch (error) {
+            setMessage('An error occurred while sending verification code');
+        } finally {
+            setIsSendingOtp(false);
+        }
+    };
+
+    const handleVerifyEmail = async (e) => {
+        e.preventDefault();
+        if (otp.length !== 6) {
+            setMessage('Please enter a valid 6-digit verification code.');
+            return;
+        }
+
+        setIsVerifying(true);
+        try {
+            const response = await fetch('http://localhost:3000/auth/verify-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ otp }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage('Email verified successfully!');
+                setShowVerifyEmail(false);
+                setOtp('');
+                // Reload user profile to update verification status
+                loadUserProfile();
+                setTimeout(() => setMessage(''), 5000);
+            } else {
+                setMessage(data.message || 'Email verification failed');
+            }
+        } catch (error) {
+            setMessage('An error occurred during email verification');
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="min-h-screen bg-[#122620] flex items-center justify-center">
@@ -137,14 +205,23 @@ const ProfilePage = () => {
                             <p className="text-[#D6AD60]/80 font-montserrat text-sm">{user.email}</p>
                             <div className="flex items-center space-x-4 mt-2">
                                 <span className={`px-2 py-1 text-xs font-montserrat ${user.isEmailVerified
-                                        ? 'bg-green-500/20 text-green-400 border border-green-400/30'
-                                        : 'bg-yellow-500/20 text-yellow-400 border border-yellow-400/30'
+                                    ? 'bg-green-500/20 text-green-400 border border-green-400/30'
+                                    : 'bg-yellow-500/20 text-yellow-400 border border-yellow-400/30'
                                     }`}>
                                     {user.isEmailVerified ? 'Email Verified' : 'Email Not Verified'}
                                 </span>
                                 <span className="px-2 py-1 text-xs font-montserrat bg-[#D6AD60]/20 text-[#D6AD60] border border-[#D6AD60]/30">
                                     {user.role}
                                 </span>
+                                {!user.isEmailVerified && (
+                                    <button
+                                        onClick={handleSendVerificationOtp}
+                                        disabled={isSendingOtp}
+                                        className="px-3 py-1 text-xs font-montserrat bg-[#D6AD60] text-[#122620] hover:bg-[#B68D40] transition-all duration-300 disabled:opacity-50"
+                                    >
+                                        {isSendingOtp ? 'Sending...' : 'Verify Email'}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -153,8 +230,8 @@ const ProfilePage = () => {
                 {/* Message */}
                 {message && (
                     <div className={`mb-6 p-4 border ${message.includes('successfully')
-                            ? 'bg-green-500/10 border-green-400/30 text-green-400'
-                            : 'bg-red-500/10 border-red-400/30 text-red-400'
+                        ? 'bg-green-500/10 border-green-400/30 text-green-400'
+                        : 'bg-red-500/10 border-red-400/30 text-red-400'
                         } font-montserrat text-sm`}>
                         {message}
                     </div>
@@ -172,8 +249,8 @@ const ProfilePage = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`px-6 py-3 font-montserrat text-sm tracking-wide transition-all duration-300 ${activeTab === tab.id
-                                    ? 'bg-[#D6AD60] text-[#122620]'
-                                    : 'bg-white/5 text-[#D6AD60] hover:bg-white/10'
+                                ? 'bg-[#D6AD60] text-[#122620]'
+                                : 'bg-white/5 text-[#D6AD60] hover:bg-white/10'
                                 }`}
                         >
                             {tab.label}
@@ -439,9 +516,9 @@ const ProfilePage = () => {
                                             <div className="flex justify-between items-start mb-2">
                                                 <h3 className="text-lg font-source-serif text-[#D6AD60]">{contact.subject}</h3>
                                                 <span className={`px-2 py-1 text-xs font-montserrat ${contact.status === 'new' ? 'bg-blue-500/20 text-blue-400 border border-blue-400/30' :
-                                                        contact.status === 'read' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-400/30' :
-                                                            contact.status === 'responded' ? 'bg-green-500/20 text-green-400 border border-green-400/30' :
-                                                                'bg-gray-500/20 text-gray-400 border border-gray-400/30'
+                                                    contact.status === 'read' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-400/30' :
+                                                        contact.status === 'responded' ? 'bg-green-500/20 text-green-400 border border-green-400/30' :
+                                                            'bg-gray-500/20 text-gray-400 border border-gray-400/30'
                                                     }`}>
                                                     {contact.status}
                                                 </span>
@@ -473,9 +550,9 @@ const ProfilePage = () => {
                                                     {visit.propertyTitle || 'Property Visit'}
                                                 </h3>
                                                 <span className={`px-2 py-1 text-xs font-montserrat ${visit.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-400/30' :
-                                                        visit.status === 'confirmed' ? 'bg-green-500/20 text-green-400 border border-green-400/30' :
-                                                            visit.status === 'completed' ? 'bg-blue-500/20 text-blue-400 border border-blue-400/30' :
-                                                                'bg-red-500/20 text-red-400 border border-red-400/30'
+                                                    visit.status === 'confirmed' ? 'bg-green-500/20 text-green-400 border border-green-400/30' :
+                                                        visit.status === 'completed' ? 'bg-blue-500/20 text-blue-400 border border-blue-400/30' :
+                                                            'bg-red-500/20 text-red-400 border border-red-400/30'
                                                     }`}>
                                                     {visit.status}
                                                 </span>
@@ -501,6 +578,58 @@ const ProfilePage = () => {
                     )}
                 </div>
             </div>
+
+            {/* Email Verification Modal */}
+            {showVerifyEmail && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-[#122620] border border-[#D6AD60]/20 p-8 max-w-md w-full mx-4">
+                        <div className="text-center mb-6">
+                            <h3 className="text-xl font-source-serif text-[#D6AD60] mb-2">Verify Your Email</h3>
+                            <p className="text-[#D6AD60]/80 font-montserrat text-sm">
+                                Enter the 6-digit verification code sent to your email
+                            </p>
+                        </div>
+
+                        <form onSubmit={handleVerifyEmail} className="space-y-6">
+                            <div>
+                                <label htmlFor="otp" className="block text-sm font-montserrat font-medium text-[#D6AD60] mb-2">
+                                    Verification Code
+                                </label>
+                                <input
+                                    id="otp"
+                                    type="text"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                    placeholder="Enter 6-digit code"
+                                    maxLength={6}
+                                    className="w-full px-4 py-3 bg-white/10 border border-[#D6AD60]/30 text-white placeholder-[#D6AD60]/50 font-montserrat text-sm focus:outline-none focus:border-[#D6AD60] focus:bg-white/15 transition-all duration-300"
+                                    autoComplete="one-time-code"
+                                />
+                            </div>
+
+                            <div className="flex space-x-4">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowVerifyEmail(false);
+                                        setOtp('');
+                                    }}
+                                    className="flex-1 bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-4 py-3 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-300 font-montserrat text-sm tracking-wide"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isVerifying || otp.length !== 6}
+                                    className="flex-1 bg-[#D6AD60] text-[#122620] px-4 py-3 rounded-none hover:bg-[#B68D40] transition-all duration-300 font-montserrat text-sm tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isVerifying ? 'Verifying...' : 'Verify Email'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

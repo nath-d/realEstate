@@ -9,6 +9,9 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { EmailService } from './email.service';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { MarketingController } from './marketing.controller';
+import { PdfService } from '../services/pdf.service';
+import { MarketingService } from '../services/marketing.service';
+import { PDFManagementService } from '../services/pdf-management.service';
 
 @Module({
     imports: [
@@ -20,7 +23,7 @@ import { MarketingController } from './marketing.controller';
         }),
     ],
     controllers: [AuthController, MarketingController],
-    providers: [AuthService, JwtStrategy, GoogleStrategy, EmailService],
+    providers: [AuthService, JwtStrategy, GoogleStrategy, EmailService, PdfService, MarketingService, PDFManagementService],
     exports: [AuthService, JwtModule],
 })
 export class AuthModule { } 

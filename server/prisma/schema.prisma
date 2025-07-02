@@ -241,3 +241,17 @@ model User {
     blogViews          BlogView[]
     Property           Property[]
 }
+
+model MarketingPDF {
+    id          Int      @id @default(autoincrement())
+    name        String // Display name for the PDF
+    filename    String // Original filename
+    filePath    String // Path where the file is stored
+    fileSize    Int // File size in bytes
+    mimeType    String // MIME type (application/pdf)
+    description String? // Optional description
+    category    String // welcome-guide, property-guide, investment-tips, etc.
+    isActive    Boolean  @default(true) // Whether this PDF is available for use
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}

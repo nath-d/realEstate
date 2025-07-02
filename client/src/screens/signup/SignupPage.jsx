@@ -86,7 +86,7 @@ const SignupPage = () => {
             const result = await authService.signup(userData);
 
             if (result.success) {
-                // Redirect to dashboard or home page
+                // Redirect to home page after successful signup
                 navigate('/');
             } else {
                 setSubmitError(result.error);

@@ -70,9 +70,15 @@ export class AuthController {
         return this.authService.updateProfile(req.user.id, updateProfileDto);
     }
 
-    @Get('verify-email')
-    async verifyEmail(@Query('token') token: string) {
-        return this.authService.verifyEmail(token);
+    @Post('verify-email')
+    async verifyEmail(@Body() body: { otp: string }) {
+        return this.authService.verifyEmail(body.otp);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('send-verification-otp')
+    async sendVerificationOtp(@Request() req) {
+        return this.authService.sendVerificationOtp(req.user.email);
     }
 
     @UseGuards(JwtAuthGuard)
