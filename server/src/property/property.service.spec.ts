@@ -75,6 +75,9 @@ describe('PropertyService', () => {
                 include: {
                     images: true,
                     location: true,
+                    specifications: true,
+                    materialCertifications: true,
+                    pois: true,
                     agent: true,
                 },
             });
@@ -93,6 +96,9 @@ describe('PropertyService', () => {
                 include: {
                     images: true,
                     location: true,
+                    specifications: true,
+                    materialCertifications: true,
+                    pois: true,
                     agent: true,
                 },
             });
@@ -112,6 +118,9 @@ describe('PropertyService', () => {
                 include: {
                     images: true,
                     location: true,
+                    specifications: true,
+                    materialCertifications: true,
+                    pois: true,
                     agent: true,
                 },
             });

@@ -12,6 +12,11 @@ class AuthService {
         return localStorage.getItem(this.tokenKey);
     }
 
+    // Set token only (for OAuth callbacks)
+    setToken(token) {
+        localStorage.setItem(this.tokenKey, token);
+    }
+
     // Get stored user data
     getUser() {
         const user = localStorage.getItem(this.userKey);
@@ -22,12 +27,20 @@ class AuthService {
     setAuth(token, user) {
         localStorage.setItem(this.tokenKey, token);
         localStorage.setItem(this.userKey, JSON.stringify(user));
+        // Dispatch custom event for authentication change
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+            detail: { authenticated: true, user }
+        }));
     }
 
     // Clear authentication data
     clearAuth() {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userKey);
+        // Dispatch custom event for authentication change
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+            detail: { authenticated: false, user: null }
+        }));
     }
 
     // Check if user is authenticated
@@ -196,7 +209,7 @@ class AuthService {
 
             return {
                 success: true,
-                user: updatedUser
+                user: data.user
             };
         } catch (error) {
             return {
@@ -241,7 +254,162 @@ class AuthService {
         }
     }
 
-    // Get authenticated request headers
+    // Refresh user data from server
+    async refreshUserData() {
+        try {
+            const token = this.getToken();
+            if (!token) {
+                throw new Error('No authentication token');
+            }
+
+            const response = await fetch(`${this.baseURL}/auth/profile`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch user profile');
+            }
+
+            const data = await response.json();
+
+            // Update stored user data
+            this.setAuth(token, data.user);
+
+            return {
+                success: true,
+                user: data.user
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Add property to favorites
+    async addToFavorites(propertyId) {
+        try {
+            const token = this.getToken();
+            if (!token) {
+                throw new Error('No authentication token');
+            }
+
+            const response = await fetch(`${this.baseURL}/auth/favorites/${propertyId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to add property to favorites');
+            }
+
+            const data = await response.json();
+            return {
+                success: true,
+                message: data.message
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Remove property from favorites
+    async removeFromFavorites(propertyId) {
+        try {
+            const token = this.getToken();
+            if (!token) {
+                throw new Error('No authentication token');
+            }
+
+            const response = await fetch(`${this.baseURL}/auth/favorites/${propertyId}/remove`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to remove property from favorites');
+            }
+
+            const data = await response.json();
+            return {
+                success: true,
+                message: data.message
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Get user's favorite properties
+    async getFavoriteProperties() {
+        try {
+            const token = this.getToken();
+            if (!token) {
+                throw new Error('No authentication token');
+            }
+
+            const response = await fetch(`${this.baseURL}/auth/favorites`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch favorite properties');
+            }
+
+            const data = await response.json();
+            return {
+                success: true,
+                properties: data.properties
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Check if a property is in favorites
+    async isPropertyFavorite(propertyId) {
+        try {
+            const token = this.getToken();
+            if (!token) {
+                return false;
+            }
+
+            const result = await this.getFavoriteProperties();
+            if (result.success) {
+                return result.properties.some(property => property.id === parseInt(propertyId));
+            }
+            return false;
+        } catch (error) {
+            console.error('Error checking favorite status:', error);
+            return false;
+        }
+    }
+
+    // Get authentication headers for API requests
     getAuthHeaders() {
         const token = this.getToken();
         return {

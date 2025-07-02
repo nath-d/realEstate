@@ -98,6 +98,11 @@ const SignupPage = () => {
         }
     };
 
+    const handleGoogleSignup = () => {
+        // Redirect to the Google OAuth endpoint
+        window.location.href = 'http://localhost:3000/auth/google';
+    };
+
     return (
         <div className="min-h-screen bg-[#122620] flex items-center justify-center px-4 sm:px-6 lg:px-8">
             {/* Background Pattern */}
@@ -337,6 +342,7 @@ const SignupPage = () => {
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 type="button"
+                                onClick={handleGoogleSignup}
                                 className="w-full inline-flex justify-center py-2 px-4 border border-[#D6AD60]/30 text-[#D6AD60] bg-white/5 hover:bg-white/10 font-montserrat text-sm font-medium tracking-wide transition-all duration-300"
                             >
                                 <span className="sr-only">Sign up with Google</span>

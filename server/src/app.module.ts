@@ -8,9 +8,10 @@ import { UploadModule } from './upload/upload.module';
 import { BlogModule } from './blog/blog.module';
 import { ContactModule } from './contact/contact.module';
 import { ScheduleVisitModule } from './schedule-visit/schedule-visit.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule],
+    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule],
     controllers: [AppController],
     providers: [AppService],
 })

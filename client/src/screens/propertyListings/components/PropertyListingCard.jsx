@@ -4,12 +4,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     FaChevronRight,
     FaMapMarkerAlt,
+    FaHeart,
 } from 'react-icons/fa';
 import { IndianRupee, Search, MapPin, Home, DollarSign, ArrowRight, Filter, Star, Waves, Mountain, Hotel, LandPlot, Bed, Bath, Ruler, MapPinIcon } from 'lucide-react'
+import { useFavorites } from '../../../contexts/FavoritesContext.jsx';
 
 const PropertyListingCard = ({ property, handleImageError, isActive }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { isPropertyFavorite, addToFavorites, removeFromFavorites, isAuthenticated } = useFavorites();
+
+    const isFavorite = isPropertyFavorite(property.id);
 
     useEffect(() => {
         // Check if it's a touch device
@@ -29,6 +35,40 @@ const PropertyListingCard = ({ property, handleImageError, isActive }) => {
     const bedrooms = property.bedrooms || 0;
     const bathrooms = property.bathrooms || 0;
     const livingArea = property.livingArea || 'N/A';
+
+    const handleFavoriteClick = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!isAuthenticated) {
+            // Redirect to login if not authenticated
+            window.location.href = '/login';
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            if (isFavorite) {
+                const result = await removeFromFavorites(property.id);
+                if (result.success) {
+                    console.log('Property removed from favorites');
+                } else {
+                    console.error('Failed to remove from favorites:', result.error);
+                }
+            } else {
+                const result = await addToFavorites(property.id);
+                if (result.success) {
+                    console.log('Property added to favorites');
+                } else {
+                    console.error('Failed to add to favorites:', result.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error handling favorite:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <motion.div
@@ -111,11 +151,21 @@ const PropertyListingCard = ({ property, handleImageError, isActive }) => {
                         </motion.div>
                     </motion.div>
 
-                    {/* {property.price && (
-                        <div className="flex items-center absolute bottom-4 left-4 bg-[#D6AD60] text-[#122620] px-3 py-1.5 rounded-none text-xs sm:text-sm font-medium z-10">
-                            <IndianRupee className="h-4 mr-1" />{property.price}
-                        </div>
-                    )} */}
+                    {/* Favorite Button */}
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={handleFavoriteClick}
+                        disabled={isLoading}
+                        className={`absolute top-4 left-4 p-2 rounded-full transition-all duration-300 z-10 ${isFavorite
+                                ? 'bg-red-500 text-white hover:bg-red-600'
+                                : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
+                            } ${isLoading ? 'opacity-50' : ''}`}
+                        title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                        style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
+                    >
+                        <FaHeart className={`text-lg ${isFavorite ? 'fill-current' : ''}`} />
+                    </motion.button>
 
                     {property.featured && (
                         <div className="absolute top-4 right-4 bg-[#D6AD60] text-[#122620] px-2 py-1 sm:px-3 sm:py-1.5 rounded-none flex items-center text-xs font-medium z-10">
