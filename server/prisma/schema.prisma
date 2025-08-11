@@ -255,3 +255,39 @@ model MarketingPDF {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
+
+// About Us dynamic content
+model AboutContent {
+    id               Int                 @id @default(autoincrement())
+    headerTitle      String              @default("Our Story")
+    headerSubtitle   String? // short tagline under the header
+    heroImageUrl     String? // main image on the left
+    heroImageCaption String? // caption under the image
+    rightHeading     String? // heading on the right column
+    rightParagraph1  String?             @db.Text
+    rightParagraph2  String?             @db.Text
+    stat1Label       String?             @default("Years of Excellence")
+    stat1Value       String?             @default("13+")
+    stat2Label       String?             @default("Happy Customers")
+    stat2Value       String?             @default("50K+")
+    stat3Label       String?             @default("Cities Covered")
+    stat3Value       String?             @default("100+")
+    ctaText          String?             @default("Learn More About Us")
+    ctaLink          String?             @default("/about")
+    createdAt        DateTime            @default(now())
+    updatedAt        DateTime            @updatedAt
+    timelineItems    AboutTimelineItem[]
+}
+
+model AboutTimelineItem {
+    id             Int          @id @default(autoincrement())
+    year           String
+    title          String
+    description    String       @db.Text
+    imageUrl       String?
+    order          Int          @default(0)
+    aboutContentId Int
+    aboutContent   AboutContent @relation(fields: [aboutContentId], references: [id], onDelete: Cascade)
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+}

@@ -7,6 +7,7 @@ import AuthorManagement from './pages/AuthorManagement';
 import ContactFormManagement from './pages/ContactFormManagement';
 import ScheduleVisitManagement from './pages/ScheduleVisitManagement';
 import PDFManagement from './pages/PDFManagement';
+import AboutManagement from './pages/AboutManagement';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/contact-forms" element={<ContactFormManagement />} />
           <Route path="/schedule-visits" element={<ScheduleVisitManagement />} />
           <Route path="/pdfs" element={<PDFManagement />} />
+          <Route path="/about" element={<AboutManagement />} />
           {/* Add more routes here as needed */}
         </Routes>
       </MainLayout>

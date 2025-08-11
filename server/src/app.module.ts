@@ -11,9 +11,10 @@ import { ScheduleVisitModule } from './schedule-visit/schedule-visit.module';
 import { AuthModule } from './auth/auth.module';
 import { PDFManagementService } from './services/pdf-management.service';
 import { PDFManagementController } from './services/pdf-management.controller';
+import { AboutModule } from './about/about.module';
 
 @Module({
-    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule],
+    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule, AboutModule],
     controllers: [AppController, PDFManagementController],
     providers: [AppService, PDFManagementService],
 })

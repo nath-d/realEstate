@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import aboutService from '../../../services/aboutService';
 
 const AboutUs = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -48,32 +49,20 @@ const AboutUs = () => {
         };
     }, []);
 
-    const timelineData = [
-        {
-            year: '2010',
-            title: 'The Beginning',
-            description: 'Founded with a vision to transform real estate in India, our journey began with a single office in Mumbai.',
-            image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3'
-        },
-        {
-            year: '2015',
-            title: 'Expanding Horizons',
-            description: 'Expanded operations to major metropolitan cities, establishing a strong presence in Delhi, Bangalore, and Chennai.',
-            image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3'
-        },
-        {
-            year: '2020',
-            title: 'Digital Transformation',
-            description: 'Launched our innovative digital platform, revolutionizing property search and transactions in India.',
-            image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3'
-        },
-        {
-            year: '2023',
-            title: 'Present Day',
-            description: 'Today, we stand as a leading real estate platform, serving millions of customers across India.',
-            image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3'
-        }
-    ];
+    const [content, setContent] = useState(null);
+    const [timelineData, setTimelineData] = useState([]);
+
+    useEffect(() => {
+        let isMounted = true;
+        aboutService.getContent().then((data) => {
+            if (!isMounted) return;
+            setContent(data);
+            setTimelineData(data.timelineItems || []);
+        }).catch(() => {
+            // ignore errors; keep defaults
+        });
+        return () => { isMounted = false; };
+    }, []);
 
     return (
         <section
@@ -112,7 +101,7 @@ const AboutUs = () => {
                                 <FaHome className="text-[#E5BE90] text-4xl" />
                             </div> */}
                     </div>
-                    <h2 className="text-6xl font-bold mb-4 text-[#122620] font-source-serif">Our Story</h2>
+                    <h2 className="text-6xl font-bold mb-4 text-[#122620] font-source-serif">{content?.headerTitle || 'Our Story'}</h2>
                     <div className="flex justify-center items-center gap-4">
                         <div className="flex justify-center items-center gap-4">
                             <motion.span
@@ -121,7 +110,7 @@ const AboutUs = () => {
                                 transition={{ duration: 0.8 }}
                                 className="h-0.5 bg-[#D6AD60]"
                             ></motion.span>
-                            <p className="text-[#122620]/80"> A journey of excellence, innovation, and unwavering commitment</p>
+                            <p className="text-[#122620]/80">{content?.headerSubtitle || ' A journey of excellence, innovation, and unwavering commitment'}</p>
                             <motion.span
                                 initial={{ width: 0 }}
                                 whileInView={{ width: 120 }}
@@ -137,15 +126,17 @@ const AboutUs = () => {
                     <div className={`relative transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
                         <div className="relative">
                             <img
-                                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3"
+                                src={content?.heroImageUrl || 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3'}
                                 alt="Our Office"
                                 className="w-full h-[500px] object-cover rounded-lg shadow-xl"
+                                loading="lazy"
+                                onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/1000x500?text=Image+unavailable'; }}
                             />
                             <div className="absolute inset-0 bg-[#122620]/20 rounded-lg"></div>
                             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#122620] to-transparent rounded-b-lg">
-                                <p className="text-[#D6AD60] font-montserrat text-sm">
-                                    Our headquarters in Mumbai
-                                </p>
+                                {content?.heroImageCaption && (
+                                    <p className="text-[#D6AD60] font-montserrat text-sm">{content.heroImageCaption}</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -153,26 +144,26 @@ const AboutUs = () => {
                     {/* Right Column - Text */}
                     <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                         <h3 className="text-2xl md:text-3xl font-source-serif text-[#122620] mb-6">
-                            Building Dreams, Creating Communities
+                            {content?.rightHeading || 'Building Dreams, Creating Communities'}
                         </h3>
-                        <p className="text-[#122620]/80 font-montserrat mb-6">
-                            Founded in 2010, our journey began with a simple yet powerful vision: to transform the way people find, buy, and sell properties in India. What started as a small team of passionate individuals has grown into a nationwide movement.
-                        </p>
-                        <p className="text-[#122620]/80 font-montserrat mb-6">
-                            We believe that every person deserves a place they can call home. Our mission is to make this dream accessible to everyone through innovative technology, transparent processes, and exceptional service.
-                        </p>
+                        {content?.rightParagraph1 && (
+                            <p className="text-[#122620]/80 font-montserrat mb-6">{content.rightParagraph1}</p>
+                        )}
+                        {content?.rightParagraph2 && (
+                            <p className="text-[#122620]/80 font-montserrat mb-6">{content.rightParagraph2}</p>
+                        )}
                         <div className="flex items-center space-x-4">
                             <div className="flex-1">
-                                <h4 className="text-4xl font-source-serif text-[#D6AD60] mb-2">13+</h4>
-                                <p className="text-[#122620]/80 font-montserrat text-sm">Years of Excellence</p>
+                                <h4 className="text-4xl font-source-serif text-[#D6AD60] mb-2">{content?.stat1Value || '13+'}</h4>
+                                <p className="text-[#122620]/80 font-montserrat text-sm">{content?.stat1Label || 'Years of Excellence'}</p>
                             </div>
                             <div className="flex-1">
-                                <h4 className="text-4xl font-source-serif text-[#D6AD60] mb-2">50K+</h4>
-                                <p className="text-[#122620]/80 font-montserrat text-sm">Happy Customers</p>
+                                <h4 className="text-4xl font-source-serif text-[#D6AD60] mb-2">{content?.stat2Value || '50K+'}</h4>
+                                <p className="text-[#122620]/80 font-montserrat text-sm">{content?.stat2Label || 'Happy Customers'}</p>
                             </div>
                             <div className="flex-1">
-                                <h4 className="text-4xl font-source-serif text-[#D6AD60] mb-2">100+</h4>
-                                <p className="text-[#122620]/80 font-montserrat text-sm">Cities Covered</p>
+                                <h4 className="text-4xl font-source-serif text-[#D6AD60] mb-2">{content?.stat3Value || '100+'}</h4>
+                                <p className="text-[#122620]/80 font-montserrat text-sm">{content?.stat3Label || 'Cities Covered'}</p>
                             </div>
                         </div>
                     </div>
@@ -249,9 +240,11 @@ const AboutUs = () => {
                                         <motion.img
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ duration: 0.3 }}
-                                            src={item.image}
+                                            src={item.imageUrl || item.image || 'https://via.placeholder.com/800x300?text=Timeline+image'}
                                             alt={item.title}
                                             className="w-full h-48 object-cover rounded-lg shadow-md"
+                                            loading="lazy"
+                                            onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/800x300?text=Timeline+image'; }}
                                         />
                                     </motion.div>
                                 </div>

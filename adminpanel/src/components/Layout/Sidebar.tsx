@@ -46,6 +46,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
             ]
         },
         { key: 'pdfs', icon: <FileOutlined />, label: 'PDF Management' },
+        { key: 'about', icon: <BookOutlined />, label: 'About Content' },
         {
             key: 'forms',
             icon: <FileOutlined />,
