@@ -18,6 +18,7 @@ import {
     CalendarOutlined,
     FilePdfOutlined,
 } from '@ant-design/icons';
+import { FaTrophy } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -47,6 +48,10 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
         },
         { key: 'pdfs', icon: <FileOutlined />, label: 'PDF Management' },
         { key: 'about', icon: <BookOutlined />, label: 'About Content' },
+        { key: 'achievements', icon: <FaTrophy />, label: 'Achievements' },
+        { key: 'why-choose-us', icon: <TagsOutlined />, label: 'Why Choose Us' },
+        { key: 'core-strengths', icon: <BarChartOutlined />, label: 'Core Strengths' },
+        { key: 'future-vision', icon: <BarChartOutlined />, label: 'Future Vision' },
         {
             key: 'forms',
             icon: <FileOutlined />,

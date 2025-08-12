@@ -291,3 +291,66 @@ model AboutTimelineItem {
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
 }
+
+// Achievements for homepage
+model Achievement {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    icon        String // Icon name (e.g., "FaCertificate", "FaShieldAlt")
+    category    String // Materials, Structural, Finishing, Electrical, etc.
+    year        String
+    stats       String // The statistics/value to display
+    order       Int      @default(0) // For ordering achievements
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Why Choose Us reasons for homepage
+model WhyChooseUsReason {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    stat        String?
+    statText    String?
+    icon        String? // icon key used by frontend to render an SVG
+    bgImageUrl  String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Core Strengths for homepage
+model CoreStrength {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    icon        String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Future Vision content and items
+model FutureVisionContent {
+    id         Int      @id @default(autoincrement())
+    visionText String?  @db.Text
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model FutureVisionGoal {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    icon        String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model FutureVisionTimelineItem {
+    id          Int      @id @default(autoincrement())
+    year        String
+    description String   @db.Text
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}

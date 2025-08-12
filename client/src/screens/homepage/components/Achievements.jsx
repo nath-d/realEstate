@@ -1,58 +1,108 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaCertificate, FaCheckCircle, FaShieldAlt, FaAward, FaMedal, FaStar, FaTrophy, FaRibbon } from 'react-icons/fa';
+import { FaCertificate, FaCheckCircle, FaShieldAlt, FaAward, FaMedal, FaStar, FaTrophy, FaRibbon, FaCrown, FaGem } from 'react-icons/fa';
+import { getAchievements } from '../../../services/achievementService';
 
 const Achievements = () => {
-    const achievements = [
-        {
-            title: "Premium Cement Certification",
-            description: "ISO 9001:2015 certified cement from leading manufacturers",
-            icon: FaCertificate,
-            category: "Materials",
-            year: "2024",
-            stats: "Grade 53 OPC"
-        },
-        {
-            title: "Steel Quality Assurance",
-            description: "TMT bars certified by Bureau of Indian Standards (BIS)",
-            icon: FaShieldAlt,
-            category: "Structural",
-            year: "2024",
-            stats: "Fe 500D Grade"
-        },
-        {
-            title: "Sand Quality Control",
-            description: "IS 383 certified river sand and M-sand",
-            icon: FaCheckCircle,
-            category: "Materials",
-            year: "2024",
-            stats: "Zone II"
-        },
-        {
-            title: "Brick Standards",
-            description: "IS 12894 certified fly ash bricks",
-            icon: FaMedal,
-            category: "Materials",
-            year: "2024",
-            stats: "Class 1"
-        },
-        {
-            title: "Paint Certification",
-            description: "ISI marked premium quality paints",
-            icon: FaStar,
-            category: "Finishing",
-            year: "2024",
-            stats: "IS 15489"
-        },
-        {
-            title: "Electrical Standards",
-            description: "ISI certified electrical fittings and wires",
-            icon: FaAward,
-            category: "Electrical",
-            year: "2024",
-            stats: "IS 694"
-        }
-    ];
+    const [achievements, setAchievements] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Icon mapping
+    const iconMap = {
+        'FaCertificate': FaCertificate,
+        'FaCheckCircle': FaCheckCircle,
+        'FaShieldAlt': FaShieldAlt,
+        'FaAward': FaAward,
+        'FaMedal': FaMedal,
+        'FaStar': FaStar,
+        'FaTrophy': FaTrophy,
+        'FaRibbon': FaRibbon,
+        'FaCrown': FaCrown,
+        'FaGem': FaGem,
+    };
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchAchievements = async () => {
+            try {
+                console.log('Fetching achievements...');
+                const data = await getAchievements();
+                console.log('Fetched achievements:', data);
+                console.log('Achievements length:', data.length);
+
+                if (isMounted) {
+                    setAchievements(data);
+                }
+            } catch (error) {
+                console.error('Error fetching achievements:', error);
+                if (isMounted) {
+                    // Fallback to default achievements if API fails
+                    setAchievements([
+                        {
+                            title: "Premium Cement Certification",
+                            description: "ISO 9001:2015 certified cement from leading manufacturers",
+                            icon: FaCertificate,
+                            category: "Materials",
+                            year: "2024",
+                            stats: "Grade 53 OPC"
+                        },
+                        {
+                            title: "Steel Quality Assurance",
+                            description: "TMT bars certified by Bureau of Indian Standards (BIS)",
+                            icon: FaShieldAlt,
+                            category: "Structural",
+                            year: "2024",
+                            stats: "Fe 500D Grade"
+                        },
+                        {
+                            title: "Sand Quality Control",
+                            description: "IS 383 certified river sand and M-sand",
+                            icon: FaCheckCircle,
+                            category: "Materials",
+                            year: "2024",
+                            stats: "Zone II"
+                        },
+                        {
+                            title: "Brick Standards",
+                            description: "IS 12894 certified fly ash bricks",
+                            icon: FaMedal,
+                            category: "Materials",
+                            year: "2024",
+                            stats: "Class 1"
+                        },
+                        {
+                            title: "Paint Certification",
+                            description: "ISI marked premium quality paints",
+                            icon: FaStar,
+                            category: "Finishing",
+                            year: "2024",
+                            stats: "IS 15489"
+                        },
+                        {
+                            title: "Electrical Standards",
+                            description: "ISI certified electrical fittings and wires",
+                            icon: FaAward,
+                            category: "Electrical",
+                            year: "2024",
+                            stats: "IS 694"
+                        }
+                    ]);
+                }
+            } finally {
+                if (isMounted) {
+                    console.log('Setting loading to false');
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchAchievements();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     const container = {
         hidden: { opacity: 0 },
@@ -68,6 +118,8 @@ const Achievements = () => {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0 }
     };
+
+    console.log('Achievements component render - loading:', loading, 'achievements:', achievements);
 
     return (
         <section className="py-20 relative overflow-hidden bg-[#122620]">
@@ -110,60 +162,65 @@ const Achievements = () => {
                     </div>
                 </motion.div>
 
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 pt-20"
-                >
-                    {achievements.map((achievement, index) => (
-                        <motion.div
-                            key={index}
-                            variants={item}
-                            className="group relative h-[350px]"
-                        >
-                            <div className="relative h-full flex flex-col border-b border-[#E5BE90]/20 pb-6">
-                                {/* Large Background Icon */}
-                                <div className="absolute -right-4 -top-4 w-32 h-32 text-[#E5BE90]/5 transform group-hover:scale-110 transition-transform duration-500">
-                                    <achievement.icon className="w-full h-full" />
-                                </div>
-
-                                <div className="relative flex-grow">
-                                    {/* Main Icon */}
-                                    <div className="w-24 h-24 bg-[#E5BE90]/10 rounded-2xl flex items-center justify-center mb-8 transform group-hover:scale-105 transition-all duration-500">
-                                        <achievement.icon className="text-[#E5BE90] text-5xl" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 pt-20">
+                    {loading && (
+                        <div className="col-span-full text-center text-white">Loading achievements...</div>
+                    )}
+                    {!loading && achievements.length === 0 && (
+                        <div className="col-span-full text-center text-white">No achievements found.</div>
+                    )}
+                    {!loading && achievements.length > 0 && achievements.map((achievement, index) => {
+                        // Handle both string icon names and direct icon components
+                        const IconComponent = typeof achievement.icon === 'string'
+                            ? iconMap[achievement.icon] || FaCertificate
+                            : achievement.icon || FaCertificate;
+                        return (
+                            <div
+                                key={achievement.id || index}
+                                className="group relative h-[350px]"
+                            >
+                                <div className="relative h-full flex flex-col border-b border-[#E5BE90]/20 pb-6">
+                                    {/* Large Background Icon */}
+                                    <div className="absolute -right-4 -top-4 w-32 h-32 text-[#E5BE90]/5 transform group-hover:scale-110 transition-transform duration-500">
+                                        <IconComponent className="w-full h-full" />
                                     </div>
 
-                                    {/* Content */}
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-3xl font-bold text-white group-hover:text-[#E5BE90] transition-colors duration-500 font-source-serif tracking-wide">
-                                                {achievement.title}
-                                            </h3>
-                                            <span className="text-[#E5BE90] text-sm font-medium">
-                                                {achievement.year}
-                                            </span>
+                                    <div className="relative flex-grow">
+                                        {/* Main Icon */}
+                                        <div className="w-24 h-24 bg-[#E5BE90]/10 rounded-2xl flex items-center justify-center mb-8 transform group-hover:scale-105 transition-all duration-500">
+                                            <IconComponent className="text-[#E5BE90] text-5xl" />
                                         </div>
 
-                                        <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-500">
-                                            {achievement.description}
-                                        </p>
+                                        {/* Content */}
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-3xl font-bold text-white group-hover:text-[#E5BE90] transition-colors duration-500 font-source-serif tracking-wide">
+                                                    {achievement.title}
+                                                </h3>
+                                                <span className="text-[#E5BE90] text-sm font-medium">
+                                                    {achievement.year}
+                                                </span>
+                                            </div>
 
-                                        <div className="flex items-center justify-between pt-2">
-                                            <span className="text-[#E5BE90] text-sm font-medium">
-                                                {achievement.category}
-                                            </span>
-                                            <span className="text-2xl font-bold text-[#E5BE90] font-source-serif tracking-wide">
-                                                {achievement.stats}
-                                            </span>
+                                            <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-500">
+                                                {achievement.description}
+                                            </p>
+
+                                            <div className="flex items-center justify-between pt-2">
+                                                <span className="text-[#E5BE90] text-sm font-medium">
+                                                    {achievement.category}
+                                                </span>
+                                                <span className="text-2xl font-bold text-[#E5BE90] font-source-serif tracking-wide">
+                                                    {achievement.stats}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                        );
+                    })}
+                </div>
 
                 {/* Additional Recognition Section */}
                 <motion.div
