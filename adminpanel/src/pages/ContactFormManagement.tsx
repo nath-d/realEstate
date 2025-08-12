@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNotifications } from '../context/NotificationContext';
 import { Card, Button, message, Modal, Alert, Spin, Table, Tag, Space, Drawer, Descriptions, Typography, Select } from 'antd';
 import { EyeOutlined, DeleteOutlined, MailOutlined, UserOutlined, PhoneOutlined, MessageOutlined } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -18,6 +20,7 @@ interface ContactForm {
 }
 
 const ContactFormManagement: React.FC = () => {
+    const location = useLocation() as any;
     const [contactForms, setContactForms] = useState<ContactForm[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -25,10 +28,23 @@ const ContactFormManagement: React.FC = () => {
     const [viewingForm, setViewingForm] = useState<ContactForm | null>(null);
     const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
     const [formToDelete, setFormToDelete] = useState<ContactForm | null>(null);
+    const { refresh } = useNotifications();
+    const [highlightId, setHighlightId] = useState<number | null>(null);
 
     useEffect(() => {
         fetchContactForms();
     }, []);
+
+    // pick up highlight from navigation state
+    useEffect(() => {
+        const hl = location?.state?.highlight;
+        if (hl?.type === 'contact' && typeof hl?.id === 'number') {
+            setHighlightId(hl.id);
+            // clear it after a few seconds
+            const t = setTimeout(() => setHighlightId(null), 4000);
+            return () => clearTimeout(t);
+        }
+    }, [location?.state]);
 
     const fetchContactForms = async () => {
         try {
@@ -69,6 +85,7 @@ const ContactFormManagement: React.FC = () => {
 
             setContactForms(contactForms.filter(f => f.id !== id));
             message.success('Contact form deleted successfully');
+            refresh();
         } catch (error) {
             console.error('Error deleting contact form:', error);
             message.error('Failed to delete contact form');
@@ -93,6 +110,7 @@ const ContactFormManagement: React.FC = () => {
                 f.id === id ? { ...f, status } : f
             ));
             message.success('Status updated successfully');
+            refresh();
         } catch (error) {
             console.error('Error updating status:', error);
             message.error('Failed to update status');
@@ -251,6 +269,7 @@ const ContactFormManagement: React.FC = () => {
                         columns={columns}
                         dataSource={contactForms}
                         rowKey="id"
+                        rowClassName={(record: ContactForm) => record.id === highlightId ? 'row-highlight' : ''}
                         pagination={{
                             pageSize: 10,
                             showSizeChanger: true,

@@ -165,6 +165,14 @@ export class PropertyController {
                 node["railway"~"station|subway|tram_stop|halt"](around:${radius},${lat},${lng});
                 node["public_transport"~"stop_position|platform|station"](around:${radius},${lat},${lng});
                 node["shop"~"supermarket|mall|grocery|convenience|department_store"](around:${radius},${lat},${lng});
+                way["amenity"~"school|college|university|hospital|library|police|restaurant|cafe|bank"](around:${radius},${lat},${lng});
+                way["leisure"~"park|playground|sports_centre|stadium"](around:${radius},${lat},${lng});
+                way["railway"~"station|subway|tram_stop|halt"](around:${radius},${lat},${lng});
+                way["shop"~"supermarket|mall|grocery|convenience|department_store"](around:${radius},${lat},${lng});
+                relation["amenity"~"school|college|university|hospital|library|police|restaurant|cafe|bank"](around:${radius},${lat},${lng});
+                relation["leisure"~"park|playground|sports_centre|stadium"](around:${radius},${lat},${lng});
+                relation["railway"~"station|subway|tram_stop|halt"](around:${radius},${lat},${lng});
+                relation["shop"~"supermarket|mall|grocery|convenience|department_store"](around:${radius},${lat},${lng});
             );
             out center;
         `;

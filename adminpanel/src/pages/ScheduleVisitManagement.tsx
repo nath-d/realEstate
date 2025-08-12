@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNotifications } from '../context/NotificationContext';
 import { Card, Button, message, Modal, Alert, Spin, Table, Tag, Space, Drawer, Descriptions, Typography, Select } from 'antd';
 import { EyeOutlined, DeleteOutlined, CalendarOutlined, UserOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -22,6 +24,7 @@ interface ScheduleVisit {
 }
 
 const ScheduleVisitManagement: React.FC = () => {
+    const location = useLocation() as any;
     const [scheduleVisits, setScheduleVisits] = useState<ScheduleVisit[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -29,10 +32,22 @@ const ScheduleVisitManagement: React.FC = () => {
     const [viewingVisit, setViewingVisit] = useState<ScheduleVisit | null>(null);
     const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
     const [visitToDelete, setVisitToDelete] = useState<ScheduleVisit | null>(null);
+    const { refresh } = useNotifications();
+    const [highlightId, setHighlightId] = useState<number | null>(null);
 
     useEffect(() => {
         fetchScheduleVisits();
     }, []);
+
+    // pick up highlight from navigation state
+    useEffect(() => {
+        const hl = location?.state?.highlight;
+        if (hl?.type === 'visit' && typeof hl?.id === 'number') {
+            setHighlightId(hl.id);
+            const t = setTimeout(() => setHighlightId(null), 4000);
+            return () => clearTimeout(t);
+        }
+    }, [location?.state]);
 
     const fetchScheduleVisits = async () => {
         try {
@@ -73,6 +88,7 @@ const ScheduleVisitManagement: React.FC = () => {
 
             setScheduleVisits(scheduleVisits.filter(v => v.id !== id));
             message.success('Schedule visit deleted successfully');
+            refresh();
         } catch (error) {
             console.error('Error deleting schedule visit:', error);
             message.error('Failed to delete schedule visit');
@@ -97,6 +113,7 @@ const ScheduleVisitManagement: React.FC = () => {
                 v.id === id ? { ...v, status } : v
             ));
             message.success('Status updated successfully');
+            refresh();
         } catch (error) {
             console.error('Error updating status:', error);
             message.error('Failed to update status');
@@ -266,6 +283,7 @@ const ScheduleVisitManagement: React.FC = () => {
                         columns={columns}
                         dataSource={scheduleVisits}
                         rowKey="id"
+                        rowClassName={(record: ScheduleVisit) => record.id === highlightId ? 'row-highlight' : ''}
                         pagination={{
                             pageSize: 10,
                             showSizeChanger: true,
