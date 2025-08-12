@@ -182,16 +182,31 @@ const MapPicker: React.FC<MapPickerProps> = ({ open, onCancel, onSelect, initial
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ lat, lng, radius: 1000 }),
+                // Modest radius for speed; backend caps and caches results
+                body: JSON.stringify({ lat, lng, radius: 600 }),
             });
-            const data = await response.json();
-            const pois: POI[] = (data.elements || []).map((el: any) => ({
-                lat: el.lat,
-                lng: el.lon,
-                type: el.tags?.amenity || el.tags?.leisure || el.tags?.railway || el.tags?.shop || 'other',
-                name: el.tags?.name || el.tags?.amenity || el.tags?.leisure || el.tags?.railway || el.tags?.shop || 'POI',
-                tags: el.tags,
-            }));
+            let data: any = {};
+            try {
+                data = await response.json();
+            } catch (err) {
+                data = { elements: [] };
+            }
+            const pois: POI[] = (data.elements || [])
+                .map((el: any) => {
+                    const poiLat = el.lat ?? el.center?.lat;
+                    const poiLng = el.lon ?? el.center?.lon;
+                    if (poiLat == null || poiLng == null) return null;
+                    const type = el.tags?.amenity || el.tags?.leisure || el.tags?.railway || el.tags?.shop || 'other';
+                    const name = el.tags?.name || el.tags?.amenity || el.tags?.leisure || el.tags?.railway || el.tags?.shop || 'POI';
+                    return {
+                        lat: poiLat,
+                        lng: poiLng,
+                        type,
+                        name,
+                        tags: el.tags,
+                    } as POI;
+                })
+                .filter((p: POI | null) => p !== null) as POI[];
             setPOIs(pois);
             if (pois.length > 0) {
                 message.success(`Found ${pois.length} nearby places of interest`);

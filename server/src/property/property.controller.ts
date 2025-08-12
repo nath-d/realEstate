@@ -1,4 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put, BadRequestException } from '@nestjs/common';
+import axios from 'axios';
+
+// Simple in-memory cache for POI results (rounded to ~100m grid)
+type CacheEntry = { data: any; expiresAt: number };
+const poiCache: Map<string, CacheEntry> = new Map();
+const POI_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 import { PropertyService } from './property.service';
 import { Prisma } from '@prisma/client';
 
@@ -138,32 +144,70 @@ export class PropertyController {
 
     @Post('pois/fetch')
     async fetchPOIs(@Body() body: { lat: number; lng: number; radius?: number }) {
-        try {
-            const { lat, lng, radius = 1000 } = body;
-            const query = `
-                [out:json][timeout:25];
-                (
-                    node["amenity"~"school|college|university|restaurant|cafe|hospital|pharmacy|police"](around:${radius},${lat},${lng});
-                    node["leisure"="park"](around:${radius},${lat},${lng});
-                    node["railway"~"station|metro|subway"](around:${radius},${lat},${lng});
-                    node["shop"~"supermarket|mall|grocery"](around:${radius},${lat},${lng});
-                );
-                out body;
-            `;
+        const { lat, lng } = body;
+        // Keep radius modest for speed; cap at 800m to avoid heavy queries
+        const radius = Math.min(Math.max(Number(body.radius) || 600, 300), 800);
 
-            const response = await fetch('https://overpass-api.de/api/interpreter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'User-Agent': 'RealEstateApp/1.0',
-                },
-                body: `data=${encodeURIComponent(query)}`,
-            });
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            throw new Error('Failed to fetch POIs');
+        // Cache key by coarse grid (~100m) and radius
+        const key = `${radius}:${lat.toFixed(3)},${lng.toFixed(3)}`;
+        const cached = poiCache.get(key);
+        if (cached && cached.expiresAt > Date.now()) {
+            return cached.data;
         }
+
+        // Build Overpass query (keep reasonably small to avoid rate limits/timeouts)
+        // Nodes-only query for speed
+        const query = `
+            [out:json][timeout:20];
+            (
+                node["amenity"~"school|kindergarten|college|university|restaurant|cafe|bar|pub|hospital|clinic|pharmacy|police|bank|atm|library"](around:${radius},${lat},${lng});
+                node["leisure"~"park|playground|sports_centre|stadium"](around:${radius},${lat},${lng});
+                node["railway"~"station|subway|tram_stop|halt"](around:${radius},${lat},${lng});
+                node["public_transport"~"stop_position|platform|station"](around:${radius},${lat},${lng});
+                node["shop"~"supermarket|mall|grocery|convenience|department_store"](around:${radius},${lat},${lng});
+            );
+            out center;
+        `;
+
+        const endpoints = [
+            'https://overpass-api.de/api/interpreter',
+            'https://overpass.kumi.systems/api/interpreter',
+            'https://lz4.overpass-api.de/api/interpreter'
+        ];
+
+        // Fire all mirrors simultaneously and take the first successful response
+        const makeReq = (endpoint: string) => axios.post(
+            endpoint,
+            `data=${encodeURIComponent(query)}`,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'User-Agent': 'RealEstateApp/1.0 (contact: admin@example.com)'
+                },
+                timeout: 8000,
+                transformRequest: [(data) => data],
+                validateStatus: (s) => s >= 200 && s < 300,
+            }
+        ).then(r => r.data);
+
+        const attempts = endpoints.map(ep => makeReq(ep).catch(() => Promise.reject()));
+
+        let data: any;
+        try {
+            // First success wins
+            data = await Promise.any(attempts);
+        } catch {
+            console.error('POI fetch failed on all mirrors (fast path)');
+            data = { elements: [] };
+        }
+
+        // Trim to a sensible maximum for speed in UI
+        if (Array.isArray(data?.elements) && data.elements.length > 120) {
+            data.elements = data.elements.slice(0, 120);
+        }
+
+        // Cache the result
+        poiCache.set(key, { data, expiresAt: Date.now() + POI_CACHE_TTL_MS });
+        return data;
     }
 } 
