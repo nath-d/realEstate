@@ -17,6 +17,7 @@ import {
     UserAddOutlined,
     CalendarOutlined,
     FilePdfOutlined,
+    MailOutlined,
 } from '@ant-design/icons';
 import { FaTrophy } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -52,6 +53,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
         { key: 'why-choose-us', icon: <TagsOutlined />, label: 'Why Choose Us' },
         { key: 'core-strengths', icon: <BarChartOutlined />, label: 'Core Strengths' },
         { key: 'future-vision', icon: <BarChartOutlined />, label: 'Future Vision' },
+        { key: 'newsletter', icon: <MailOutlined />, label: 'Newsletter' },
         {
             key: 'forms',
             icon: <FileOutlined />,

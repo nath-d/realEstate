@@ -12,6 +12,7 @@ import AchievementManagement from './pages/AchievementManagement';
 import WhyChooseUsManagement from './pages/WhyChooseUsManagement';
 import CoreStrengthsManagement from './pages/CoreStrengthsManagement';
 import FutureVisionManagement from './pages/FutureVisionManagement';
+import NewsletterManagement from './pages/NewsletterManagement';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/why-choose-us" element={<WhyChooseUsManagement />} />
           <Route path="/core-strengths" element={<CoreStrengthsManagement />} />
           <Route path="/future-vision" element={<FutureVisionManagement />} />
+          <Route path="/newsletter" element={<NewsletterManagement />} />
           {/* Add more routes here as needed */}
         </Routes>
       </MainLayout>

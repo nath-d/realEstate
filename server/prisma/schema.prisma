@@ -354,3 +354,18 @@ model FutureVisionTimelineItem {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
+
+// Newsletter subscribers
+model NewsletterSubscriber {
+    id               Int       @id @default(autoincrement())
+    email            String    @unique
+    firstName        String?
+    lastName         String?
+    isConfirmed      Boolean   @default(false)
+    confirmToken     String?   @unique
+    unsubscribeToken String    @unique
+    unsubscribedAt   DateTime?
+    subscribedAt     DateTime  @default(now())
+    updatedAt        DateTime  @updatedAt
+    tags             String[]  @default([])
+}

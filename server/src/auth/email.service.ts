@@ -270,6 +270,68 @@ export class EmailService {
         }
     }
 
+    // Send confirmation email for newsletter subscription
+    async sendConfirmSubscription(email: string, confirmUrl: string): Promise<void> {
+        try {
+            const mailOptions = {
+                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                to: email,
+                subject: 'Confirm your subscription - Real Estate Platform',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
+                        <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <p style="color: #7f8c8d; margin: 10px 0 0 0;">Please confirm your subscription</p>
+                            </div>
+                            <p style="color: #34495e; line-height: 1.6; margin-bottom: 25px;">
+                                Thanks for subscribing to our newsletter. Please confirm your email to start receiving updates.
+                            </p>
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="${confirmUrl}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">Confirm Subscription</a>
+                            </div>
+                        </div>
+                    </div>
+                `,
+            };
+
+            await this.transporter.sendMail(mailOptions);
+            this.logger.log(`Confirmation email sent successfully to ${email}`);
+        } catch (error) {
+            this.logger.error(`Failed to send confirmation email to ${email}:`, error);
+        }
+    }
+
+    // Send newsletter email with unsubscribe footer
+    async sendNewsletterEmail(email: string, subject: string, htmlContent: string, unsubscribeUrl: string, attachments?: { filename: string; content: Buffer; contentType?: string }[]): Promise<void> {
+        try {
+            const wrappedHtml = `
+                <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
+                    <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.06);">
+                        ${htmlContent}
+                        <hr style="border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;">
+                        <p style="color: #95a5a6; font-size: 12px; text-align: center;">
+                            You are receiving this because you subscribed to Real Estate Platform updates.
+                            If you no longer wish to receive these emails, <a href="${unsubscribeUrl}">unsubscribe here</a>.
+                        </p>
+                    </div>
+                </div>`;
+
+            await this.transporter.sendMail({
+                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                to: email,
+                subject,
+                html: wrappedHtml,
+                attachments: attachments && attachments.length > 0
+                    ? attachments.map(a => ({ filename: a.filename, content: a.content, contentType: a.contentType }))
+                    : undefined,
+            });
+            this.logger.log(`Newsletter email sent successfully to ${email}`);
+        } catch (error) {
+            this.logger.error(`Failed to send newsletter email to ${email}:`, error);
+        }
+    }
+
     // Send welcome email with PDF attachment
     async sendWelcomeEmailWithPdf(email: string, firstName: string, pdfPath: string): Promise<void> {
         try {

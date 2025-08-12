@@ -1,4 +1,5 @@
 import React from 'react';
+import NewsletterForm from './NewsletterForm';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
@@ -86,28 +87,7 @@ const Footer = () => {
                         <p className="text-gray-300 mb-6 leading-relaxed">
                             Subscribe to our newsletter for the latest property updates and market insights.
                         </p>
-                        <form className="space-y-4">
-                            <div className="relative">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="w-full px-6 py-4 rounded-non bg-[#122620] text-white border-2 border-gray-700 focus:border-[#c9a66b] focus:outline-none transition-colors"
-                                />
-                            </div>
-                            {/* <button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-[#c9a66b] to-[#e6c48a] text-white py-4 px-6 rounded-lg hover:from-[#e6c48a] hover:to-[#c9a66b] transition-all duration-300 transform hover:scale-[1.02] font-semibold"
-                            >
-                                Subscribe Now
-                            </button> */}
-                            <button
-                                // to="/properties"
-                                type="submit"
-                                className="w-full inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
-                            >
-                                Subscribe Now
-                            </button>
-                        </form>
+                        <NewsletterForm />
                     </div>
                 </div>
 

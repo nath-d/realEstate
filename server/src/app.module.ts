@@ -16,9 +16,10 @@ import { AchievementModule } from './achievement/achievement.module';
 import { WhyChooseUsModule } from './why-choose-us/why-choose-us.module';
 import { CoreStrengthsModule } from './core-strengths/core-strengths.module';
 import { FutureVisionModule } from './future-vision/future-vision.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
-    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule, AboutModule, AchievementModule, WhyChooseUsModule, CoreStrengthsModule, FutureVisionModule],
+    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule, AboutModule, AchievementModule, WhyChooseUsModule, CoreStrengthsModule, FutureVisionModule, NewsletterModule],
     controllers: [AppController, PDFManagementController],
     providers: [AppService, PDFManagementService],
 })

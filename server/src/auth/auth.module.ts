@@ -24,6 +24,6 @@ import { PDFManagementService } from '../services/pdf-management.service';
     ],
     controllers: [AuthController, MarketingController],
     providers: [AuthService, JwtStrategy, GoogleStrategy, EmailService, PdfService, MarketingService, PDFManagementService],
-    exports: [AuthService, JwtModule],
+    exports: [AuthService, JwtModule, EmailService],
 })
 export class AuthModule { } 
