@@ -225,9 +225,9 @@ const AchievementManagement: React.FC = () => {
     return (
         <div className="p-6">
             <div className="mb-6">
-                <Title level={2} className="mb-2">Achievement Management</Title>
+                <Title level={2} className="mb-2">Certifications</Title>
                 <p className="text-gray-600">
-                    Manage the achievements displayed on the homepage. You can add, edit, and delete achievements.
+                    Manage the certifications displayed on the homepage. You can add, edit, and delete certifications.
                 </p>
             </div>
 
@@ -236,7 +236,7 @@ const AchievementManagement: React.FC = () => {
                     <div>
                         <h3 className="text-lg font-semibold">Achievements</h3>
                         <p className="text-sm text-gray-500">
-                            Total: {achievements.length} achievements
+                            Total: {achievements.length} Certifications
                         </p>
                     </div>
                     <Button

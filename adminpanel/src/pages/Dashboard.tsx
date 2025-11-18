@@ -13,7 +13,7 @@ import {
     ArrowUpOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-
+import { TbCurrencyRupee } from "react-icons/tb";
 const { Title, Text } = Typography;
 
 interface Property {
@@ -251,9 +251,9 @@ const Dashboard: React.FC = () => {
                         <Statistic
                             title="Total Value"
                             value={stats.totalValue}
-                            prefix={<DollarOutlined className="text-green-500" />}
+                            // prefix={<TbCurrencyRupee className="text-green-500" />}
                             valueStyle={{ color: '#10b981' }}
-                            formatter={(value) => `$${(value as number).toLocaleString()}`}
+                            formatter={(value) => `₹${(value as number).toLocaleString()}`}
                         />
                         <div className="mt-2">
                             <Text type="secondary" className="text-xs">
@@ -526,7 +526,7 @@ const Dashboard: React.FC = () => {
                                                     <span>📍 {property.location?.city}, {property.location?.state}</span>
                                                 </div>
                                                 <div className="text-sm font-semibold text-green-600">
-                                                    ${property.price.toLocaleString()}
+                                                    ₹{property.price.toLocaleString()}
                                                 </div>
                                             </div>
                                         }
@@ -590,8 +590,9 @@ const Dashboard: React.FC = () => {
                                                     <span>🚿 {property.bathrooms} baths</span>
                                                     <span>📍 {property.location?.city}, {property.location?.state}</span>
                                                 </div>
-                                                <div className="text-lg font-bold text-green-600">
-                                                    ${property.price.toLocaleString()}
+                                                <div className="text-green-500 flex items-center text-lg font-medium">
+                                                    <TbCurrencyRupee className="text-green-600 mr-1" />
+                                                    <p className="">{property.price.toLocaleString()} INR</p>
                                                 </div>
                                             </div>
                                         }

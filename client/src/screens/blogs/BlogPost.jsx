@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../homepage/components/Navbar';
 import Footer from '../homepage/components/Footer';
 import blogService from '../../services/blogService';
+import SEOHelmet from '../../components/SEO/SEOHelmet';
+import { generateBlogSEO } from '../../utils/seoUtils';
 
 const BlogPost = () => {
     const { id } = useParams();
@@ -75,8 +77,11 @@ const BlogPost = () => {
         );
     }
 
+    const seoData = blogPost ? generateBlogSEO(blogPost) : {};
+
     return (
         <div className="min-h-screen bg-[#F4EBD0]">
+            {blogPost && <SEOHelmet {...seoData} />}
             <Navbar />
             <div className="container mx-auto px-4 py-20">
                 {/* Back Button */}

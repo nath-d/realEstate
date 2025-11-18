@@ -303,7 +303,7 @@ const AboutManagement: React.FC = () => {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900 mb-3">About Page Management</h1>
+                            <h1 className="text-2xl font-bold text-gray-900 mb-3">Our Story Section</h1>
                             <p className="text-gray-600 text-base">Manage the content and timeline for your about page</p>
                         </div>
                         <Button

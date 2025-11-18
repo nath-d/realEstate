@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, message, Modal, Alert, Spin, Table, Image, Tag, Space, Drawer, Descriptions, Divider, Typography } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, HomeOutlined, DollarOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, HomeOutlined, DollarOutlined, EnvironmentOutlined, } from '@ant-design/icons';
 import { PiBedDuotone, PiBathtubDuotone, PiCarDuotone, PiCalendarBlankDuotone } from "react-icons/pi";
+import { TbCurrencyRupee } from "react-icons/tb";
 
 import { PropertyForm } from '../components/PropertyForm';
 import type { PropertyFormData } from '../components/PropertyForm';
@@ -421,11 +422,11 @@ const PropertyManagement: React.FC = () => {
             render: (price: number) => (
                 <div className="text-center py-2">
                     <div className="text-xl font-bold text-green-600 flex items-center justify-center mb-1">
-                        <DollarOutlined className="mr-1" />
-                        {price.toLocaleString()}
+                        <TbCurrencyRupee className="mr-1" />
+                        {price.toLocaleString()} INR
                     </div>
                     <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block">
-                        USD
+                        INR
                     </div>
                 </div>
             ),

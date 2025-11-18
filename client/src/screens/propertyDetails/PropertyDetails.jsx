@@ -20,6 +20,8 @@ import PropertySpecifications from './components/PropertySpecifications';
 import Navbar from '../homepage/components/Navbar';
 import Footer from '../homepage/components/Footer';
 import { propertyService } from '../../services/propertyService';
+import SEOHelmet from '../../components/SEO/SEOHelmet';
+import { generatePropertySEO } from '../../utils/seoUtils';
 
 const PropertyDetails = () => {
     const [searchParams] = useSearchParams();
@@ -190,8 +192,11 @@ const PropertyDetails = () => {
         pois: property.pois || []
     };
 
+    const seoData = property ? generatePropertySEO(property) : {};
+
     return (
         <div className="min-h-screen bg-[#122620] text-white">
+            {property && <SEOHelmet {...seoData} />}
             <Navbar />
             {/* Enhanced Sticky Header */}
             {/* <motion.div
