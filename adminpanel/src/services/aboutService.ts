@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../../config';
 
-const API_BASE_URL = 'http://localhost:3000/about';
+const API_BASE_URL = `${config.api.baseUrl}/about`;
 
 export interface AboutContentDTO {
     headerTitle: string;

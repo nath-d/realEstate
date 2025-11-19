@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../../config.js';
 
-const API = 'http://localhost:3000/blogs';
+const API = `${config.api.baseUrl}/blogs`;
 
 const blogService = {
     getBlogs: async () => (await axios.get(API)).data,

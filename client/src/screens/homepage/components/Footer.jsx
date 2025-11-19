@@ -17,7 +17,7 @@ const Footer = () => {
                     {/* Company Info */}
                     <div className="space-y-6">
                         <h3 className="text-4xl font-bold mb-6 bg-gradient-to-r from-[#c9a66b] to-[#e6c48a] bg-clip-text text-transparent font-source-serif">
-                            MG Pacific Estates
+                            MG Constructions
                         </h3>
                         <p className="text-gray-300 leading-relaxed">
                             Your trusted partner in finding the perfect property. We specialize in luxury real estate and provide exceptional service to our clients.
@@ -64,19 +64,19 @@ const Footer = () => {
                                 <div className="p-3 bg-[#122620] rounded-full group-hover:bg-[#c9a66b] transition-colors">
                                     <FaPhone className="text-[#c9a66b] group-hover:text-white transition-colors" />
                                 </div>
-                                <span className="text-gray-300">+1 (555) 123-4567</span>
+                                <span className="text-gray-300">+91 9748853901</span>
                             </li>
                             <li className="flex items-center space-x-4 group">
                                 <div className="p-3 bg-[#122620] rounded-full group-hover:bg-[#c9a66b] transition-colors">
                                     <FaEnvelope className="text-[#c9a66b] group-hover:text-white transition-colors" />
                                 </div>
-                                <span className="text-gray-300">info@projectestate.com</span>
+                                <span className="text-gray-300">mgconstructions1995@gmail.com</span>
                             </li>
                             <li className="flex items-start space-x-4 group">
                                 <div className="p-3 bg-[#122620] rounded-full group-hover:bg-[#c9a66b] transition-colors mt-1">
                                     <FaMapMarkerAlt className="text-[#c9a66b] group-hover:text-white transition-colors" />
                                 </div>
-                                <span className="text-gray-300">123 Luxury Avenue, Suite 100<br />New York, NY 10001</span>
+                                <span className="text-gray-300">285, Gopal Misra Road, Behala<br />Kolkata, 700034</span>
                             </li>
                         </ul>
                     </div>
@@ -95,7 +95,7 @@ const Footer = () => {
                 <div className="border-t border-gray-700 mt-16 pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <p className="text-gray-400 text-sm">
-                            © {new Date().getFullYear()} Project Estate. All rights reserved.
+                            © {new Date().getFullYear()} MG Constructions. All rights reserved.
                         </p>
                         <div className="flex space-x-8 mt-4 md:mt-0">
                             {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (

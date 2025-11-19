@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import config from '../../../config.js';
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
@@ -54,7 +55,7 @@ const ResetPassword = () => {
         setStatus('loading');
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/reset-password`, {
+            const response = await fetch(`${config.api.baseUrl}/auth/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

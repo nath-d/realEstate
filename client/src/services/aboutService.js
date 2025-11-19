@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../../config.js';
 
-const API = 'http://localhost:3000/about';
+const API = `${config.api.baseUrl}/about`;
 
 const aboutService = {
     getContent: async () => (await axios.get(API)).data,

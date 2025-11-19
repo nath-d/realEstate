@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { cloudinaryService } from '../services/cloudinaryService';
+import config from '../../config';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE = config.api.baseUrl;
 
 export default function NewsletterManagement() {
     const [subject, setSubject] = useState('');
@@ -12,7 +13,7 @@ export default function NewsletterManagement() {
     const [authError, setAuthError] = useState<string | null>(null);
     const [files, setFiles] = useState<File[]>([]);
     const [builder, setBuilder] = useState({
-        brandName: 'MG Pacific Estates',
+        brandName: 'MG Constructions',
         logoUrl: '',
         preheader: 'Latest updates from our real estate team',
         headline: 'Your Monthly Property Update',
@@ -20,9 +21,9 @@ export default function NewsletterManagement() {
         intro: 'Discover the latest listings, market insights, and investment opportunities tailored for you.',
         bodyHtml: '<p>Write your newsletter content here. You can include <strong>bold text</strong>, <em>italics</em>, and links.</p>',
         ctaText: 'Browse Properties',
-        ctaUrl: (import.meta.env.VITE_FRONTEND_URL as string) || 'http://localhost:5173/properties',
-        footerAddress: '123 Luxury Avenue, Suite 100, New York, NY 10001',
-        footerWebsite: (import.meta.env.VITE_FRONTEND_URL as string) || 'http://localhost:5173',
+        ctaUrl: `${config.frontend.baseUrl}/properties`,
+        footerAddress: '285, Gopal Misra Road, Behala, Kolkata 700034',
+        footerWebsite: config.frontend.baseUrl,
         primaryColor: '#122620',
         accentColor: '#D6AD60',
     });
@@ -47,9 +48,9 @@ export default function NewsletterManagement() {
     const [openHouses, setOpenHouses] = useState<Array<{ dateLabel: string; title: string; time: string }>>([]);
 
     function loadMgPacificTemplate() {
-        const frontend = (import.meta.env.VITE_FRONTEND_URL as string) || 'http://localhost:5173';
+        const frontend = config.frontend.baseUrl;
         const cfg = {
-            brandName: 'MG Pacific Estates',
+            brandName: 'MG Constructions',
             logoUrl: 'https://your-domain.com/assets/logo.png',
             preheader: 'Handpicked homes, market insights, and open house events this month.',
             headline: 'August Featured Homes',
@@ -110,7 +111,7 @@ export default function NewsletterManagement() {
 `,
             ctaText: 'Browse Properties',
             ctaUrl: `${frontend}/properties`,
-            footerAddress: '123 Luxury Avenue, Suite 100, New York, NY 10001',
+            footerAddress: '285, Gopal Misra Road, Behala, Kolkata 700034',
             footerWebsite: frontend,
             primaryColor: '#122620',
             accentColor: '#D6AD60',
@@ -119,7 +120,7 @@ export default function NewsletterManagement() {
         const generated = generateEmailHtml(cfg);
         setBuilder(cfg);
         setHtml(generated);
-        setSubject('MG Pacific Estates — August Featured Homes');
+        setSubject('MG Constructions — August Featured Homes');
         setMessage('Loaded MG Pacific template. You can tweak fields or send as is.');
     }
 
@@ -175,7 +176,7 @@ export default function NewsletterManagement() {
     }
 
     function selectProperty(p: any) {
-        const frontend = (import.meta.env.VITE_FRONTEND_URL as string) || 'http://localhost:5173';
+        const frontend = config.frontend.baseUrl;
         const city = p?.location?.city || '';
         const region = p?.location?.state || '';
         const imageUrl = p?.images?.[0]?.url || '';
@@ -263,7 +264,7 @@ ${items}`);
     }
 
     function getAdminKey() {
-        return (import.meta.env.VITE_ADMIN_API_KEY as string) || '';
+        return config.admin.apiKey;
     }
 
     async function fetchSubscribers() {
@@ -276,7 +277,7 @@ ${items}`);
             });
             const data = await res.json();
             if (res.status === 401) {
-                setAuthError('Unauthorized. Please set VITE_ADMIN_API_KEY in adminpanel env.');
+                setAuthError('Unauthorized. Please check admin API key in config.');
                 setSubscribers([]);
                 return;
             }
@@ -327,7 +328,7 @@ ${items}`);
             });
             const data = await res.json();
             if (res.status === 401) {
-                setAuthError('Unauthorized. Please set VITE_ADMIN_API_KEY in adminpanel env.');
+                setAuthError('Unauthorized. Please check admin API key in config.');
                 setMessage(null);
                 return;
             }

@@ -13,8 +13,8 @@ const ContactUsPage = () => {
             icon: <FaPhone className="text-3xl" />,
             title: "Phone",
             details: [
-                "+1 (555) 123-4567",
-                "+1 (555) 987-6543"
+                "+91 9748853901",
+                "+91 7449664398"
             ],
             color: "bg-blue-500"
         },
@@ -22,8 +22,8 @@ const ContactUsPage = () => {
             icon: <FaEnvelope className="text-3xl" />,
             title: "Email",
             details: [
-                "info@mgpacificestates.com",
-                "support@mgpacificestates.com"
+                " mgconstructions1995@gmail.com",
+                // "support@mgpacificestates.com"
             ],
             color: "bg-green-500"
         },
@@ -31,8 +31,8 @@ const ContactUsPage = () => {
             icon: <FaMapMarkerAlt className="text-3xl" />,
             title: "Office",
             details: [
-                "123 Luxury Avenue, Suite 100",
-                "New York, NY 10001"
+                "285, Gopal Misra Road, Behala",
+                "Kolkata 700034"
             ],
             color: "bg-red-500"
         },
@@ -48,11 +48,11 @@ const ContactUsPage = () => {
     ];
 
     const officeLocation = {
-        city: "New York",
-        address: "123 Luxury Avenue, Suite 100",
-        state: "NY 10001",
-        phone: "+1 (555) 123-4567",
-        email: "info@mgpacificestates.com",
+        city: "Kolkata",
+        address: "285, Gopal Misra Road, Behala",
+        state: "Kolkata 700034",
+        phone: "+91 9748853901",
+        email: " mgconstructions1995@gmail.com",
         image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     };
 

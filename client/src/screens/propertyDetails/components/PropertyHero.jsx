@@ -102,7 +102,7 @@ const PropertyHero = ({ property }) => {
 
                         <div className="flex items-center gap-8">
                             <p className="price-text text-5xl font-bold text-[#E5BE90]">
-                                {property.price}
+                                ₹ {property.price?.toString().replace(/[$₹]/g, '').trim()}
                             </p>
                             <div className="flex gap-4">
                                 <motion.button
@@ -111,8 +111,8 @@ const PropertyHero = ({ property }) => {
                                     onClick={handleFavoriteClick}
                                     disabled={isLoading}
                                     className={`p-4 rounded-full transition-all duration-300 transform hover:scale-105 z-10 ${isFavorite
-                                            ? 'bg-red-500 text-white hover:bg-red-600'
-                                            : 'bg-[#1A332C] hover:bg-[#E5BE90] text-white'
+                                        ? 'bg-red-500 text-white hover:bg-red-600'
+                                        : 'bg-[#1A332C] hover:bg-[#E5BE90] text-white'
                                         } ${isLoading ? 'opacity-50' : ''}`}
                                     title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                                     style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}

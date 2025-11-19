@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../../config';
 import { Card, Button, Table, Modal, Form, Input, Select, Upload, message, Popconfirm, Tag, Progress } from 'antd';
 import { UploadOutlined, DeleteOutlined, DownloadOutlined, FilePdfOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -37,7 +38,7 @@ const PDFManagement: React.FC = () => {
     const fetchPDFs = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:3000/pdfs/list');
+            const res = await axios.get(`${config.api.baseUrl}/pdfs/list`);
             setPDFs(res.data.pdfs);
         } catch (e) {
             message.error('Failed to fetch PDFs');
@@ -78,7 +79,7 @@ const PDFManagement: React.FC = () => {
         setUploadProgress(0);
 
         try {
-            const response = await axios.post('http://localhost:3000/pdfs/upload', formData, {
+            const response = await axios.post(`${config.api.baseUrl}/pdfs/upload`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 onUploadProgress: (progressEvent) => {
                     if (progressEvent.total) {
@@ -104,7 +105,7 @@ const PDFManagement: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            await axios.delete(`http://localhost:3000/pdfs/${id}`);
+            await axios.delete(`${config.api.baseUrl}/pdfs/${id}`);
             message.success('PDF deleted');
             fetchPDFs();
         } catch {
@@ -155,7 +156,7 @@ const PDFManagement: React.FC = () => {
                     <Button
                         icon={<DownloadOutlined />}
                         type="link"
-                        href={`http://localhost:3000/pdfs/download/${record.id}`}
+                        href={`${config.api.baseUrl}/pdfs/download/${record.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                     >

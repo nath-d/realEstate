@@ -75,7 +75,7 @@ export const generatePropertySEO = (property) => {
 export const generateBlogSEO = (blog) => {
     if (!blog) return {};
 
-    const title = `${blog.title} | MG Pacific Estates Blog`;
+    const title = `${blog.title} | MG Constructions Blog`;
     const description = blog.excerpt || blog.metaDescription ||
         `${blog.content?.substring(0, 150)}...` ||
         'Expert insights on luxury real estate market trends and investment opportunities.';
@@ -95,11 +95,11 @@ export const generateBlogSEO = (blog) => {
         "image": blog.featuredImage || "/hero1.jpg",
         "author": {
             "@type": "Person",
-            "name": blog.author?.name || "MG Pacific Estates Team"
+            "name": blog.author?.name || "MG Constructions Team"
         },
         "publisher": {
             "@type": "Organization",
-            "name": "MG Pacific Estates",
+            "name": "MG Constructions",
             "logo": {
                 "@type": "ImageObject",
                 "url": `${window.location.origin}/logoPng.png`
@@ -123,7 +123,7 @@ export const generateBlogSEO = (blog) => {
 };
 
 export const generateLocationSEO = (location, properties = []) => {
-    const title = `Luxury Real Estate in ${location} | MG Pacific Estates`;
+    const title = `Luxury Real Estate in ${location} | MG Constructions`;
     const description = `Discover premium properties and luxury homes in ${location}. Expert real estate services with ${properties.length}+ exclusive listings.`;
 
     const keywords = [
@@ -137,7 +137,7 @@ export const generateLocationSEO = (location, properties = []) => {
     const structuredData = {
         "@context": "https://schema.org",
         "@type": "RealEstateAgent",
-        "name": "MG Pacific Estates",
+        "name": "MG Constructions",
         "description": `Luxury real estate services in ${location}`,
         "areaServed": location,
         "serviceType": "Real Estate Sales",
@@ -159,8 +159,8 @@ export const generateLocationSEO = (location, properties = []) => {
 };
 
 export const generateHomepageSEO = () => {
-    const title = "MG Pacific Estates - Luxury Real Estate & Premium Properties";
-    const description = "Discover exceptional luxury real estate with MG Pacific Estates. Premium properties, expert market knowledge, and personalized service for discerning clients.";
+    const title = "MG Constructions - Luxury Real Estate & Premium Properties";
+    const description = "Discover exceptional luxury real estate with MG Constructions. Premium properties, expert market knowledge, and personalized service for discerning clients.";
 
     const keywords = [
         'luxury real estate',
@@ -169,13 +169,13 @@ export const generateHomepageSEO = () => {
         'luxury homes for sale',
         'property investment',
         'real estate services',
-        'MG Pacific Estates'
+        'MG Constructions'
     ].join(', ');
 
     const structuredData = {
         "@context": "https://schema.org",
         "@type": "RealEstateAgent",
-        "name": "MG Pacific Estates",
+        "name": "MG Constructions",
         "description": "Premier luxury real estate services specializing in high-end properties and exceptional client experiences.",
         "url": window.location.origin,
         "logo": `${window.location.origin}/logoPng.png`,

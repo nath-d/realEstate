@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
+import config from '../../../config.js';
 
 const SignupPage = () => {
     const navigate = useNavigate();
@@ -100,7 +101,7 @@ const SignupPage = () => {
 
     const handleGoogleSignup = () => {
         // Redirect to the Google OAuth endpoint
-        window.location.href = 'http://localhost:3000/auth/google';
+        window.location.href = `${config.api.baseUrl}/auth/google`;
     };
 
     return (
@@ -116,7 +117,7 @@ const SignupPage = () => {
                     <Link to="/" className="inline-block mb-8">
                         <img
                             src="/logoConcept2.svg"
-                            alt="MG Pacific Estates"
+                            alt="MG Constructions"
                             className="h-16 w-auto object-contain mx-auto"
                         />
                     </Link>
@@ -124,7 +125,7 @@ const SignupPage = () => {
                         Create Account
                     </h2>
                     <p className="text-[#D6AD60]/80 font-montserrat text-sm tracking-wide">
-                        Join MG Pacific Estates today
+                        Join MG Constructions today
                     </p>
                 </div>
 

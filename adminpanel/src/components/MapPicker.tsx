@@ -3,6 +3,7 @@ import { Modal, Input, Button, Spin, List, Typography, Space, message, Card, Row
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import config from '../../config';
 import { EnvironmentOutlined, PlusOutlined, DeleteOutlined, AimOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
@@ -149,7 +150,7 @@ const MapPicker: React.FC<MapPickerProps> = ({ open, onCancel, onSelect, initial
         if (!search.trim()) return;
         setSearching(true);
         try {
-            const response = await fetch(`http://localhost:3000/properties/geocode/search/${encodeURIComponent(search)}`);
+            const response = await fetch(`${config.api.baseUrl}/properties/geocode/search/${encodeURIComponent(search)}`);
             const data = await response.json();
             if (data && data.length > 0) {
                 const loc = data[0];
@@ -177,7 +178,7 @@ const MapPicker: React.FC<MapPickerProps> = ({ open, onCancel, onSelect, initial
         setLoadingPOI(true);
         setPOIs([]);
         try {
-            const response = await fetch('http://localhost:3000/properties/pois/fetch', {
+            const response = await fetch(`${config.api.baseUrl}/properties/pois/fetch`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -228,7 +229,7 @@ const MapPicker: React.FC<MapPickerProps> = ({ open, onCancel, onSelect, initial
     // Reverse geocode to get address
     const reverseGeocode = async (lat: number, lng: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/properties/geocode/reverse/${lat}/${lng}`);
+            const response = await fetch(`${config.api.baseUrl}/properties/geocode/reverse/${lat}/${lng}`);
             const data = await response.json();
             setAddress(data.display_name || '');
             setCity(data.address?.city || data.address?.town || data.address?.village || '');

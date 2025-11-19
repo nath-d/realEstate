@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaPhone, FaEnvelope, FaWhatsapp, FaLinkedin, FaUser } from 'react-icons/fa';
+import config from '../../../../config.js';
 
 const PropertyAgent = ({ agent }) => {
     const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const PropertyAgent = ({ agent }) => {
         setSubmitStatus(null);
 
         try {
-            const response = await fetch('http://localhost:3000/contact', {
+            const response = await fetch(`${config.api.baseUrl}/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

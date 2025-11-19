@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../../config';
 import { Card, Row, Col, Statistic, Typography, Progress, List, Avatar, Tag, Space, Button, Alert, Spin } from 'antd';
 import {
     HomeOutlined,
@@ -94,18 +95,18 @@ const Dashboard: React.FC = () => {
             setError(null);
 
             // Fetch properties
-            const propertiesResponse = await fetch('http://localhost:3000/properties');
+            const propertiesResponse = await fetch(`${config.api.baseUrl}/properties`);
             if (!propertiesResponse.ok) {
                 throw new Error('Failed to fetch properties');
             }
             const properties: Property[] = await propertiesResponse.json();
 
             // Fetch contact form stats
-            const contactStatsResponse = await fetch('http://localhost:3000/contact/stats');
+            const contactStatsResponse = await fetch(`${config.api.baseUrl}/contact/stats`);
             const contactStats = contactStatsResponse.ok ? await contactStatsResponse.json() : { total: 0, new: 0, read: 0, responded: 0 };
 
             // Fetch schedule visit stats
-            const scheduleStatsResponse = await fetch('http://localhost:3000/schedule-visit/stats');
+            const scheduleStatsResponse = await fetch(`${config.api.baseUrl}/schedule-visit/stats`);
             const scheduleStats = scheduleStatsResponse.ok ? await scheduleStatsResponse.json() : { total: 0, pending: 0, confirmed: 0, completed: 0 };
 
             // Calculate statistics

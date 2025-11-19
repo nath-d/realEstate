@@ -231,7 +231,7 @@ The component uses Tailwind CSS classes and follows the application's design sys
 
 ## Backend Integration
 
-The form submits to: `http://localhost:3000/contact`
+The form submits to: `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'}/contact`
 
 The backend expects a POST request with the following JSON structure:
 ```json

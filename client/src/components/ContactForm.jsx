@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaTimes, FaUser, FaEnvelope, FaPhone, FaFileAlt, FaComments } from 'react-icons/fa';
+import config from '../../config.js';
 
 const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = "We'd love to hear from you" }) => {
     const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = 
         setSubmitStatus(null);
 
         try {
-            const response = await fetch('http://localhost:3000/contact', {
+            const response = await fetch(`${config.api.baseUrl}/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -178,7 +179,7 @@ const ContactForm = ({ isOpen, onClose, title = "Send Us a Message", subtitle = 
                             onChange={handleInputChange}
                             disabled={isSubmitting}
                             className="w-full px-4 py-3 bg-[#122620] border border-[#D6AD60]/30 rounded-lg text-white placeholder-gray-400 focus:border-[#D6AD60] focus:outline-none transition-colors disabled:opacity-50"
-                            placeholder="+1 (555) 123-4567"
+                            placeholder="+91 9748853901"
                         />
                     </div>
                     <div>

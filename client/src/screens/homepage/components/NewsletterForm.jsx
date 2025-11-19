@@ -1,6 +1,7 @@
 import React from 'react';
+import config from '../../../../config.js';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE = config.api.baseUrl;
 
 export default function NewsletterForm() {
     const [email, setEmail] = React.useState('');

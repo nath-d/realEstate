@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import authService from '../../services/authService';
+import config from '../../../config.js';
 
 const AuthCallback = () => {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const AuthCallback = () => {
                     // If no user data from URL, fetch it from API
                     if (!userData) {
                         console.log('Fetching user profile from API...');
-                        const response = await fetch('http://localhost:3000/auth/profile', {
+                        const response = await fetch(`${config.api.baseUrl}/auth/profile`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`,
                                 'Content-Type': 'application/json',

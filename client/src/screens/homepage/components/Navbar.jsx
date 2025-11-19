@@ -47,7 +47,7 @@ const Navbar = () => {
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/">
-                            <img src="/logoConcept2.svg" alt="MG Pacific Estates" className="h-20 md:h-16 w-auto object-contain" />
+                            <img src="/logoConcept2.svg" alt="MG Constructions" className="h-20 md:h-16 w-auto object-contain" />
                         </Link>
                     </div>
 

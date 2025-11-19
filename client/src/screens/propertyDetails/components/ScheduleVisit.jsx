@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaTimes, FaCalendarAlt, FaClock, FaUser, FaPhone, FaEnvelope } from 'react-icons/fa';
+import config from '../../../../config.js';
 
 const ScheduleVisit = ({ property, onClose }) => {
     const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const ScheduleVisit = ({ property, onClose }) => {
             // Debug: log the data being sent
             console.log('Submitting scheduleData:', scheduleData);
 
-            const response = await fetch('http://localhost:3000/schedule-visit', {
+            const response = await fetch(`${config.api.baseUrl}/schedule-visit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

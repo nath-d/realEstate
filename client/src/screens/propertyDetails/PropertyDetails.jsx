@@ -132,6 +132,7 @@ const PropertyDetails = () => {
         images: property.images && property.images.length > 0
             ? property.images.map(img => img.url)
             : ['https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg'],
+        videoLink: property.videoLink || null,
         amenities: {
             interior: [
                 "Custom Italian Kitchen",
@@ -342,7 +343,7 @@ const PropertyDetails = () => {
                 <div className="container mx-auto px-6 space-y-16">
                     {/* <VirtualTour url={property.virtualTour} /> */}
                     <PropertyDescription description={propertyData.description} />
-                    <PropertyGallery images={propertyData.images} />
+                    <PropertyGallery images={propertyData.images} videoLink={propertyData.videoLink} />
                     <PropertySpecifications specifications={propertyData.specifications} />
                     <MaterialCertifications certifications={propertyData.materialCertifications} />
                     {/* <PropertyAmenities amenities={property.amenities} /> */}

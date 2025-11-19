@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import config from '../../../config.js';
 
 const VerifyEmail = () => {
     const [searchParams] = useSearchParams();
@@ -26,7 +27,7 @@ const VerifyEmail = () => {
         setStatus('verifying');
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/verify-email`, {
+            const response = await fetch(`${config.api.baseUrl}/auth/verify-email`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

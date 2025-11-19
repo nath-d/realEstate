@@ -21,6 +21,7 @@ import {
 } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
+const config = require('../../config');
 
 @Controller('auth')
 export class AuthController {
@@ -117,7 +118,7 @@ export class AuthController {
 
             if (!req.user) {
                 console.error('No user data received from Google');
-                const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+                const frontendUrl = config.urls.frontend;
                 const redirectUrl = `${frontendUrl}/auth/callback?error=no_user_data`;
                 return res.redirect(redirectUrl);
             }
@@ -128,13 +129,13 @@ export class AuthController {
             const userData = encodeURIComponent(JSON.stringify(result.user));
 
             // Redirect to frontend with token and user data
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+            const frontendUrl = config.urls.frontend;
             const redirectUrl = `${frontendUrl}/auth/callback?token=${result.token}&user=${userData}&success=true`;
 
             res.redirect(redirectUrl);
         } catch (error) {
             console.error('Google auth callback error:', error);
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+            const frontendUrl = config.urls.frontend;
             const errorMessage = encodeURIComponent(error.message || 'Authentication failed');
             const redirectUrl = `${frontendUrl}/auth/callback?error=${errorMessage}`;
             res.redirect(redirectUrl);

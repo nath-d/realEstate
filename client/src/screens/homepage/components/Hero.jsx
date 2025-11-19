@@ -16,7 +16,7 @@ const Hero = () => {
 
     const textContent = [
         {
-            title: "MG Pacific Estates",
+            title: "MG Constructions",
             subtitle: "Luxury Living Redefined"
         },
         {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../../config';
 import { Card, Button, message, Modal, Alert, Spin, Table, Image, Tag, Space, Drawer, Descriptions, Divider, Typography } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, HomeOutlined, DollarOutlined, EnvironmentOutlined, } from '@ant-design/icons';
 import { PiBedDuotone, PiBathtubDuotone, PiCarDuotone, PiCalendarBlankDuotone } from "react-icons/pi";
@@ -92,7 +93,7 @@ const PropertyManagement: React.FC = () => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch('http://localhost:3000/properties');
+            const response = await fetch(`${config.api.baseUrl}/properties`);
             console.log('PropertyManagement: Fetch response status:', response.status);
 
             if (!response.ok) {
@@ -210,7 +211,7 @@ const PropertyManagement: React.FC = () => {
 
                 console.log('Update formatted data:', updateData);
 
-                const response = await fetch(`http://localhost:3000/properties/${editingProperty.id}`, {
+                const response = await fetch(`${config.api.baseUrl}/properties/${editingProperty.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -288,7 +289,7 @@ const PropertyManagement: React.FC = () => {
                 console.log('Create formatted data:', createData);
                 console.log('Images to create:', createData.images.create);
 
-                const response = await fetch('http://localhost:3000/properties', {
+                const response = await fetch(`${config.api.baseUrl}/properties`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -328,7 +329,7 @@ const PropertyManagement: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/properties/${id}`, {
+            const response = await fetch(`${config.api.baseUrl}/properties/${id}`, {
                 method: 'DELETE',
             });
 

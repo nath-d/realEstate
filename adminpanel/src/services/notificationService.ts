@@ -1,3 +1,5 @@
+import config from '../../config';
+
 export type NotificationType = 'contact' | 'visit'
 
 export interface NotificationItem {
@@ -15,10 +17,11 @@ export interface NotificationCounts {
     visitPending: number
 }
 
-const CONTACT_ENDPOINT = 'http://localhost:3000/contact'
-const CONTACT_STATS_ENDPOINT = 'http://localhost:3000/contact/stats'
-const VISIT_ENDPOINT = 'http://localhost:3000/schedule-visit'
-const VISIT_STATS_ENDPOINT = 'http://localhost:3000/schedule-visit/stats'
+const BASE_URL = config.api.baseUrl;
+const CONTACT_ENDPOINT = `${BASE_URL}/contact`
+const CONTACT_STATS_ENDPOINT = `${BASE_URL}/contact/stats`
+const VISIT_ENDPOINT = `${BASE_URL}/schedule-visit`
+const VISIT_STATS_ENDPOINT = `${BASE_URL}/schedule-visit/stats`
 
 async function safeJson<T>(res: Response, fallback: T): Promise<T> {
     try {

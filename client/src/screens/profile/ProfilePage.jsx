@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import authService from '../../services/authService';
+import config from '../../../config.js';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -27,7 +28,7 @@ const ProfilePage = () => {
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/auth/profile', {
+            const response = await fetch(`${config.api.baseUrl}/auth/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ const ProfilePage = () => {
 
         try {
             const token = authService.getToken();
-            const response = await fetch('http://localhost:3000/auth/profile', {
+            const response = await fetch(`${config.api.baseUrl}/auth/profile`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -99,7 +100,7 @@ const ProfilePage = () => {
         setIsSendingOtp(true);
         try {
             const token = authService.getToken();
-            const response = await fetch('http://localhost:3000/auth/send-verification-otp', {
+            const response = await fetch(`${config.api.baseUrl}/auth/send-verification-otp`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -132,7 +133,7 @@ const ProfilePage = () => {
 
         setIsVerifying(true);
         try {
-            const response = await fetch('http://localhost:3000/auth/verify-email', {
+            const response = await fetch(`${config.api.baseUrl}/auth/verify-email`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -178,7 +179,7 @@ const ProfilePage = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex items-center justify-between">
                         <Link to="/" className="flex items-center space-x-3">
-                            <img src="/logoConcept2.svg" alt="MG Pacific Estates" className="h-12 w-auto" />
+                            <img src="/logoConcept2.svg" alt="MG Constructions" className="h-12 w-auto" />
                             <span className="text-[#D6AD60] font-source-serif text-xl">Profile</span>
                         </Link>
                         <button

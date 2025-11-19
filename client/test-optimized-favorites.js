@@ -17,7 +17,7 @@ async function testOptimizedFavorites() {
     if (token) {
         const startTime = performance.now();
         try {
-            const response = await fetch('http://localhost:3000/auth/favorites', {
+            const response = await fetch(`${process.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/favorites`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

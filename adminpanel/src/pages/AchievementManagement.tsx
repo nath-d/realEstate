@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Switch, message, Space, Popconfirm, Card, Typography, Tag } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import config from '../../config';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -69,7 +70,7 @@ const AchievementManagement: React.FC = () => {
     const fetchAchievements = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3000/achievements');
+            const response = await fetch(`${config.api.baseUrl}/achievements`);
             if (response.ok) {
                 const data = await response.json();
                 setAchievements(data);
@@ -98,7 +99,7 @@ const AchievementManagement: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/achievements/${id}`, {
+            const response = await fetch(`${config.api.baseUrl}/achievements/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -123,8 +124,8 @@ const AchievementManagement: React.FC = () => {
             };
 
             const url = editingAchievement
-                ? `http://localhost:3000/achievements/${editingAchievement.id}`
-                : 'http://localhost:3000/achievements';
+                ? `${config.api.baseUrl}/achievements/${editingAchievement.id}`
+                : `${config.api.baseUrl}/achievements`;
 
             const method = editingAchievement ? 'PUT' : 'POST';
 

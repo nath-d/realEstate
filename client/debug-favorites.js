@@ -16,7 +16,7 @@ async function debugFavorites() {
     console.log('\n2. Testing API Directly...');
     if (token) {
         try {
-            const response = await fetch('http://localhost:3000/auth/favorites', {
+            const response = await fetch(`${process.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/favorites`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ async function debugFavorites() {
     const testPropertyId = 1;
     if (token) {
         try {
-            const response = await fetch(`http://localhost:3000/auth/favorites/${testPropertyId}`, {
+            const response = await fetch(`${process.env.VITE_BACKEND_URL || 'http://localhost:3000'}/auth/favorites/${testPropertyId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

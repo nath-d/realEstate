@@ -1,17 +1,38 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTimes, FaChevronLeft, FaChevronRight, FaCamera } from 'react-icons/fa';
+import { FaTimes, FaChevronLeft, FaChevronRight, FaCamera, FaPlay } from 'react-icons/fa';
 import { cloudinaryService } from '../../../services/cloudinaryService';
 import '../styles/fonts.css';
 
-const PropertyGallery = ({ images }) => {
+const PropertyGallery = ({ images, videoLink }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+    const [showVideoModal, setShowVideoModal] = useState(false);
 
     // Debug logging
     console.log('PropertyGallery received images:', images);
     console.log('Images type:', typeof images);
     console.log('Images length:', images ? images.length : 0);
+    console.log('PropertyGallery received videoLink:', videoLink);
+
+    // YouTube utility functions
+    const extractYouTubeVideoId = (url) => {
+        if (!url) return null;
+        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    };
+
+    const getYouTubeThumbnail = (videoId) => {
+        return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    };
+
+    const getYouTubeEmbedUrl = (videoId) => {
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    };
+
+    const videoId = extractYouTubeVideoId(videoLink);
+    const hasVideo = videoId && videoLink;
 
     const openLightbox = (index) => {
         setSelectedImage(images[index]);
@@ -20,6 +41,14 @@ const PropertyGallery = ({ images }) => {
 
     const closeLightbox = () => {
         setSelectedImage(null);
+    };
+
+    const openVideoModal = () => {
+        setShowVideoModal(true);
+    };
+
+    const closeVideoModal = () => {
+        setShowVideoModal(false);
     };
 
     const nextImage = () => {
@@ -129,6 +158,38 @@ const PropertyGallery = ({ images }) => {
                     viewport={{ once: true }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
+                    {/* Video thumbnail (if available) */}
+                    {hasVideo && (
+                        <motion.div
+                            variants={item}
+                            className="relative md:col-span-2 md:row-span-2"
+                        >
+                            <div
+                                className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
+                                onClick={openVideoModal}
+                            >
+                                <img
+                                    src={getYouTubeThumbnail(videoId)}
+                                    alt="Property video thumbnail"
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    loading="eager"
+                                />
+                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                                        <FaPlay className="text-white text-2xl ml-1" />
+                                    </div>
+                                </div>
+                                <div className="absolute top-4 left-4 px-3 py-1 bg-red-600 text-white text-sm font-montserrat rounded-full">
+                                    Video Tour
+                                </div>
+                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
+                                    <span className="font-montserrat px-6 py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider">Play Video</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Image gallery */}
                     {images.map((image, index) => {
                         const optimizedUrl = getOptimizedImageUrl(image, index);
                         console.log(`Image ${index}:`, { original: image, optimized: optimizedUrl });
@@ -137,7 +198,7 @@ const PropertyGallery = ({ images }) => {
                             <motion.div
                                 key={index}
                                 variants={item}
-                                className={`relative ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
+                                className={`relative ${index === 0 && !hasVideo ? 'md:col-span-2 md:row-span-2' : ''}`}
                             >
                                 <div
                                     className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
@@ -217,6 +278,51 @@ const PropertyGallery = ({ images }) => {
 
                             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 rounded-full text-white font-montserrat">
                                 {lightboxIndex + 1} / {images.length}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Video Modal */}
+            <AnimatePresence>
+                {showVideoModal && hasVideo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center backdrop-blur-sm"
+                        onClick={closeVideoModal}
+                    >
+                        <div className="relative w-full max-w-6xl mx-auto px-4" onClick={e => e.stopPropagation()}>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border-4 border-[#E5BE90]"
+                            >
+                                <iframe
+                                    src={getYouTubeEmbedUrl(videoId)}
+                                    title="Property Video Tour"
+                                    className="w-full h-full"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                />
+                            </motion.div>
+
+                            <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={closeVideoModal}
+                                className="border-4 border-[#E5BE90] absolute top-4 right-4 p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
+                            >
+                                <FaTimes size={20} />
+                            </motion.button>
+
+                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 rounded-full text-white font-montserrat">
+                                Property Video Tour
                             </div>
                         </div>
                     </motion.div>

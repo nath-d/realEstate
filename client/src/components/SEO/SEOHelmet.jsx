@@ -2,19 +2,19 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SEOHelmet = ({
-    title = "MG Pacific Estates - Luxury Real Estate",
-    description = "Discover luxury real estate properties with MG Pacific Estates. Premium homes, expert service, and unmatched market knowledge.",
+    title = "MG Constructions - Luxury Real Estate",
+    description = "Discover luxury real estate properties with MG Constructions. Premium homes, expert service, and unmatched market knowledge.",
     keywords = "luxury real estate, premium properties, homes for sale, real estate agent, property investment",
     image = "/logoPng.png",
     url = window.location.href,
     type = "website",
-    author = "MG Pacific Estates",
-    siteName = "MG Pacific Estates",
+    author = "MG Constructions",
+    siteName = "MG Constructions",
     twitterHandle = "@mgpacificestates",
     structuredData = null,
     canonical = null
 }) => {
-    const fullTitle = title.includes('MG Pacific Estates') ? title : `${title} | MG Pacific Estates`;
+    const fullTitle = title.includes('MG Constructions') ? title : `${title} | MG Constructions`;
     const fullImageUrl = image.startsWith('http') ? image : `${window.location.origin}${image}`;
 
     return (

@@ -1,8 +1,9 @@
 // Authentication service for handling login, signup, and user management
+import config from '../../config.js';
 
 class AuthService {
     constructor() {
-        this.baseURL = 'http://localhost:3000'; // Update with your actual API URL
+        this.baseURL = config.api.baseUrl;
         this.tokenKey = 'mg_pacific_token';
         this.userKey = 'mg_pacific_user';
     }

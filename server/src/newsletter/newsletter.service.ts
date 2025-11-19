@@ -2,6 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../auth/email.service';
 import { randomUUID } from 'crypto';
+const config = require('../../config');
 
 @Injectable()
 export class NewsletterService {
@@ -38,7 +39,7 @@ export class NewsletterService {
             },
         });
 
-        const confirmUrl = `${process.env.BACKEND_URL || 'http://localhost:3000'}/newsletter/confirm?token=${confirmToken}`;
+        const confirmUrl = `${config.urls.backend}/newsletter/confirm?token=${confirmToken}`;
         await this.emailService.sendConfirmSubscription(email, confirmUrl);
         return { success: true, message: 'Confirmation email sent' };
     }
@@ -79,7 +80,7 @@ export class NewsletterService {
             const chunk = recipients.slice(i, i + chunkSize);
             await Promise.all(
                 chunk.map(({ email, unsubscribeToken }) => {
-                    const unsubscribeUrl = `${process.env.BACKEND_URL || 'http://localhost:3000'}/newsletter/unsubscribe?token=${unsubscribeToken}`;
+                    const unsubscribeUrl = `${config.urls.backend}/newsletter/unsubscribe?token=${unsubscribeToken}`;
                     const preparedAttachments = (attachments || []).map(a => ({
                         filename: a.filename,
                         content: Buffer.from(a.bufferBase64, 'base64'),

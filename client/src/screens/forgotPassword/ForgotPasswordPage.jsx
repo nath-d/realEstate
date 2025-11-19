@@ -47,7 +47,7 @@ const ForgotPasswordPage = () => {
                     <Link to="/" className="inline-block mb-8">
                         <img
                             src="/logoConcept2.svg"
-                            alt="MG Pacific Estates"
+                            alt="MG Constructions"
                             className="h-16 w-auto object-contain mx-auto"
                         />
                     </Link>

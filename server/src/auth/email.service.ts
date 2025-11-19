@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
+const config = require('../../config');
 
 @Injectable()
 export class EmailService {
@@ -12,8 +13,8 @@ export class EmailService {
         this.transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.EMAIL_USER || 'your-email@gmail.com',
-                pass: process.env.EMAIL_PASSWORD || 'your-app-password',
+                user: config.email.user,
+                pass: config.email.password,
             },
         });
     }
@@ -26,7 +27,7 @@ export class EmailService {
     async sendVerificationEmail(email: string, otp: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Verify your email address - Real Estate Platform',
                 html: `
@@ -80,7 +81,7 @@ export class EmailService {
     async sendPasswordResetEmail(email: string, otp: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Reset your password - Real Estate Platform',
                 html: `
@@ -149,7 +150,7 @@ export class EmailService {
     async sendWelcomeEmail(email: string, firstName?: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Welcome to Real Estate Platform!',
                 html: `
@@ -174,7 +175,7 @@ export class EmailService {
                             </ul>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     Browse Properties
                                 </a>
@@ -195,7 +196,7 @@ export class EmailService {
     async sendMarketingEmail(email: string, subject: string, content: string, templateData?: any): Promise<void> {
         try {
             await this.transporter.sendMail({
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: subject,
                 html: content,
@@ -215,13 +216,13 @@ export class EmailService {
                     <h3 style="color: #2c3e50; margin: 0 0 10px 0;">${property.title}</h3>
                     <p style="color: #7f8c8d; margin: 5px 0;">📍 ${property.location}</p>
                     <p style="color: #27ae60; font-weight: bold; margin: 5px 0;">💰 $${property.price?.toLocaleString()}</p>
-                    <a href="${process.env.FRONTEND_URL}/property/${property.id}" 
+                    <a href="${config.urls.frontend}/property/${property.id}" 
                        style="color: #3498db; text-decoration: none;">View Property →</a>
                 </div>
             `).join('');
 
             await this.transporter.sendMail({
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: `New Properties Matching Your Criteria - Real Estate Platform`,
                 html: `
@@ -242,7 +243,7 @@ export class EmailService {
                             ${propertiesHtml}
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     View All Properties
                                 </a>
@@ -274,7 +275,7 @@ export class EmailService {
     async sendConfirmSubscription(email: string, confirmUrl: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Confirm your subscription - Real Estate Platform',
                 html: `
@@ -318,7 +319,7 @@ export class EmailService {
                 </div>`;
 
             await this.transporter.sendMail({
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject,
                 html: wrappedHtml,
@@ -336,7 +337,7 @@ export class EmailService {
     async sendWelcomeEmailWithPdf(email: string, firstName: string, pdfPath: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Welcome to Real Estate Platform - Your Free Guide Inside!',
                 html: `
@@ -367,7 +368,7 @@ export class EmailService {
                             </div>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     Start Browsing Properties
                                 </a>
@@ -401,7 +402,7 @@ export class EmailService {
     async sendPropertyGuideEmail(email: string, firstName: string, pdfPath: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Your Free Property Investment Guide - Real Estate Platform',
                 html: `
@@ -430,7 +431,7 @@ export class EmailService {
                             </div>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     Explore Investment Properties
                                 </a>
@@ -464,7 +465,7 @@ export class EmailService {
     async sendInvestmentTipsEmail(email: string, firstName: string, pdfPath: string): Promise<void> {
         try {
             const mailOptions = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Exclusive Investment Tips - Real Estate Platform',
                 html: `
@@ -493,7 +494,7 @@ export class EmailService {
                             </div>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     View Investment Properties
                                 </a>
@@ -527,7 +528,7 @@ export class EmailService {
     async sendWelcomeEmailWithPdfs(email: string, firstName: string, pdfs: { name: string; buffer: Buffer }[]): Promise<void> {
         try {
             const mailOptions: any = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Welcome to Real Estate Platform! 🏠',
                 html: `
@@ -563,7 +564,7 @@ export class EmailService {
                             </ul>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     Browse Properties
                                 </a>
@@ -594,7 +595,7 @@ export class EmailService {
     async sendPropertyGuideEmailWithPdfs(email: string, firstName: string, pdfs: { name: string; buffer: Buffer }[]): Promise<void> {
         try {
             const mailOptions: any = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Your Property Guide - Real Estate Platform 🏠',
                 html: `
@@ -630,7 +631,7 @@ export class EmailService {
                             </ul>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     View Properties
                                 </a>
@@ -661,7 +662,7 @@ export class EmailService {
     async sendInvestmentTipsEmailWithPdfs(email: string, firstName: string, pdfs: { name: string; buffer: Buffer }[]): Promise<void> {
         try {
             const mailOptions: any = {
-                from: process.env.EMAIL_USER || 'your-email@gmail.com',
+                from: config.email.user,
                 to: email,
                 subject: 'Investment Tips & Strategies - Real Estate Platform 💰',
                 html: `
@@ -697,7 +698,7 @@ export class EmailService {
                             </ul>
                             
                             <div style="text-align: center; margin: 30px 0;">
-                                <a href="${process.env.FRONTEND_URL}/properties" 
+                                <a href="${config.urls.frontend}/properties" 
                                    style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
                                     Explore Investment Properties
                                 </a>

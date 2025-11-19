@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../../config';
 
-const API_BASE_URL = 'http://localhost:3000/future-vision';
+const API_BASE_URL = `${config.api.baseUrl}/future-vision`;
 
 export interface FutureVisionContentDTO { visionText?: string | null }
 export interface FutureVisionGoalDTO { id?: number; title: string; description: string; icon?: string }

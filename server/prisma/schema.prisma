@@ -35,6 +35,9 @@ model Property {
     // Images
     images Image[]
 
+    // Video
+    videoLink String? // YouTube video link for property showcase
+
     // Location
     location Location?
 

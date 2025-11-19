@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Select, Switch, Button, Upload, Card, Space, Divider, Row, Col, message, Image, Typography, Tag } from 'antd';
-import { PlusOutlined, DeleteOutlined, UploadOutlined, LoadingOutlined, EnvironmentOutlined, PictureOutlined, HomeOutlined, DollarOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined, UploadOutlined, LoadingOutlined, EnvironmentOutlined, PictureOutlined, HomeOutlined, DollarOutlined, InfoCircleOutlined, VideoCameraOutlined, LinkOutlined } from '@ant-design/icons';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { cloudinaryService } from '../services/cloudinaryService';
 import MapPicker from './MapPicker';
@@ -152,13 +152,11 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
     const handleImageUpload = async (info: any) => {
         const { fileList: newFileList, file } = info;
 
-        if (file.status === 'uploading') {
-            setUploading(true);
-            return;
-        }
+        // Check if any files are still uploading
+        const isAnyFileUploading = newFileList.some((f: any) => f.status === 'uploading');
+        setUploading(isAnyFileUploading);
 
         if (file.status === 'done') {
-            setUploading(false);
             message.success(`${file.name} uploaded successfully`);
 
             if (file.response && file.response.data && file.response.data.url) {
@@ -167,9 +165,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
         }
 
         if (file.status === 'error') {
-            setUploading(false);
             message.error(`${file.name} upload failed`);
-            return;
         }
 
         setFileList(newFileList);
@@ -223,7 +219,6 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
         const { file, onSuccess, onError } = options;
 
         try {
-            setUploading(true);
             const response = await cloudinaryService.uploadImage(file);
 
             if (response.success) {
@@ -232,23 +227,12 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 file.url = response.data.url;
 
                 onSuccess({ data: response.data }, file);
-
-                const updatedFileList = [...fileList, file];
-                setFileList(updatedFileList);
-
-                const imageUrls = updatedFileList
-                    .filter((f: any) => f.url || (f.response && f.response.data && f.response.data.url))
-                    .map((f: any) => f.url || (f.response && f.response.data && f.response.data.url));
-
-                form.setFieldValue('images', imageUrls);
             } else {
                 onError(new Error('Upload failed'));
             }
         } catch (error) {
             console.error('Upload error:', error);
             onError(error);
-        } finally {
-            setUploading(false);
         }
     };
 
@@ -444,7 +428,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             >
                                 <InputNumber
                                     placeholder="Enter price"
-                                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    formatter={value => `₹ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={((value: string | undefined) => {
                                         if (typeof value !== 'string') return 0;
                                         return Number(value.replace(/\$\s?|(,*)/g, ''));
@@ -818,7 +802,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader
                         title="Property Images"
-                        subtitle="Upload high-quality images of the property (max 8 images)"
+                        subtitle="Upload high-quality images of the property (max 16 images)"
                         icon={<PictureOutlined className="text-blue-600 text-lg" />}
                     />
 
@@ -830,11 +814,45 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             onChange={handleImageUpload}
                             customRequest={customUpload}
                             accept="image/*"
-                            maxCount={8}
+                            multiple
+                            maxCount={16}
                             className="property-images-upload border-[#d1d5db] rounded-lg"
                         >
-                            {fileList.length >= 8 ? null : uploadButton}
+                            {fileList.length >= 16 ? null : uploadButton}
                         </Upload>
+                    </Form.Item>
+
+                    <Divider className="my-6" />
+
+                    <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <VideoCameraOutlined className="text-blue-600 text-lg" />
+                            <Text strong className="text-gray-800">Property Video</Text>
+                        </div>
+                        <Text type="secondary" className="text-sm">
+                            Add a YouTube video link to showcase the property
+                        </Text>
+                    </div>
+
+                    <Form.Item
+                        name="videoLink"
+                        label="YouTube Video Link"
+                        rules={[
+                            {
+                                type: 'url',
+                                message: 'Please enter a valid URL'
+                            },
+                            {
+                                pattern: /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/,
+                                message: 'Please enter a valid YouTube URL'
+                            }
+                        ]}
+                    >
+                        <Input
+                            prefix={<LinkOutlined className="text-gray-400" />}
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            className="rounded-[8px] border-[#d1d5db] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        />
                     </Form.Item>
                 </Card>
 

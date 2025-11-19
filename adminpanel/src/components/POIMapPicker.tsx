@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import config from '../../config';
 import { Modal, Input, Button, Spin, Typography, message, Card, Row, Col, Select } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -120,7 +121,7 @@ const POIMapPicker: React.FC<POIMapPickerProps> = ({ open, onCancel, onSelect, i
     // Reverse geocode to get address
     const reverseGeocode = async (lat: number, lng: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/properties/geocode/reverse/${lat}/${lng}`);
+            const response = await fetch(`${config.api.baseUrl}/properties/geocode/reverse/${lat}/${lng}`);
             const data = await response.json();
             setAddress(data.display_name || '');
         } catch (e) {

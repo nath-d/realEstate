@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost:3000';
+import config from '../../config.js';
+
+const API_BASE_URL = config.api.baseUrl;
 
 export const getFutureVisionContent = async () => {
     try { const res = await fetch(`${API_BASE_URL}/future-vision/content`); if (!res.ok) throw new Error('Failed'); return await res.json(); }

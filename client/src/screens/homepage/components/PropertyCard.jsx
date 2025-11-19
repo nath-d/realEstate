@@ -52,7 +52,7 @@ const PropertyCard = ({ property, handleImageError }) => {
         ? cloudinaryService.getLowCreditThumbnailUrl(originalImageUrl, 400, 320)
         : originalImageUrl;
 
-    const price = property.price ? `$${property.price.toLocaleString()}` : 'Price on request';
+    const price = property.price ? `${property.price.toLocaleString()}` : 'Price on request';
     const location = property.location ? `${property.location.city}, ${property.location.state}` : 'Location not specified';
     const bedrooms = property.bedrooms || 0;
     const bathrooms = property.bathrooms || 0;
@@ -75,8 +75,8 @@ const PropertyCard = ({ property, handleImageError }) => {
                     onClick={handleFavoriteClick}
                     disabled={isLoading}
                     className={`absolute top-4 left-4 p-2 rounded-full transition-all duration-300 z-10 ${isFavorite
-                            ? 'bg-red-500 text-white hover:bg-red-600'
-                            : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
+                        ? 'bg-red-500 text-white hover:bg-red-600'
+                        : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
                         } ${isLoading ? 'opacity-50' : ''}`}
                     title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                     style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}

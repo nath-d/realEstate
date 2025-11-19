@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../../config';
 
-const API_BASE_URL = 'http://localhost:3000/why-choose-us';
+const API_BASE_URL = `${config.api.baseUrl}/why-choose-us`;
 
 export interface WhyReasonDTO {
     id?: number;

@@ -12,7 +12,7 @@ const FeaturedPropertyCard = ({ property, handleImageError }) => {
         ? cloudinaryService.getLowCreditThumbnailUrl(originalImageUrl, 600, 400)
         : originalImageUrl;
 
-    const price = property.price ? `$${property.price.toLocaleString()}` : 'Price on request';
+    const price = property.price ? `${property.price.toLocaleString()}` : 'Price on request';
     const location = property.location ? `${property.location.city}, ${property.location.state}` : 'Location not specified';
     const bedrooms = property.bedrooms || 0;
     const bathrooms = property.bathrooms || 0;
@@ -81,7 +81,9 @@ const FeaturedPropertyCard = ({ property, handleImageError }) => {
 
                     <Link
                         to={`/propertyDet?id=${property.id}`}
-                        className="inline-block w-full text-center bg-[#D6AD60] text-[#122620] px-8 py-4 rounded-lg font-montserrat font-bold text-lg transition-all duration-300 hover:bg-[#E5BE90] hover:scale-105 transform"
+                        // className="inline-block w-full text-center bg-[#D6AD60] text-[#122620] px-8 py-4 rounded-lg font-montserrat font-bold text-lg transition-all duration-300 hover:bg-[#E5BE90] hover:scale-105 transform"
+                        className="inline-block w-full text-center bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-3 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
+
                     >
                         View Details
                     </Link>

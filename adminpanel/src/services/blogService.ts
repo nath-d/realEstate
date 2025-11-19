@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { BlogAuthor, Blog, CreateBlogData, CreateAuthorData } from './blogTypes';
+import config from '../../config';
 
-const API_BASE_URL = 'http://localhost:3000/blogs';
+const API_BASE_URL = `${config.api.baseUrl}/blogs`;
 
 // Service functions
 export const getBlogs = async (): Promise<Blog[]> => {

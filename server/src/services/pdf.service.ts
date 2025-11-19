@@ -156,7 +156,7 @@ export class PdfService {
             .fillColor('#34495e')
             .text('Our team is here to help you find your perfect property.')
             .text('Email: support@realestateplatform.com')
-            .text('Phone: +1 (555) 123-4567')
+            .text('Phone: +91 9748853901')
             .moveDown(2);
 
         // Footer

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from '../../config';
 import { useNotifications } from '../context/NotificationContext';
 import { Card, Button, message, Modal, Alert, Spin, Table, Tag, Space, Drawer, Descriptions, Typography, Select } from 'antd';
 import { EyeOutlined, DeleteOutlined, MailOutlined, UserOutlined, PhoneOutlined, MessageOutlined } from '@ant-design/icons';
@@ -51,7 +52,7 @@ const ContactFormManagement: React.FC = () => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch('http://localhost:3000/contact');
+            const response = await fetch(`${config.api.baseUrl}/contact`);
             if (!response.ok) {
                 throw new Error('Failed to fetch contact forms');
             }
@@ -75,7 +76,7 @@ const ContactFormManagement: React.FC = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/contact/${id}`, {
+            const response = await fetch(`${config.api.baseUrl}/contact/${id}`, {
                 method: 'DELETE',
             });
 
@@ -94,7 +95,7 @@ const ContactFormManagement: React.FC = () => {
 
     const handleStatusUpdate = async (id: number, status: string) => {
         try {
-            const response = await fetch(`http://localhost:3000/contact/${id}`, {
+            const response = await fetch(`${config.api.baseUrl}/contact/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
