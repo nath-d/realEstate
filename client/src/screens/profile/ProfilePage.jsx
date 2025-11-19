@@ -179,7 +179,7 @@ const ProfilePage = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex items-center justify-between">
                         <Link to="/" className="flex items-center space-x-3">
-                            <img src="/logoConcept2.svg" alt="MG Constructions" className="h-12 w-auto" />
+                            <img src="/logoFinalSvg.svg" alt="MG Constructions" className="h-12 w-auto" />
                             <span className="text-[#D6AD60] font-source-serif text-xl">Profile</span>
                         </Link>
                         <button

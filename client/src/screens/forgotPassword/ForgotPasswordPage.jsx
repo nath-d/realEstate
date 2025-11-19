@@ -46,7 +46,7 @@ const ForgotPasswordPage = () => {
                 <div className="text-center">
                     <Link to="/" className="inline-block mb-8">
                         <img
-                            src="/logoConcept2.svg"
+                            src="/logoFinalSvg.svg"
                             alt="MG Constructions"
                             className="h-16 w-auto object-contain mx-auto"
                         />

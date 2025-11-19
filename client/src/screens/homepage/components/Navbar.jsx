@@ -43,11 +43,11 @@ const Navbar = () => {
     return (
         <nav className="bg-[#122620] shadow-md w-full z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-24 md:h-28">
+                <div className="flex justify-between h-24 md:h-36">
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/">
-                            <img src="/logoConcept2.svg" alt="MG Constructions" className="h-20 md:h-16 w-auto object-contain" />
+                            <img src="/logoFinalSvg.svg" alt="MG Constructions" className="h-20 md:h-28 w-auto object-contain" />
                         </Link>
                     </div>
 

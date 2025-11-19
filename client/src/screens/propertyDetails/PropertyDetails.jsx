@@ -156,10 +156,10 @@ const PropertyDetails = () => {
             ]
         },
         agent: {
-            name: "Sarah Johnson",
-            phone: "+1 (310) 555-0123",
-            email: "sarah.j@realestate.com",
-            image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+            name: "Bhumika Ghosh",
+            phone: "+91 9748853901",
+            email: "mgconstructions1995@gmail.com",
+            // image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
         },
         virtualTour: "https://example.com/virtual-tour",
         similarProperties: [],
