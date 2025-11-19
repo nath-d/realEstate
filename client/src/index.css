@@ -1,3 +1,6 @@
+/* Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,16 +54,33 @@ body {
 
 }
 
-
-
-
-
 @font-face {
     font-family: 'MagnoliaNormal';
     src: url('./assets/fonts/MagnoliaRegular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
+}
+
+@font-face {
+    font-family: 'Magnolia Bold';
+    src: url('./assets/fonts/Magnolia Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Magnolia Medium';
+    src: url('./assets/fonts/Magnolia Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Magnolia Regular';
+    src: url('./assets/fonts/Magnolia Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /* @font-face {
@@ -200,4 +220,270 @@ body {
 
 .animate-float-delay {
     animation: float-delay 10s ease-in-out infinite;
+}
+
+/* Leaflet map customizations - Clean Modern Design with Performance Optimizations */
+.leaflet-container {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    height: 100% !important;
+    width: 100% !important;
+    z-index: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Performance optimizations for map tiles */
+.leaflet-tile {
+    filter: none !important;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.leaflet-tile-pane {
+    filter: none;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Ensure map container has proper dimensions */
+.leaflet-container.leaflet-fade-anim .leaflet-tile,
+.leaflet-container.leaflet-fade-anim .leaflet-popup {
+    opacity: 1;
+}
+
+.leaflet-container.leaflet-zoom-anim .leaflet-zoom-animated {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Clean marker styling with subtle shadows and performance optimizations */
+.custom-poi-icon {
+    background: transparent !important;
+    border: none !important;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+    z-index: 1000 !important;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.custom-poi-icon:hover {
+    transform: scale(1.1) translateZ(0);
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+.custom-poi-icon div {
+    transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.custom-poi-icon:hover div {
+    transform: scale(1.05) translateZ(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.property-marker {
+    background: transparent !important;
+    border: none !important;
+    filter: drop-shadow(0 4px 12px rgba(214, 173, 96, 0.3));
+    z-index: 1001 !important;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.property-marker:hover {
+    transform: scale(1.05) translateZ(0);
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 6px 16px rgba(214, 173, 96, 0.4));
+}
+
+.property-marker div {
+    transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.property-marker:hover div {
+    transform: scale(1.02) translateZ(0);
+    box-shadow: 0 6px 16px rgba(214, 173, 96, 0.4) !important;
+}
+
+/* Clean zoom controls with performance optimizations */
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-control-zoom a {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #6B7280 !important;
+    border: none !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03) !important;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-control-zoom a:last-child {
+    border-bottom: none !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: rgba(59, 130, 246, 0.08) !important;
+    color: #3B82F6 !important;
+    transform: translateY(-1px) translateZ(0);
+}
+
+.leaflet-control-zoom a:active {
+    transform: translateY(0) translateZ(0);
+}
+
+/* Clean popup styling with performance optimizations */
+.leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #374151 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+    backdrop-filter: blur(10px);
+    padding: 0 !important;
+    overflow: hidden;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #374151 !important;
+}
+
+.leaflet-popup-tip {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Hide default Leaflet attribution for cleaner look */
+.leaflet-control-attribution {
+    display: none !important;
+}
+
+/* Additional map container fixes with performance optimizations */
+.leaflet-pane {
+    z-index: 1;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-overlay-pane {
+    z-index: 4;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-marker-pane {
+    z-index: 6;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-tooltip-pane {
+    z-index: 6;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.leaflet-popup-pane {
+    z-index: 7;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Clean map background */
+.leaflet-container {
+    background: #fafbfc !important;
+}
+
+/* Custom scrollbar for map */
+.leaflet-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.leaflet-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 3px;
+}
+
+.leaflet-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+.leaflet-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+/* Map loading animation */
+.map-loading {
+    background: linear-gradient(90deg, #f8f9fa 25%, #f1f3f4 50%, #f8f9fa 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Subtle marker visibility with performance optimizations */
+.leaflet-marker-icon {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15));
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Performance optimizations for smooth zooming */
+.leaflet-zoom-animated {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.leaflet-fade-anim .leaflet-tile,
+.leaflet-fade-anim .leaflet-popup {
+    will-change: opacity;
+}
+
+/* Optimize tile loading */
+.leaflet-tile-loaded {
+    will-change: auto;
 }

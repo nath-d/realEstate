@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaClipboardList, FaBuilding, FaPaintBrush, FaDoorOpen, FaWindowMaximize, FaLayerGroup, FaUtensils, FaBath, FaBolt, FaWater } from 'react-icons/fa';
 import { FaElevator } from 'react-icons/fa6';
+
 const SpecificationCard = ({ icon: Icon, title, details, index }) => {
     return (
         <motion.div
@@ -26,22 +27,33 @@ const SpecificationCard = ({ icon: Icon, title, details, index }) => {
 
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 gap-4">
-                        {details.map((detail, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="col-span-2 md:col-span-1"
-                            >
+                        {details && details.length > 0 ? (
+                            details.map((detail, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.1 }}
+                                    className="col-span-2 md:col-span-1"
+                                >
+                                    <div className="h-full p-4 rounded-lg bg-[#122620] hover:bg-[#E5BE90]/10 transition-colors duration-300">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[#D6AD60] mt-2 flex-shrink-0"></div>
+                                            <p className="text-gray-300 text-sm leading-relaxed">{detail}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))
+                        ) : (
+                            <div className="col-span-2">
                                 <div className="h-full p-4 rounded-lg bg-[#122620] hover:bg-[#E5BE90]/10 transition-colors duration-300">
                                     <div className="flex items-start gap-3">
                                         <div className="w-1.5 h-1.5 rounded-full bg-[#D6AD60] mt-2 flex-shrink-0"></div>
-                                        <p className="text-gray-300 text-sm leading-relaxed">{detail}</p>
+                                        <p className="text-gray-300 text-sm leading-relaxed">No specifications available</p>
                                     </div>
                                 </div>
-                            </motion.div>
-                        ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -49,110 +61,80 @@ const SpecificationCard = ({ icon: Icon, title, details, index }) => {
     );
 };
 
-const PropertySpecifications = () => {
-    const specifications = [
+const PropertySpecifications = ({ specifications }) => {
+    // Default specifications if none provided
+    const defaultSpecifications = [
         {
             icon: FaBuilding,
             title: "Structure & Brickwork",
-            details: [
-                "Premium RCC Frame Structure",
-                "High-grade Cement (OPC 53 Grade)",
-                "First-class Brickwork with 1:6 Mortar Ratio",
-                "Reinforced Concrete Columns and Beams"
-            ]
+            details: specifications?.structure || ["No structure specifications available"]
         },
         {
             icon: FaPaintBrush,
             title: "External & Interior Finish",
             details: [
-                "Premium Weatherproof Exterior Paint",
-                "High-quality Interior Putty Finish",
-                "Textured Wall Finishes",
-                "Anti-bacterial Interior Paint"
-            ]
+                ...(specifications?.externalFinish || []),
+                ...(specifications?.interiorFinish || [])
+            ].length > 0 ? [
+                ...(specifications?.externalFinish || []),
+                ...(specifications?.interiorFinish || [])
+            ] : ["No finish specifications available"]
         },
         {
             icon: FaDoorOpen,
             title: "Doors and Hardware",
-            details: [
-                "Premium Brand Main Door",
-                "High-quality Internal Doors",
-                "Stainless Steel Hardware",
-                "Security Locks and Fittings"
-            ]
+            details: specifications?.doors || ["No door specifications available"]
         },
         {
             icon: FaWindowMaximize,
             title: "Windows",
-            details: [
-                "Double-glazed UPVC Windows",
-                "Premium Quality Glass",
-                "Weather-resistant Frames",
-                "Safety Grills and Mosquito Nets"
-            ]
+            details: specifications?.windows || ["No window specifications available"]
         },
         {
             icon: FaLayerGroup,
             title: "Flooring",
-            details: [
-                "Premium Vitrified Tiles",
-                "Anti-skid Bathroom Tiles",
-                "Marble/Granite Flooring in Common Areas",
-                "High-quality Tile Adhesives"
-            ]
+            details: specifications?.flooring || ["No flooring specifications available"]
         },
         {
             icon: FaUtensils,
             title: "Kitchen Counter",
-            details: [
-                "Premium Granite/Quartz Countertops",
-                "Stainless Steel Sink",
-                "High-quality Plumbing Fixtures",
-                "Modular Kitchen Units"
-            ]
+            details: specifications?.kitchen || ["No kitchen specifications available"]
         },
         {
             icon: FaBath,
             title: "Washroom",
-            details: [
-                "Premium Sanitaryware Brands",
-                "Anti-skid Floor Tiles",
-                "High-quality CP Fittings",
-                "Modern Bathroom Fixtures"
-            ]
+            details: specifications?.washroom || ["No washroom specifications available"]
         },
         {
             icon: FaElevator,
             title: "Elevator",
-            details: [
-                "Premium Brand Elevator",
-                "Safety Features and Sensors",
-                "Emergency Backup System",
-                "Regular Maintenance Schedule"
-            ]
+            details: specifications?.elevator || ["No elevator specifications available"]
         },
         {
             icon: FaBolt,
             title: "Electricity",
-            details: [
-                "Premium Electrical Points",
-                "Modular Switches",
-                "LED Lighting Fixtures",
-                "Power Backup System"
-            ]
+            details: specifications?.electricity || ["No electricity specifications available"]
         },
         {
             icon: FaWater,
             title: "Water Supply",
-            details: [
-                "Municipal Water Connection",
-                "24/7 Water Supply",
-                "Water Treatment System",
-                "Rainwater Harvesting",
-                "Rainwater Harvesting",
-
-            ]
+            details: specifications?.waterSupply || ["No water supply specifications available"]
         }
+    ];
+
+    // Create table data from specifications
+    const tableData = [
+        { category: "Structure & Brickwork", specifications: specifications?.structure || ["Not specified"] },
+        { category: "External Finish", specifications: specifications?.externalFinish || ["Not specified"] },
+        { category: "Interior Finish", specifications: specifications?.interiorFinish || ["Not specified"] },
+        { category: "Doors & Hardware", specifications: specifications?.doors || ["Not specified"] },
+        { category: "Windows", specifications: specifications?.windows || ["Not specified"] },
+        { category: "Flooring", specifications: specifications?.flooring || ["Not specified"] },
+        { category: "Kitchen Counter", specifications: specifications?.kitchen || ["Not specified"] },
+        { category: "Washroom", specifications: specifications?.washroom || ["Not specified"] },
+        { category: "Elevator", specifications: specifications?.elevator || ["Not specified"] },
+        { category: "Electricity", specifications: specifications?.electricity || ["Not specified"] },
+        { category: "Water Supply", specifications: specifications?.waterSupply || ["Not specified"] }
     ];
 
     return (
@@ -189,8 +171,8 @@ const PropertySpecifications = () => {
                     </div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16">
-                    {specifications.map((spec, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16 mb-20">
+                    {defaultSpecifications.map((spec, index) => (
                         <SpecificationCard
                             key={index}
                             icon={spec.icon}
@@ -200,6 +182,88 @@ const PropertySpecifications = () => {
                         />
                     ))}
                 </div>
+
+                {/* Specifications Table */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-gradient-to-br from-[#1A332C] to-[#122620] rounded-2xl overflow-hidden shadow-xl border border-[#E5BE90]/20"
+                >
+                    <div className="p-4 bg-gradient-to-r from-[#E5BE90]/10 to-transparent border-b border-[#E5BE90]/20">
+                        <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                            <FaClipboardList className="text-[#E5BE90]" />
+                            Complete Specifications Overview
+                        </h3>
+                        <p className="text-gray-400 text-xs mt-1">Detailed breakdown of all property specifications</p>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-[#122620]/50 border-b border-[#E5BE90]/20">
+                                    <th className="px-6 py-4 text-left text-[#E5BE90] font-semibold text-base tracking-wide">
+                                        Category
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-[#E5BE90] font-semibold text-base tracking-wide">
+                                        Specifications
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tableData.map((row, index) => (
+                                    <motion.tr
+                                        key={index}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className={`border-b border-[#E5BE90]/10 hover:bg-[#E5BE90]/5 transition-colors duration-300 ${index % 2 === 0 ? 'bg-[#1A332C]/30' : 'bg-[#122620]/30'
+                                            }`}
+                                    >
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-2 h-2 rounded-full bg-[#E5BE90] flex-shrink-0"></div>
+                                                <span className="text-white font-medium text-base">{row.category}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-wrap items-center">
+                                                {Array.isArray(row.specifications) ? (
+                                                    row.specifications.map((spec, specIndex) => (
+                                                        <div key={specIndex} className="flex items-center">
+                                                            <span className="text-gray-300 text-base leading-relaxed">
+                                                                {spec.length > 50 ? `${spec.substring(0, 50)}...` : spec}
+                                                            </span>
+                                                            {specIndex < row.specifications.length - 1 && (
+                                                                <span className="text-[#E5BE90] text-base mx-3">,</span>
+                                                            )}
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="flex items-center">
+                                                        <span className="text-gray-300 text-base leading-relaxed">
+                                                            {row.specifications.length > 50 ? `${row.specifications.substring(0, 50)}...` : row.specifications}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Table Footer */}
+                    <div className="p-3 bg-gradient-to-r from-transparent to-[#E5BE90]/5 border-t border-[#E5BE90]/20">
+                        <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span>Total Categories: {tableData.length}</span>
+                            <span>Last Updated: {new Date().toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

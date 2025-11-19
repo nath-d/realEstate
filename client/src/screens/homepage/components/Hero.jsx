@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import ContactForm from '../../../components/ContactForm';
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState('next');
     const [isChanging, setIsChanging] = useState(false);
+    const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
     const images = [
         'https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1920',
@@ -14,7 +16,7 @@ const Hero = () => {
 
     const textContent = [
         {
-            title: "MG Pacific Estates",
+            title: "MG Constructions",
             subtitle: "Luxury Living Redefined"
         },
         {
@@ -131,12 +133,22 @@ const Hero = () => {
                             {textContent[textIndex].subtitle}
                         </p>
                     </div>
-                    <Link
-                        to="/properties"
-                        className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 sm:px-8 py-3 sm:py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-normal tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
-                    >
-                        Explore Properties
-                    </Link>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center">
+                        <Link
+                            to="/properties"
+                            className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 sm:px-8 py-3 sm:py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-normal tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
+                        >
+                            Explore Properties
+                        </Link>
+                        <button
+                            onClick={() => setIsContactFormOpen(true)}
+                            className="bg-[#D6AD60] text-[#122620] px-6 sm:px-8 py-3 sm:py-4 rounded-none hover:bg-[#E5BE90] transition-all duration-700 font-montserrat font-normal tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
+                        >
+                            Contact Us
+                        </button>
+                    </div>
                 </div>
 
                 {/* Navigation Arrows */}
@@ -170,6 +182,14 @@ const Hero = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Reusable Contact Form */}
+            <ContactForm
+                isOpen={isContactFormOpen}
+                onClose={() => setIsContactFormOpen(false)}
+                title="Get In Touch"
+                subtitle="Ready to find your dream home? Let's start the conversation."
+            />
         </div>
     );
 };

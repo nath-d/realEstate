@@ -1,0 +1,374 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Property {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    price       Float
+    featured    Boolean  @default(false)
+    type        String   @default("house") // villa, apartment, house, penthouse, etc.
+    status      String   @default("for sale") // for sale, for rent, sold, etc.
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Property Details
+    bedrooms   Int    @default(0)
+    bathrooms  Float  @default(0)
+    garage     Int    @default(0)
+    lotSize    String @default("0")
+    livingArea String @default("0")
+    yearBuilt  Int    @default(2024)
+
+    // Images
+    images Image[]
+
+    // Video
+    videoLink String? // YouTube video link for property showcase
+
+    // Location
+    location Location?
+
+    // Property Specifications (one-to-many)
+    specifications PropertySpecification[]
+
+    // Material Certifications (one-to-many)
+    materialCertifications MaterialCertification[]
+
+    // Nearby POIs (one-to-many)
+    pois POI[]
+
+    // Agent
+    agentId Int?
+    agent   Agent? @relation(fields: [agentId], references: [id])
+
+    // Similar Properties (self-referential many-to-many)
+    similarTo   Property[] @relation("SimilarProperties")
+    similarFrom Property[] @relation("SimilarProperties")
+
+    // User relations
+    favoritedBy User[] @relation("UserFavorites")
+    User        User?  @relation(fields: [userId], references: [id])
+    userId      Int?
+}
+
+model PropertySpecification {
+    id             Int      @id @default(autoincrement())
+    structure      String[]
+    brickwork      String[]
+    windows        String[]
+    externalFinish String[]
+    interiorFinish String[]
+    doors          String[]
+    flooring       String[]
+    kitchen        String[]
+    washroom       String[]
+    elevator       String[]
+    electricity    String[]
+    waterSupply    String[]
+    propertyId     Int
+    property       Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+}
+
+model Image {
+    id         Int      @id @default(autoincrement())
+    url        String
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+}
+
+model Location {
+    id         Int      @id @default(autoincrement())
+    latitude   Float
+    longitude  Float
+    address    String
+    city       String
+    state      String
+    zipCode    String
+    propertyId Int      @unique
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model Agent {
+    id         Int        @id @default(autoincrement())
+    name       String
+    email      String     @unique
+    phone      String
+    image      String?
+    properties Property[]
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime   @updatedAt
+}
+
+model MaterialCertification {
+    id          Int      @id @default(autoincrement())
+    material    String
+    brand       String
+    certificate String
+    description String   @db.Text
+    verified    Boolean  @default(false)
+    imageUrl    String? // URL for the material image
+    propertyId  Int
+    property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model POI {
+    id         Int      @id @default(autoincrement())
+    name       String
+    type       String // school, park, station, restaurant, shop, etc.
+    latitude   Float
+    longitude  Float
+    distance   Float? // distance from property in meters
+    propertyId Int
+    property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model BlogAuthor {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String   @unique
+    bio       String?
+    avatar    String?
+    blogs     Blog[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Blog {
+    id              Int        @id @default(autoincrement())
+    title           String
+    content         String     @db.Text
+    excerpt         String?
+    featuredImage   String?
+    status          String     @default("draft") // draft, published
+    authorId        Int
+    author          BlogAuthor @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    tags            String[]
+    metaTitle       String?
+    metaDescription String?
+    views           BlogView[]
+    createdAt       DateTime   @default(now())
+    updatedAt       DateTime   @updatedAt
+}
+
+model BlogView {
+    id        Int      @id @default(autoincrement())
+    blogId    Int
+    blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+    ip        String
+    userId    Int?
+    user      User?    @relation(fields: [userId], references: [id])
+    createdAt DateTime @default(now())
+}
+
+model ContactForm {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String
+    phone     String?
+    subject   String
+    message   String   @db.Text
+    status    String   @default("new") // new, read, responded, closed
+    userId    Int?
+    user      User?    @relation(fields: [userId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model ScheduleVisit {
+    id               Int      @id @default(autoincrement())
+    name             String
+    email            String
+    phone            String
+    preferredDate    DateTime
+    preferredTime    String
+    message          String?  @db.Text
+    preferredContact String   @default("email") // email, phone
+    propertyId       Int?
+    propertyTitle    String?
+    status           String   @default("pending") // pending, confirmed, completed, cancelled
+    userId           Int?
+    user             User?    @relation(fields: [userId], references: [id])
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+}
+
+model User {
+    id                     Int       @id @default(autoincrement())
+    email                  String    @unique
+    firstName              String
+    lastName               String
+    password               String? // Null for OAuth users
+    googleId               String?   @unique
+    avatar                 String?
+    phone                  String?
+    dateOfBirth            DateTime?
+    address                String?
+    city                   String?
+    state                  String?
+    zipCode                String?
+    country                String?
+    isEmailVerified        Boolean   @default(false)
+    emailVerificationToken String?
+    passwordResetToken     String?
+    passwordResetExpires   DateTime?
+    role                   String    @default("user") // user, admin
+    preferences            Json? // User preferences as JSON
+    lastLoginAt            DateTime?
+    createdAt              DateTime  @default(now())
+    updatedAt              DateTime  @updatedAt
+
+    // Relations
+    favoriteProperties Property[]      @relation("UserFavorites")
+    contactForms       ContactForm[]
+    scheduleVisits     ScheduleVisit[]
+    blogViews          BlogView[]
+    Property           Property[]
+}
+
+model MarketingPDF {
+    id          Int      @id @default(autoincrement())
+    name        String // Display name for the PDF
+    filename    String // Original filename
+    filePath    String // Path where the file is stored
+    fileSize    Int // File size in bytes
+    mimeType    String // MIME type (application/pdf)
+    description String? // Optional description
+    category    String // welcome-guide, property-guide, investment-tips, etc.
+    isActive    Boolean  @default(true) // Whether this PDF is available for use
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// About Us dynamic content
+model AboutContent {
+    id               Int                 @id @default(autoincrement())
+    headerTitle      String              @default("Our Story")
+    headerSubtitle   String? // short tagline under the header
+    heroImageUrl     String? // main image on the left
+    heroImageCaption String? // caption under the image
+    rightHeading     String? // heading on the right column
+    rightParagraph1  String?             @db.Text
+    rightParagraph2  String?             @db.Text
+    stat1Label       String?             @default("Years of Excellence")
+    stat1Value       String?             @default("13+")
+    stat2Label       String?             @default("Happy Customers")
+    stat2Value       String?             @default("50K+")
+    stat3Label       String?             @default("Cities Covered")
+    stat3Value       String?             @default("100+")
+    ctaText          String?             @default("Learn More About Us")
+    ctaLink          String?             @default("/about")
+    createdAt        DateTime            @default(now())
+    updatedAt        DateTime            @updatedAt
+    timelineItems    AboutTimelineItem[]
+}
+
+model AboutTimelineItem {
+    id             Int          @id @default(autoincrement())
+    year           String
+    title          String
+    description    String       @db.Text
+    imageUrl       String?
+    order          Int          @default(0)
+    aboutContentId Int
+    aboutContent   AboutContent @relation(fields: [aboutContentId], references: [id], onDelete: Cascade)
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+}
+
+// Achievements for homepage
+model Achievement {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    icon        String // Icon name (e.g., "FaCertificate", "FaShieldAlt")
+    category    String // Materials, Structural, Finishing, Electrical, etc.
+    year        String
+    stats       String // The statistics/value to display
+    order       Int      @default(0) // For ordering achievements
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Why Choose Us reasons for homepage
+model WhyChooseUsReason {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    stat        String?
+    statText    String?
+    icon        String? // icon key used by frontend to render an SVG
+    bgImageUrl  String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Core Strengths for homepage
+model CoreStrength {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    icon        String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Future Vision content and items
+model FutureVisionContent {
+    id         Int      @id @default(autoincrement())
+    visionText String?  @db.Text
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}
+
+model FutureVisionGoal {
+    id          Int      @id @default(autoincrement())
+    title       String
+    description String   @db.Text
+    icon        String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model FutureVisionTimelineItem {
+    id          Int      @id @default(autoincrement())
+    year        String
+    description String   @db.Text
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// Newsletter subscribers
+model NewsletterSubscriber {
+    id               Int       @id @default(autoincrement())
+    email            String    @unique
+    firstName        String?
+    lastName         String?
+    isConfirmed      Boolean   @default(false)
+    confirmToken     String?   @unique
+    unsubscribeToken String    @unique
+    unsubscribedAt   DateTime?
+    subscribedAt     DateTime  @default(now())
+    updatedAt        DateTime  @updatedAt
+    tags             String[]  @default([])
+}

@@ -1,79 +1,346 @@
+/* Import Inter font for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles */
+/* Global styles and resets */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #f8fafc;
   color: #1e293b;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-:root {
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --secondary: #64748b;
-  --background: #f8fafc;
-  --surface: #ffffff;
-  --text: #1e293b;
-  --text-secondary: #64748b;
-  --border: #e2e8f0;
+/* 3rd-party overrides (like Leaflet) and map styles remain below */
+
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 }
 
-a {
-  font-weight: 500;
-  color: var(--primary);
-  text-decoration: none;
-  transition: color 0.2s ease;
+.leaflet-tile {
+  filter: none !important;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
-a:hover {
-  color: var(--primary-hover);
+.leaflet-fade-anim .leaflet-tile,
+.leaflet-fade-anim .leaflet-popup {
+  opacity: inherit;
 }
 
-button {
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.property-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.poi-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.map-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(245, 245, 245, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  border-radius: 8px;
+}
+
+.leaflet-control-container {
+  z-index: 1000;
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 4px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: #f5f5f5 !important;
+  color: #1890ff !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.leaflet-popup-tip {
+  background: white !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.ant-modal .leaflet-container {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.leaflet-container.leaflet-fade-anim {
+  transition: opacity 0.3s linear;
+}
+
+.leaflet-tile-pane {
+  opacity: 1 !important;
+}
+
+.leaflet-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Featured Image Upload Styles */
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  border: 2px dashed #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img {
+  object-fit: cover;
   border-radius: 6px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--primary);
+}
+
+.featured-image-upload .ant-upload.ant-upload-select-picture-card {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  border: 2px dashed #d9d9d9;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.featured-image-upload .ant-upload.ant-upload-select-picture-card:hover {
+  border-color: #1890ff;
+  background: #f0f8ff;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-actions {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon {
   color: white;
-  cursor: pointer;
+}
+
+.featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon:hover {
+  color: #ff4d4f;
+}
+
+/* Blog Form Styles */
+.blog-form {
+  padding: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.blog-form .ant-form-item {
+  margin-bottom: 24px;
+}
+
+.blog-form .ant-form-item-label>label {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.blog-form .ant-input,
+.blog-form .ant-select-selector,
+.blog-form .ant-input-number {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.blog-form .ant-input:focus,
+.blog-form .ant-select-focused .ant-select-selector,
+.blog-form .ant-input-number-focused {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.blog-form .ant-input-textarea textarea {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: all 0.2s ease;
+  resize: vertical;
+}
+
+.blog-form .ant-input-textarea textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.blog-form .ant-btn-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  height: 48px;
+  font-size: 16px;
   transition: all 0.2s ease;
 }
 
-button:hover {
-  background-color: var(--primary-hover);
+.blog-form .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-button:focus,
-button:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+/* Sidebar styling */
+.blog-form .bg-gray-50 {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
+.blog-form .bg-gray-50:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* Responsive adjustments for blog form */
+@media (max-width: 1280px) {
+  .blog-form .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-form .xl\\:col-span-3 {
+    grid-column: 1;
+  }
+
+  .blog-form .space-y-8>div {
+    margin-bottom: 24px;
+  }
+}
+
+/* Modal improvements for blog form */
+.ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+}
+
+.ant-modal-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 24px;
+  background-color: #f8fafc;
+  position: relative;
+  z-index: 10;
+}
+
+.ant-modal-body {
+  padding: 24px;
+  height: calc(100% - 80px);
+  overflow: hidden;
+}
+
+.ant-modal-title {
+  font-weight: 600;
+  font-size: 18px;
+  color: #1f2937;
+}
+
+/* Fix close button positioning */
+.ant-modal-close {
+  top: 20px;
+  right: 24px;
+  z-index: 11;
+}
+
+.ant-modal-close:hover {
+  background-color: #f3f4f6;
+  border-radius: 6px;
+}
+
+/* Ensure scrollbar doesn't overlap with content */
+.blog-form::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.blog-form::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb {
+.blog-form::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.blog-form::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Subtle row highlight for navigated notifications */
+.row-highlight {
+  animation: rowPulse 3s ease-in-out 1;
+  background-color: #fff7ed !important;
+  /* amber-50 */
+}
+
+@keyframes rowPulse {
+  0% {
+    background-color: #fffbeb;
+  }
+
+  50% {
+    background-color: #fff7ed;
+  }
+
+  100% {
+    background-color: #ffffff;
+  }
 }

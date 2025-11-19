@@ -534,17 +534,6 @@ function RealEstateMapApp() {
         node(around:1000,${lat},${lon})["university"];
         node(around:1000,${lat},${lon})["park"];
         node(around:1000,${lat},${lon})["restaurant"];
-        node(around:1000,${lat},${lon})["cafe"];
-        node(around:1000,${lat},${lon})["bar"];
-        node(around:1000,${lat},${lon})["pub"];
-        node(around:1000,${lat},${lon})["nightclub"];
-        node(around:1000,${lat},${lon})["club"];
-        node(around:1000,${lat},${lon})["cinema"];
-        node(around:1000,${lat},${lon})["theatre"];
-        node(around:1000,${lat},${lon})["museum"];
-        node(around:1000,${lat},${lon})["gallery"];
-        node(around:1000,${lat},${lon})["library"];
-        node(around:1000,${lat},${lon})["bookstore"];
         node(around:1000,${lat},${lon})["supermarket"];
         node(around:1000,${lat},${lon})["mall"];
         node(around:1000,${lat},${lon})["grocery"];

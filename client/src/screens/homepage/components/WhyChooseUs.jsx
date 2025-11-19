@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { getWhyReasons } from '../../../services/whyChooseUsService';
 
 const WhyChooseUs = () => {
     const sectionRef = useRef(null);
@@ -13,86 +14,70 @@ const WhyChooseUs = () => {
         }
     }, [isInView, controls]);
 
-    const reasons = [
-        {
-            id: 1,
-            title: "Unmatched Expertise",
-            description: "With over two decades of industry leadership and a portfolio of successful transactions worth $2B+, our expertise speaks through results.",
-            stat: "20+",
-            statText: "Years of Excellence",
-            icon: (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                </svg>
-            ),
-            bgImg: "https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?q=80&w=2940&auto=format&fit=crop"
-        },
-        {
-            id: 2,
-            title: "Luxury Portfolio",
-            description: "Access to an exclusive collection of premium properties, each handpicked and vetted to meet our exceptional standards of luxury and value.",
-            stat: "1000+",
-            statText: "Luxury Properties",
-            icon: (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                </svg>
-            ),
-            bgImg: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop"
-        },
-        {
-            id: 3,
-            title: "White-Glove Service",
-            description: "Experience our signature concierge-style service. From private viewings to personalized property matching, we deliver excellence at every step.",
-            stat: "24/7",
-            statText: "Dedicated Support",
-            icon: (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-            ),
-            bgImg: "https://images.unsplash.com/photo-1611095973763-414019e72400?q=80&w=2940&auto=format&fit=crop"
-        },
-        {
-            id: 4,
-            title: "Innovation Leaders",
-            description: "Pioneering the future of real estate with cutting-edge technology, virtual tours, and AI-powered property matching for a seamless experience.",
-            stat: "100%",
-            statText: "Digital Integration",
-            icon: (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-            ),
-            bgImg: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?q=80&w=2940&auto=format&fit=crop"
-        },
-        {
-            id: 5,
-            title: "Market Authority",
-            description: "Our deep market insights and data-driven approach ensure you make informed decisions that maximize your investment potential.",
-            stat: "35%",
-            statText: "Above Market Returns",
-            icon: (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                </svg>
-            ),
-            bgImg: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=2940&auto=format&fit=crop"
-        },
-        {
-            id: 6,
-            title: "Trust & Recognition",
-            description: "Award-winning service with countless accolades and a network of satisfied clients who trust us with their most valuable investments.",
-            stat: "98%",
-            statText: "Client Satisfaction",
-            icon: (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                </svg>
-            ),
-            bgImg: "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?q=80&w=2940&auto=format&fit=crop"
+    const [reasons, setReasons] = useState([]);
+
+    useEffect(() => {
+        getWhyReasons().then((items) => setReasons(items || []));
+    }, []);
+
+    const renderIcon = (iconKey) => {
+        switch (iconKey) {
+            case 'shield':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"></path>
+                    </svg>
+                );
+            case 'star':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+                    </svg>
+                );
+            case 'award':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8a4 4 0 100-8 4 4 0 000 8zm6 14l-4-2-2 4-2-4-4 2 1.5-5.5L2 12l5.5-.5L10 6l2.5 5.5L18 12l-4.5 4.5L18 22z"></path>
+                    </svg>
+                );
+            case 'building':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 21h18M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"></path>
+                    </svg>
+                );
+            case 'graph':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 3v18h18M7 13l3 3 7-7"></path>
+                    </svg>
+                );
+            case 'support':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M18 13a3 3 0 013 3v3H3v-3a3 3 0 013-3m12 0V9a6 6 0 10-12 0v4m12 0H6"></path>
+                    </svg>
+                );
+            case 'innovation':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 2a7 7 0 00-7 7c0 2.9 1.64 5.41 4 6.32V18a3 3 0 003 3 3 3 0 003-3v-2.68c2.36-.91 4-3.42 4-6.32a7 7 0 00-7-7z"></path>
+                    </svg>
+                );
+            case 'trust':
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 21s-6-4-6-10a6 6 0 1112 0c0 6-6 10-6 10z"></path>
+                    </svg>
+                );
+            default:
+                return (
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                );
         }
-    ];
+    };
 
     return (
         <section ref={sectionRef} className="py-32 bg-gradient-to-b from-[#122620] to-[#0a1a17] relative overflow-hidden">
@@ -191,7 +176,7 @@ const WhyChooseUs = () => {
                                 {/* Card Header with Image */}
                                 <div className="relative h-48">
                                     <img
-                                        src={reason.bgImg}
+                                        src={reason.bgImageUrl}
                                         alt={reason.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -202,7 +187,7 @@ const WhyChooseUs = () => {
                                 <div className="p-6">
                                     <div className="flex items-center gap-4 mb-4">
                                         <div className="w-12 h-12 rounded-lg bg-[#D6AD60]/10 flex items-center justify-center text-[#D6AD60]">
-                                            {reason.icon}
+                                            {renderIcon(reason.icon)}
                                         </div>
                                         <h3 className="text-xl font-source-serif text-white font-semibold">{reason.title}</h3>
                                     </div>

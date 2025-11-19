@@ -1,0 +1,237 @@
+import React, { useEffect } from 'react';
+import { Form, Input, Button, Select, Upload, message } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { getAuthors } from '../services/blogService';
+import { cloudinaryService } from '../services/cloudinaryService';
+import type { BlogAuthor, CreateBlogData } from '../services/blogTypes';
+import type { UploadFile } from 'antd/es/upload/interface';
+
+const { Option } = Select;
+
+interface BlogFormProps {
+    initialValues?: Partial<CreateBlogData>;
+    onSubmit: (values: CreateBlogData) => void;
+}
+
+const BlogForm: React.FC<BlogFormProps> = ({ initialValues, onSubmit }) => {
+    const [form] = Form.useForm();
+    const [authors, setAuthors] = React.useState<BlogAuthor[]>([]);
+    const [fileList, setFileList] = React.useState<UploadFile[]>([]);
+    const [uploading, setUploading] = React.useState(false);
+
+    useEffect(() => {
+        getAuthors().then(setAuthors);
+    }, []);
+
+    useEffect(() => {
+        if (initialValues) {
+            form.setFieldsValue(initialValues);
+            // Set fileList if there's an existing featured image
+            if (initialValues.featuredImage) {
+                setFileList([{
+                    uid: '-1',
+                    name: 'featured-image',
+                    status: 'done',
+                    url: initialValues.featuredImage,
+                }]);
+            } else {
+                setFileList([]);
+            }
+        } else {
+            form.resetFields();
+            setFileList([]);
+        }
+    }, [initialValues, form]);
+
+    const handleImageUpload = async (info: any) => {
+        console.log('handleImageUpload called:', info);
+        const { fileList: newFileList, file } = info;
+
+        if (file.status === 'uploading') {
+            setUploading(true);
+            setFileList(newFileList);
+            return;
+        }
+
+        if (file.status === 'done') {
+            setUploading(false);
+            message.success(`${file.name} uploaded successfully`);
+
+            if (file.response && file.response.data && file.response.data.url) {
+                file.url = file.response.data.url;
+                // Update the form field with the uploaded image URL
+                form.setFieldValue('featuredImage', file.response.data.url);
+                console.log('Image URL set in form:', file.response.data.url);
+            }
+            setFileList(newFileList);
+        }
+
+        if (file.status === 'error') {
+            setUploading(false);
+            message.error(`${file.name} upload failed`);
+            setFileList(newFileList);
+            return;
+        }
+
+        // Always update fileList to maintain state
+        setFileList(newFileList);
+    };
+
+    const customUpload = async (options: any) => {
+        const { file, onSuccess, onError } = options;
+
+        try {
+            console.log('Starting upload for file:', file.name);
+            setUploading(true);
+            const response = await cloudinaryService.uploadImage(file);
+
+            console.log('Upload response:', response);
+
+            if (response.success) {
+                file.status = 'done';
+                file.response = { data: response.data };
+                file.url = response.data.url;
+
+                // Update the form field immediately
+                form.setFieldValue('featuredImage', response.data.url);
+                console.log('Image URL set in form during upload:', response.data.url);
+
+                onSuccess({ data: response.data }, file);
+            } else {
+                console.error('Upload failed - no success response');
+                onError(new Error('Upload failed'));
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            onError(error);
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleFinish = (values: CreateBlogData) => {
+        console.log('Form submitted with values:', values);
+        console.log('Current fileList:', fileList);
+
+        // Ensure the featured image URL is included
+        if (fileList.length > 0 && fileList[0]?.url) {
+            values.featuredImage = fileList[0].url;
+        }
+
+        console.log('Final values to submit:', values);
+        onSubmit(values);
+    };
+
+    const uploadButton = (
+        <div className="flex flex-col items-center justify-center p-4">
+            {uploading ? <LoadingOutlined className="text-2xl text-blue-500" /> : <UploadOutlined className="text-2xl text-gray-400" />}
+            <div className="mt-2 text-sm text-gray-500">
+                {uploading ? 'Uploading...' : 'Upload Featured Image'}
+            </div>
+        </div>
+    );
+
+    return (
+        <Form form={form} layout="vertical" onFinish={handleFinish} className="blog-form">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 h-full">
+                {/* Main Content Column */}
+                <div className="xl:col-span-3 space-y-4">
+                    <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+                        <Input size="large" placeholder="Enter blog title" />
+                    </Form.Item>
+
+                    <Form.Item name="content" label="Content" rules={[{ required: true }]}>
+                        <Input.TextArea
+                            rows={20}
+                            placeholder="Write your blog content here..."
+                            className="min-h-[500px] resize-y"
+                            style={{
+                                fontSize: '16px',
+                                lineHeight: '1.6',
+                                fontFamily: 'Inter, system-ui, sans-serif'
+                            }}
+                        />
+                    </Form.Item>
+
+                    <Form.Item name="excerpt" label="Excerpt">
+                        <Input.TextArea
+                            rows={4}
+                            placeholder="Brief summary of the blog post..."
+                            maxLength={300}
+                            showCount
+                        />
+                    </Form.Item>
+                </div>
+
+                {/* Sidebar Column */}
+                <div className="space-y-4 mr-2 mt-7">
+                    <div className="bg-gray-50 p-6 rounded-lg">
+                        <Form.Item name="featuredImage" label="Featured Image">
+                            <Upload
+                                name="featuredImage"
+                                listType="picture-card"
+                                fileList={fileList}
+                                onChange={handleImageUpload}
+                                customRequest={customUpload}
+                                accept="image/*"
+                                maxCount={1}
+                                className="featured-image-upload"
+                                onRemove={() => {
+                                    setFileList([]);
+                                    form.setFieldValue('featuredImage', undefined);
+                                    return true;
+                                }}
+                            >
+                                {fileList.length >= 1 ? null : uploadButton}
+                            </Upload>
+                        </Form.Item>
+                    </div>
+
+                    <div className="bg-gray-50 p-6 rounded-lg space-y-6">
+                        <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+                            <Select size="large">
+                                <Option value="draft">Draft</Option>
+                                <Option value="published">Published</Option>
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item name="authorId" label="Author" rules={[{ required: true }]}>
+                            <Select size="large">
+                                {authors.map(a => <Option key={a.id} value={a.id}>{a.name}</Option>)}
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item name="tags" label="Tags">
+                            <Select mode="tags" size="large" placeholder="Add tags..." />
+                        </Form.Item>
+                    </div>
+
+                    {/* <div className="bg-gray-50 p-6 rounded-lg space-y-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">SEO Settings</h3>
+
+                        <Form.Item name="metaTitle" label="Meta Title">
+                            <Input size="large" placeholder="SEO title for search engines" />
+                        </Form.Item>
+
+                        <Form.Item name="metaDescription" label="Meta Description">
+                            <Input.TextArea
+                                rows={4}
+                                placeholder="SEO description for search engines"
+                                maxLength={160}
+                                showCount
+                            />
+                        </Form.Item>
+                    </div> */}
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" size="large" block>
+                            {initialValues ? 'Update Blog' : 'Create Blog'}
+                        </Button>
+                    </Form.Item>
+                </div>
+            </div>
+        </Form>
+    );
+};
+
+export default BlogForm; 

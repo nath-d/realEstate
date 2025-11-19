@@ -124,48 +124,48 @@ const MortgageCalculator = ({ price, onClose }) => {
                         </div>
                     </div>
 
-                    <div className="bg-gray-800 rounded-lg p-6">
+                    <div className="bg-gray-800 rounded-lg p-2 border border-[#D6AD60]/20">
                         <h3 className="text-xl font-semibold mb-4 text-[#D6AD60]">Monthly Payment Breakdown</h3>
                         <div className="space-y-3">
-                            <div className="flex justify-between">
+                            <div className="flex justify-between text-sm">
                                 <span className="text-gray-400">Principal & Interest</span>
-                                <span className="text-white">${monthlyPayment.toFixed(2)}</span>
+                                <span className="text-white">₹ {monthlyPayment.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-gray-400">Property Tax</span>
                                 <span className="text-white">
-                                    ${((formData.homePrice * formData.propertyTax / 100) / 12).toFixed(2)}
+                                    ₹ {((formData.homePrice * formData.propertyTax / 100) / 12).toFixed(2)}
                                 </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-gray-400">Insurance</span>
                                 <span className="text-white">
-                                    ${((formData.homePrice * formData.insurance / 100) / 12).toFixed(2)}
+                                    ₹ {((formData.homePrice * formData.insurance / 100) / 12).toFixed(2)}
                                 </span>
                             </div>
                             {formData.downPayment < 20 && (
                                 <div className="flex justify-between">
                                     <span className="text-gray-400">PMI</span>
                                     <span className="text-white">
-                                        ${((formData.homePrice * formData.pmi / 100) / 12).toFixed(2)}
+                                        ₹ {((formData.homePrice * formData.pmi / 100) / 12).toFixed(2)}
                                     </span>
                                 </div>
                             )}
                             <div className="border-t border-gray-700 my-3"></div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between text-sm">
                                 <span className="text-[#D6AD60] font-semibold">Total Monthly Payment</span>
-                                <span className="text-[#D6AD60] font-semibold">${monthlyPayment.toFixed(2)}</span>
+                                <span className="text-[#D6AD60] font-semibold">Rs {monthlyPayment.toFixed(2)}</span>
                             </div>
                         </div>
 
                         <div className="mt-6 space-y-2">
                             <div className="flex justify-between">
                                 <span className="text-gray-400">Total Payment</span>
-                                <span className="text-white">${totalPayment.toFixed(2)}</span>
+                                <span className="text-white">₹ {totalPayment.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-gray-400">Total Interest</span>
-                                <span className="text-white">${totalInterest.toFixed(2)}</span>
+                                <span className="text-white">₹ {totalInterest.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

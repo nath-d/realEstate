@@ -1,8 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import authService from '../../../services/authService';
+import { FaHeart } from 'react-icons/fa';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = authService.getToken();
+            if (token) {
+                let userData = authService.getUser();
+
+                // If we have a token but no user data, try to refresh it
+                if (!userData) {
+                    console.log('Token exists but no user data, refreshing...');
+                    const refreshResult = await authService.refreshUserData();
+                    if (refreshResult.success) {
+                        userData = refreshResult.user;
+                    }
+                }
+
+                setUser(userData);
+            }
+            setIsLoading(false);
+        };
+
+        checkAuth();
+    }, []);
+
+    const handleLogout = () => {
+        authService.logout();
+        setUser(null);
+    };
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -11,11 +43,11 @@ const Navbar = () => {
     return (
         <nav className="bg-[#122620] shadow-md w-full z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-24 md:h-28">
+                <div className="flex justify-between h-24 md:h-36">
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/">
-                            <img src="/logoConcept2.svg" alt="MG Pacific Estates" className="h-20 md:h-16 w-auto object-contain" />
+                            <img src="/logoFinalSvg.svg" alt="MG Constructions" className="h-20 md:h-28 w-auto object-contain" />
                         </Link>
                     </div>
 
@@ -37,7 +69,7 @@ const Navbar = () => {
                             About
                             <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-full"></span>
                         </Link>
-                        <Link to="/propertyDet" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 relative group">
+                        <Link to="/contact" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 relative group">
                             Contact
                             <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-full"></span>
                         </Link>
@@ -45,11 +77,31 @@ const Navbar = () => {
                             Sign In
                         </button> */}
 
-                        <button
-                            className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-2.5 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
-                        >
-                            Sign in
-                        </button>
+                        {user ? (
+                            <div className="flex items-center space-x-4">
+                                <Link to="/favorites" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 font-montserrat text-sm">
+                                    <FaHeart className="inline mr-1" />
+                                    Favorites
+                                </Link>
+                                <Link to="/profile" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 font-montserrat text-sm">
+                                    {user.firstName}
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-2.5 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            <Link to="/login">
+                                <button
+                                    className="bg-transparent backdrop-blur-sm border-2 border-[#D6AD60] text-[#D6AD60] px-6 py-2.5 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]"
+                                >
+                                    Sign in
+                                </button>
+                            </Link>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -84,9 +136,29 @@ const Navbar = () => {
                             <span className="absolute bottom-0 left-4 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-2rem)]"></span>
                         </Link>
                         <div className="px-4 py-3">
-                            <button className="w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
-                                Sign In
-                            </button>
+                            {user ? (
+                                <div className="space-y-3">
+                                    <Link to="/favorites" className="block w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
+                                        <FaHeart className="inline mr-1" />
+                                        Favorites
+                                    </Link>
+                                    <Link to="/profile" className="block w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
+                                        {user.firstName}
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-center px-4 py-3 bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] rounded-md hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-200 font-montserrat font-medium tracking-wide text-lg"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <Link to="/login">
+                                    <button className="w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
+                                        Sign In
+                                    </button>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>

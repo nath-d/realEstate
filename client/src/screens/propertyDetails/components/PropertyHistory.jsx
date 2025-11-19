@@ -175,9 +175,9 @@ const PropertyHistory = ({ history }) => {
                                                 {index > 0 && (
                                                     <div className="text-right">
                                                         <div className={`flex items-center justify-end space-x-2 ${parseFloat(event.price.replace(/[^0-9.]/g, '')) >
-                                                                parseFloat(history.priceHistory[index - 1].price.replace(/[^0-9.]/g, ''))
-                                                                ? 'text-green-400'
-                                                                : 'text-red-400'
+                                                            parseFloat(history.priceHistory[index - 1].price.replace(/[^0-9.]/g, ''))
+                                                            ? 'text-green-400'
+                                                            : 'text-red-400'
                                                             }`}>
                                                             <span className="text-2xl font-bold">
                                                                 {parseFloat(event.price.replace(/[^0-9.]/g, '')) >

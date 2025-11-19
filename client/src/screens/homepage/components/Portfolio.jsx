@@ -1,11 +1,91 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { propertyService } from '../../../services/propertyService';
+import { cloudinaryService } from '../../../services/cloudinaryService';
 
 const Portfolio = () => {
     const sectionRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
     const hasAnimatedRef = useRef(false);
+    const [properties, setProperties] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetchProperties();
+    }, []);
+
+    const fetchProperties = async () => {
+        try {
+            setLoading(true);
+            console.log('Portfolio: Fetching properties from API...');
+            const data = await propertyService.getAllProperties();
+            console.log('Portfolio: API response:', data);
+
+            // Check if we have data
+            if (!data || data.length === 0) {
+                console.log('Portfolio: No properties found in API, using fallback data');
+                // Use fallback sample data when no properties are available
+                const fallbackProperties = [
+                    {
+                        id: 1,
+                        title: "Luxury Villa",
+                        location: "Beverly Hills, CA",
+                        price: "$12.5M",
+                        image: "/propertyTwo.jpg",
+                        size: "large",
+                        features: ["8 Beds", "12 Baths", "15,000 sqft"]
+                    }
+                ];
+                setProperties(fallbackProperties);
+                return;
+            }
+
+            // Take only the first 7 properties for the portfolio grid
+            const portfolioProperties = data.slice(0, 7).map((property, index) => ({
+                ...property,
+                // Assign sizes based on index to create a nice grid layout
+                size: index === 0 ? 'large' : index === 1 || index === 2 ? 'medium' : 'small',
+                // Format features from property data
+                features: [
+                    `${property.bedrooms} Beds`,
+                    `${property.bathrooms} Baths`,
+                    property.livingArea
+                ],
+                // Format price
+                price: `$${property.price?.toLocaleString() || 'Price on request'}`,
+                // Format location
+                location: property.location ? `${property.location.city}, ${property.location.state}` : 'Location not specified',
+                // Get first image or fallback
+                image: property.images && property.images.length > 0
+                    ? property.images[0].url
+                    : 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg'
+            }));
+            console.log('Portfolio: Processed properties:', portfolioProperties);
+            setProperties(portfolioProperties);
+        } catch (error) {
+            console.error('Portfolio: Error fetching properties:', error);
+            console.log('Portfolio: Using fallback data due to API error');
+            // Use fallback data when API fails
+            const fallbackProperties = [
+                {
+                    id: 1,
+                    title: "Luxury Villa",
+                    location: "Beverly Hills, CA",
+                    price: "$12.5M",
+                    image: "/propertyTwo.jpg",
+                    size: "large",
+                    features: ["8 Beds", "12 Baths", "15,000 sqft"]
+                }
+
+            ];
+            setProperties(fallbackProperties);
+            setError(null); // Clear error since we're using fallback data
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         const checkInitialVisibility = () => {
@@ -48,96 +128,13 @@ const Portfolio = () => {
         };
     }, []);
 
-    const properties = [
-        {
-            id: 1,
-            title: "Luxury Villa",
-            location: "Beverly Hills, CA",
-            price: "$12.5M",
-            // image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyTwo.jpg",
-            size: "large",
-            features: ["8 Beds", "12 Baths", "15,000 sqft"]
-        },
-        {
-            id: 2,
-            title: "Modern Penthouse",
-            location: "Manhattan, NY",
-            price: "$8.9M",
-            // image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyThree.jpg",
-            size: "medium",
-            features: ["4 Beds", "5 Baths", "6,500 sqft"]
-        },
-        {
-            id: 3,
-            title: "Waterfront Estate",
-            location: "Miami Beach, FL",
-            price: "$15.2M",
-            // image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyFour.jpg",
-            size: "medium",
-            features: ["6 Beds", "8 Baths", "12,000 sqft"]
-        },
-        {
-            id: 4,
-            title: "Mountain Retreat",
-            location: "Aspen, CO",
-            price: "$9.8M",
-            // image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyOne.jpg",
-            size: "small",
-            features: ["5 Beds", "6 Baths", "8,500 sqft"]
-        },
-        {
-            id: 5,
-            title: "Historic Mansion",
-            location: "Charleston, SC",
-            price: "$7.5M",
-            // image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyTwo.jpg",
-            size: "small",
-            features: ["7 Beds", "9 Baths", "10,000 sqft"]
-        },
-        {
-            id: 6,
-            title: "Tech Executive Home",
-            location: "Silicon Valley, CA",
-            price: "$18.3M",
-            // image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyFour.jpg",
-            size: "large",
-            features: ["9 Beds", "11 Baths", "18,000 sqft"]
-        },
-        {
-            id: 7,
-            title: "Historic Mansion",
-            location: "Charleston, SC",
-            price: "$7.5M",
-            // image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
-            image: "/propertyOne.jpg",
-            size: "small",
-            features: ["7 Beds", "9 Baths", "10,000 sqft"]
-        },
-        // {
-        //     id: 8,
-        //     title: "Historic Mansion",
-        //     location: "Charleston, SC",
-        //     price: "$7.5M",
-        //     image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
-        //     size: "small",
-        //     features: ["7 Beds", "9 Baths", "10,000 sqft"]
-        // },
-        // {
-        //     id: 9,
-        //     title: "Historic Mansion",
-        //     location: "Charleston, SC",
-        //     price: "$7.5M",
-        //     image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2940&auto=format&fit=crop",
-        //     size: "small",
-        //     features: ["7 Beds", "9 Baths", "10,000 sqft"]
-        // },
-    ];
+    const getOptimizedImageUrl = (imageUrl) => {
+        if (!cloudinaryService.isCloudinaryUrl(imageUrl)) {
+            return imageUrl;
+        }
+        // Use low credit thumbnail for portfolio grid
+        return cloudinaryService.getLowCreditThumbnailUrl(imageUrl, 400, 300);
+    };
 
     const getGridClass = (size) => {
         switch (size) {
@@ -152,8 +149,43 @@ const Portfolio = () => {
         }
     };
 
+    if (loading) {
+        return (
+            <section className="py-32 bg-gradient-to-b from-[#0a1a17] to-[#122620] relative overflow-hidden">
+                <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#D6AD60] mx-auto"></div>
+                        <p className="text-[#F4EBD0] mt-4">Loading portfolio...</p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="py-32 bg-gradient-to-b from-[#0a1a17] to-[#122620] relative overflow-hidden">
+                <div className="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center">
+                        <p className="text-red-400">{error}</p>
+                        <button
+                            onClick={fetchProperties}
+                            className="mt-4 px-6 py-2 bg-[#D6AD60] text-[#122620] rounded hover:bg-[#E5BE90] transition-colors"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section ref={sectionRef} className="py-32 bg-gradient-to-b from-[#0a1a17] to-[#122620] relative overflow-hidden">
+            {/* Debug info - remove this later */}
+            {console.log('Portfolio render - properties length:', properties.length)}
+            {console.log('Portfolio render - properties:', properties)}
+
             {/* Brand Watermark */}
             <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
                 <img src="/logo192.png" alt="ProjectEstate" className="w-64 h-64" />
@@ -216,7 +248,7 @@ const Portfolio = () => {
                 </motion.div>
 
                 {/* Portfolio Grid */}
-                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 h-full mb-24 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 h-full mb-24 transition-all duration-1000 ${properties.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
                     {properties.map((property, index) => (
                         <motion.div
                             key={property.id}
@@ -230,7 +262,7 @@ const Portfolio = () => {
                         >
                             <div className="relative h-[300px] sm:h-full w-full overflow-hidden rounded-xl bg-[#F4EBD0]/5 backdrop-blur-sm border border-[#D6AD60]/20 shadow-xl hover:shadow-2xl hover:shadow-[#D6AD60]/10 transition-all duration-500">
                                 <img
-                                    src={property.image}
+                                    src={getOptimizedImageUrl(property.image)}
                                     alt={property.title}
                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                                 />
@@ -253,9 +285,21 @@ const Portfolio = () => {
                                         ))}
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <button className="px-6 py-2.5 bg-[#D6AD60]/20 backdrop-blur-sm border border-[#D6AD60]/30 rounded-full text-[#F4EBD0] hover:bg-[#D6AD60]/30 transition-all duration-300 transform hover:scale-105">
-                                            View Details
-                                        </button>
+                                        {property.id && property.id > 0 ? (
+                                            <Link
+                                                to={`/propertyDet?id=${property.id}`}
+                                                className="px-6 py-2.5 bg-[#D6AD60]/20 backdrop-blur-sm border border-[#D6AD60]/30 rounded-full text-[#F4EBD0] hover:bg-[#D6AD60]/30 transition-all duration-300 transform hover:scale-105"
+                                            >
+                                                View Details
+                                            </Link>
+                                        ) : (
+                                            <button
+                                                className="px-6 py-2.5 bg-[#D6AD60]/20 backdrop-blur-sm border border-[#D6AD60]/30 rounded-full text-[#F4EBD0] hover:bg-[#D6AD60]/30 transition-all duration-300 transform hover:scale-105"
+                                                onClick={() => window.location.href = '/properties'}
+                                            >
+                                                View All Properties
+                                            </button>
+                                        )}
                                         <button className="p-2.5 bg-[#D6AD60]/20 backdrop-blur-sm border border-[#D6AD60]/30 rounded-full text-[#F4EBD0] hover:bg-[#D6AD60]/30 transition-all duration-300 transform hover:scale-105">
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
