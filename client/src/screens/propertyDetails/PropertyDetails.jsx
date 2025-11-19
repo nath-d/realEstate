@@ -33,6 +33,7 @@ const PropertyDetails = () => {
     const [showMortgageCalculator, setShowMortgageCalculator] = useState(false);
     const [showScheduleVisit, setShowScheduleVisit] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [randomProperties, setRandomProperties] = useState([]);
 
     useEffect(() => {
         const fetchProperty = async () => {
@@ -58,6 +59,37 @@ const PropertyDetails = () => {
     }, [propertyId]);
 
     useEffect(() => {
+        const fetchRandomProperties = async () => {
+            try {
+                const data = await propertyService.getRandomProperties(3);
+                // Transform data once here to avoid re-computation on every render
+                const transformedProperties = data.map(property => ({
+                    id: property.id,
+                    title: property.title,
+                    price: property.price ? `$${property.price.toLocaleString()}` : 'Price on request',
+                    address: property.location ?
+                        `${property.location.address}, ${property.location.city}, ${property.location.state} ${property.location.zipCode}` :
+                        'Address not available',
+                    image: property.images && property.images.length > 0 ?
+                        property.images[0].url :
+                        'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg',
+                    details: {
+                        bedrooms: property.bedrooms || 0,
+                        bathrooms: property.bathrooms || 0,
+                        livingArea: property.livingArea || 'N/A'
+                    }
+                }));
+                setRandomProperties(transformedProperties);
+            } catch (err) {
+                console.error('Error fetching random properties:', err);
+                setRandomProperties([]); // Ensure empty array on error
+            }
+        };
+
+        fetchRandomProperties();
+    }, [propertyId]); // Re-fetch when propertyId changes to get fresh recommendations
+
+    useEffect(() => {
         const handleScroll = () => {
             setScrollPosition(window.scrollY);
         };
@@ -77,10 +109,10 @@ const PropertyDetails = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#122620] text-white flex items-center justify-center">
+            <div className="min-h-screen bg-[#122620] text-white flex items-center justify-center px-4">
                 <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#D6AD60] mb-4"></div>
-                    <p>Loading property details...</p>
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-[#D6AD60] mb-4"></div>
+                    <p className="text-sm sm:text-base">Loading property details...</p>
                 </div>
             </div>
         );
@@ -88,12 +120,12 @@ const PropertyDetails = () => {
 
     if (error || !property) {
         return (
-            <div className="min-h-screen bg-[#122620] text-white flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-red-400 mb-4">Error: {error || 'Property not found'}</p>
+            <div className="min-h-screen bg-[#122620] text-white flex items-center justify-center px-4">
+                <div className="text-center max-w-md mx-auto">
+                    <p className="text-red-400 mb-4 text-sm sm:text-base">Error: {error || 'Property not found'}</p>
                     <button
                         onClick={() => window.history.back()}
-                        className="bg-[#D6AD60] text-[#122620] px-6 py-2 rounded hover:bg-[#C19A4F] transition-colors"
+                        className="bg-[#D6AD60] text-[#122620] px-4 py-2 sm:px-6 sm:py-2 rounded hover:bg-[#C19A4F] transition-colors text-sm sm:text-base"
                     >
                         Go Back
                     </button>
@@ -162,7 +194,7 @@ const PropertyDetails = () => {
             // image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
         },
         virtualTour: "https://example.com/virtual-tour",
-        similarProperties: [],
+        similarProperties: randomProperties,
         history: {
             listedDate: "2024-01-15",
             lastSoldDate: "2020-06-20",
@@ -340,16 +372,16 @@ const PropertyDetails = () => {
                 </div> */}
 
                 {/* Rest of the content sections */}
-                <div className="container mx-auto px-6 space-y-16">
+                <div className="container mx-auto px-4 sm:px-6 space-y-8 sm:space-y-12 lg:space-y-16">
                     {/* <VirtualTour url={property.virtualTour} /> */}
                     <PropertyDescription description={propertyData.description} />
                     <PropertyGallery images={propertyData.images} videoLink={propertyData.videoLink} />
+                    <PropertyLocation location={property.location} pois={propertyData.pois} />
                     <PropertySpecifications specifications={propertyData.specifications} />
                     <MaterialCertifications certifications={propertyData.materialCertifications} />
                     {/* <PropertyAmenities amenities={property.amenities} /> */}
                     {/* <PropertyHistory history={property.history} /> */}
-                    <PropertyLocation location={property.location} pois={propertyData.pois} />
-                    <NeighborhoodInsights pois={propertyData.pois} />
+                    {/* <NeighborhoodInsights pois={propertyData.pois} /> */}
                     <SimilarProperties properties={propertyData.similarProperties} />
                     <PropertyAgent agent={propertyData.agent} />
                     <Footer />
@@ -357,16 +389,16 @@ const PropertyDetails = () => {
             </div>
 
             {/* Enhanced Floating Contact Buttons */}
-            <div className="fixed bottom-6 right-6 flex flex-col space-y-4 z-50">
+            <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col space-y-3 sm:space-y-4 z-50">
                 <motion.button
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setShowMortgageCalculator(true)}
-                    className="bg-[#D4AF37] text-[#122620] p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
+                    className="bg-[#D4AF37] text-[#122620] p-3 sm:p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
                 >
-                    <FaCalculator className="text-2xl" />
+                    <FaCalculator className="text-lg sm:text-2xl" />
                 </motion.button>
 
                 <motion.button
@@ -375,9 +407,9 @@ const PropertyDetails = () => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setShowScheduleVisit(true)}
-                    className="bg-[#D4AF37] text-[#122620] p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
+                    className="bg-[#D4AF37] text-[#122620] p-3 sm:p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
                 >
-                    <FaPhone className="text-2xl" />
+                    <FaPhone className="text-lg sm:text-2xl" />
                 </motion.button>
             </div>
 

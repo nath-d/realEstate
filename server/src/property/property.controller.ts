@@ -59,6 +59,11 @@ export class PropertyController {
         return this.propertyService.findSimilar(id);
     }
 
+    @Get('random/:count')
+    findRandom(@Param('count', ParseIntPipe) count: number) {
+        return this.propertyService.findRandom(count);
+    }
+
     @Put(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,

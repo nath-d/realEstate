@@ -64,13 +64,13 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                 { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Schedule Visits' },
             ]
         },
-        { key: 'users', icon: <UserOutlined />, label: 'Users' },
-        { key: 'team', icon: <TeamOutlined />, label: 'Team' },
-        { key: 'analytics', icon: <BarChartOutlined />, label: 'Analytics' },
-        { key: 'orders', icon: <ShoppingOutlined />, label: 'Orders' },
-        { key: 'messages', icon: <MessageOutlined />, label: 'Messages' },
-        { key: 'files', icon: <FileOutlined />, label: 'Files' },
-        { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
+        // { key: 'users', icon: <UserOutlined />, label: 'Users' },
+        // { key: 'team', icon: <TeamOutlined />, label: 'Team' },
+        // { key: 'analytics', icon: <BarChartOutlined />, label: 'Analytics' },
+        // { key: 'orders', icon: <ShoppingOutlined />, label: 'Orders' },
+        // { key: 'messages', icon: <MessageOutlined />, label: 'Messages' },
+        // { key: 'files', icon: <FileOutlined />, label: 'Files' },
+        // { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
     ];
 
     const currentPath = location.pathname.split('/')[1] || 'dashboard';

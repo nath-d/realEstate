@@ -111,7 +111,7 @@ const PropertyGallery = ({ images, videoLink }) => {
     };
 
     return (
-        <section className="py-20 bg-[#122620] relative overflow-hidden">
+        <section className="py-12 sm:py-16 lg:py-20 bg-[#122620] relative overflow-hidden">
             {/* Decorative Elements */}
             {/* <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E5BE90]/20 to-transparent" />
@@ -119,33 +119,33 @@ const PropertyGallery = ({ images, videoLink }) => {
                 <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-l from-[#E5BE90]/5 to-[#E5BE90]/10 rounded-full blur-3xl" />
             </div> */}
 
-            <div className="container mx-auto px-6">
+            <div className="container mx-auto px-4 sm:px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-16"
+                    className="text-center mb-8 sm:mb-12 lg:mb-16"
                 >
-                    <div className="flex justify-center mb-6">
-                        <div className="w-16 h-16 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                            <FaCamera className="text-[#E5BE90] text-3xl" />
+                    <div className="flex justify-center mb-4 sm:mb-6">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                            <FaCamera className="text-[#E5BE90] text-2xl sm:text-3xl" />
                         </div>
                     </div>
-                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Property Gallery</h2>
-                    <div className="flex justify-center items-center gap-4">
-                        <div className="flex justify-center items-center gap-4">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-white font-source-serif">Property Gallery</h2>
+                    <div className="flex justify-center items-center gap-2 sm:gap-4">
+                        <div className="flex justify-center items-center gap-2 sm:gap-4">
                             <motion.span
                                 initial={{ width: 0 }}
-                                whileInView={{ width: 120 }}
+                                whileInView={{ width: 60 }}
                                 transition={{ duration: 0.8 }}
-                                className="h-0.5 bg-[#E5BE90]"
+                                className="h-0.5 bg-[#E5BE90] sm:w-[120px]"
                             ></motion.span>
-                            <p className="text-gray-400 tracking-wider">Explore every corner of this luxurious property</p>
+                            <p className="text-gray-400 tracking-wider text-sm sm:text-base text-center px-2">Explore every corner of this luxurious property</p>
                             <motion.span
                                 initial={{ width: 0 }}
-                                whileInView={{ width: 120 }}
+                                whileInView={{ width: 60 }}
                                 transition={{ duration: 0.8 }}
-                                className="h-0.5 bg-[#E5BE90]"
+                                className="h-0.5 bg-[#E5BE90] sm:w-[120px]"
                             ></motion.span>
                         </div>
                     </div>
@@ -156,16 +156,16 @@ const PropertyGallery = ({ images, videoLink }) => {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
                 >
                     {/* Video thumbnail (if available) */}
                     {hasVideo && (
                         <motion.div
                             variants={item}
-                            className="relative md:col-span-2 md:row-span-2"
+                            className="relative sm:col-span-2 sm:row-span-2"
                         >
                             <div
-                                className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
+                                className="relative group cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full min-h-[200px] sm:min-h-[300px]"
                                 onClick={openVideoModal}
                             >
                                 <img
@@ -175,15 +175,15 @@ const PropertyGallery = ({ images, videoLink }) => {
                                     loading="eager"
                                 />
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                    <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
-                                        <FaPlay className="text-white text-2xl ml-1" />
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                                        <FaPlay className="text-white text-xl sm:text-2xl ml-1" />
                                     </div>
                                 </div>
-                                <div className="absolute top-4 left-4 px-3 py-1 bg-red-600 text-white text-sm font-montserrat rounded-full">
+                                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-3 sm:py-1 bg-red-600 text-white text-xs sm:text-sm font-montserrat rounded-full">
                                     Video Tour
                                 </div>
                                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                                    <span className="font-montserrat px-6 py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider">Play Video</span>
+                                    <span className="font-montserrat px-4 py-2 sm:px-6 sm:py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider text-sm sm:text-base">Play Video</span>
                                 </div>
                             </div>
                         </motion.div>
@@ -198,10 +198,10 @@ const PropertyGallery = ({ images, videoLink }) => {
                             <motion.div
                                 key={index}
                                 variants={item}
-                                className={`relative ${index === 0 && !hasVideo ? 'md:col-span-2 md:row-span-2' : ''}`}
+                                className={`relative ${index === 0 && !hasVideo ? 'sm:col-span-2 sm:row-span-2' : ''}`}
                             >
                                 <div
-                                    className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full"
+                                    className="relative group cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl shadow-xl border border-[#E5BE90]/20 h-full min-h-[150px] sm:min-h-[200px]"
                                     onClick={() => openLightbox(index)}
                                 >
                                     <img
@@ -218,7 +218,7 @@ const PropertyGallery = ({ images, videoLink }) => {
                                         }}
                                     />
                                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                                        <span className="font-montserrat px-6 py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider">View Larger</span>
+                                        <span className="font-montserrat px-3 py-2 sm:px-6 sm:py-3 bg-[#E5BE90]/20 rounded-full border border-[#E5BE90]/30 text-white tracking-wider text-sm sm:text-base">View Larger</span>
                                     </div>
                                 </div>
                             </motion.div>
@@ -237,7 +237,7 @@ const PropertyGallery = ({ images, videoLink }) => {
                         className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center backdrop-blur-sm"
                         onClick={closeLightbox}
                     >
-                        <div className="relative w-full mx-auto px-4" onClick={e => e.stopPropagation()}>
+                        <div className="relative w-full mx-auto px-2 sm:px-4" onClick={e => e.stopPropagation()}>
                             <motion.img
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -246,37 +246,37 @@ const PropertyGallery = ({ images, videoLink }) => {
                                 key={lightboxIndex}
                                 src={getLightboxImageUrl(selectedImage)}
                                 alt="Selected property view"
-                                className="border-4 border-[#E5BE90] object-cover max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl"
+                                className="border-2 sm:border-4 border-[#E5BE90] object-cover max-h-[75vh] sm:max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl"
                             />
 
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={closeLightbox}
-                                className="border-4 border-[#E5BE90] absolute top-4 right-4 p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
+                                className="border-2 sm:border-4 border-[#E5BE90] absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
-                                <FaTimes size={20} />
+                                <FaTimes size={16} className="sm:w-5 sm:h-5" />
                             </motion.button>
 
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={prevImage}
-                                className="border-4 border-[#E5BE90] absolute left-6 top-1/2 p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
+                                className="border-2 sm:border-4 border-[#E5BE90] absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
-                                <FaChevronLeft size={20} />
+                                <FaChevronLeft size={16} className="sm:w-5 sm:h-5" />
                             </motion.button>
 
                             <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={nextImage}
-                                className="border-4 border-[#E5BE90] absolute right-6 top-1/2 p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
+                                className="border-2 sm:border-4 border-[#E5BE90] absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
-                                <FaChevronRight size={20} />
+                                <FaChevronRight size={16} className="sm:w-5 sm:h-5" />
                             </motion.button>
 
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 rounded-full text-white font-montserrat">
+                            <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 px-3 py-1 sm:px-4 sm:py-2 bg-black/50 rounded-full text-white font-montserrat text-sm sm:text-base">
                                 {lightboxIndex + 1} / {images.length}
                             </div>
                         </div>
@@ -294,13 +294,13 @@ const PropertyGallery = ({ images, videoLink }) => {
                         className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center backdrop-blur-sm"
                         onClick={closeVideoModal}
                     >
-                        <div className="relative w-full max-w-6xl mx-auto px-4" onClick={e => e.stopPropagation()}>
+                        <div className="relative w-full max-w-4xl lg:max-w-6xl mx-auto px-2 sm:px-4" onClick={e => e.stopPropagation()}>
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border-4 border-[#E5BE90]"
+                                className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border-2 sm:border-4 border-[#E5BE90]"
                             >
                                 <iframe
                                     src={getYouTubeEmbedUrl(videoId)}
@@ -316,12 +316,12 @@ const PropertyGallery = ({ images, videoLink }) => {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={closeVideoModal}
-                                className="border-4 border-[#E5BE90] absolute top-4 right-4 p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
+                                className="border-2 sm:border-4 border-[#E5BE90] absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-black/50 text-white hover:bg-[#E5BE90]/80 hover:text-[#122620] transition-colors duration-300"
                             >
-                                <FaTimes size={20} />
+                                <FaTimes size={16} className="sm:w-5 sm:h-5" />
                             </motion.button>
 
-                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/50 rounded-full text-white font-montserrat">
+                            <div className="absolute -bottom-8 sm:-bottom-12 left-1/2 -translate-x-1/2 px-3 py-1 sm:px-4 sm:py-2 bg-black/50 rounded-full text-white font-montserrat text-sm sm:text-base">
                                 Property Video Tour
                             </div>
                         </div>

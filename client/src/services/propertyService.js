@@ -58,5 +58,28 @@ export const propertyService = {
             console.error('Error fetching similar properties:', error);
             throw error;
         }
+    },
+
+    // Get random properties
+    async getRandomProperties(count = 3) {
+        try {
+            // Add timestamp to prevent caching of random results
+            const timestamp = new Date().getTime();
+            const response = await fetch(`${API_BASE_URL}/properties/random/${count}?t=${timestamp}`, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch random properties');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching random properties:', error);
+            throw error;
+        }
     }
 }; 

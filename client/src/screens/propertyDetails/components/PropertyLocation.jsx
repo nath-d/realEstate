@@ -13,6 +13,52 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
+// Add custom scrollbar styles
+const scrollbarStyles = `
+    .custom-scrollbar {
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(229, 190, 144, 0.3) transparent;
+    }
+    
+    /* Webkit browsers (Chrome, Safari, Edge) */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 4px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(229, 190, 144, 0.3);
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(229, 190, 144, 0.5);
+    }
+    
+    /* Hide scrollbar on mobile and tablet */
+    @media (max-width: 1023px) {
+        .custom-scrollbar {
+            /* Firefox */
+            scrollbar-width: none;
+            /* IE/Edge */
+            -ms-overflow-style: none;
+        }
+        
+        /* Webkit browsers */
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+    }
+`;
+
 const PropertyLocation = ({ location, pois = [] }) => {
     const [map, setMap] = useState(null);
     const [mapContainer, setMapContainer] = useState(null);
@@ -457,183 +503,185 @@ const PropertyLocation = ({ location, pois = [] }) => {
     };
 
     return (
-        <section className="py-20 relative overflow-hidden">
-            {/* Decorative Elements */}
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('path/to/map-pattern.png')] opacity-5" />
-            <div className="absolute top-0 right-0 w-1/2 h-full bg-[#1A332C]/20 blur-3xl rounded-l-full" />
+        <>
+            <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
+            <section className="py-20 relative overflow-hidden">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('path/to/map-pattern.png')] opacity-5" />
+                <div className="absolute top-0 right-0 w-1/2 h-full bg-[#1A332C]/20 blur-3xl rounded-l-full" />
 
-            <div className="container mx-auto px-6 relative">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <div className="flex justify-center mb-6">
-                        <div className="w-16 h-16 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                            <FaMapMarkerAlt className="text-[#E5BE90] text-3xl" />
-                        </div>
-                    </div>
-                    <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Prime Location</h2>
-                    <div className="flex justify-center items-center gap-4">
-                        <div className="flex justify-center items-center gap-4">
-                            <motion.span
-                                initial={{ width: 0 }}
-                                whileInView={{ width: 120 }}
-                                transition={{ duration: 0.8 }}
-                                className="h-0.5 bg-[#E5BE90]"
-                            ></motion.span>
-                            <p className="text-gray-400 tracking-wider">Perfectly positioned for your lifestyle</p>
-                            <motion.span
-                                initial={{ width: 0 }}
-                                whileInView={{ width: 120 }}
-                                transition={{ duration: 0.8 }}
-                                className="h-0.5 bg-[#E5BE90]"
-                            ></motion.span>
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Responsive grid: 3 columns on lg+, stacked on mobile/tablet */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    {/* Map section: sticky on large screens, takes 2 columns */}
+                <div className="container mx-auto px-6 relative">
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="lg:col-span-2 bg-gradient-to-br from-[#1A332C] to-[#122620] rounded-3xl overflow-hidden shadow-2xl border border-[#E5BE90]/20 lg:sticky lg:top-32 h-full"
+                        className="text-center mb-16"
                     >
-                        <div className="p-4 bg-gradient-to-r from-[#E5BE90]/10 to-transparent border-b border-[#E5BE90]/20">
-                            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                                <FaMapMarkerAlt className="text-[#E5BE90]" />
-                                Interactive Location Map
-                            </h3>
-                            <p className="text-gray-400 text-sm mt-1">Explore the property location and nearby amenities</p>
+                        <div className="flex justify-center mb-6">
+                            <div className="w-16 h-16 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                <FaMapMarkerAlt className="text-[#E5BE90] text-3xl" />
+                            </div>
                         </div>
-                        <div
-                            ref={setMapContainer}
-                            className="w-full h-[400px] bg-gradient-to-br from-gray-50 to-gray-100 relative"
-                            style={{ minHeight: '400px' }}
-                        >
-                            {mapError && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100">
-                                    <div className="text-center">
-                                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                            <FaMapMarkerAlt className="text-red-500 text-2xl" />
-                                        </div>
-                                        <p className="text-red-600 font-semibold mb-2">Map failed to load</p>
-                                        <p className="text-gray-500 text-sm">Please refresh the page to try again</p>
-                                    </div>
-                                </div>
-                            )}
-                            {!location && !mapError && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                                    <div className="text-center">
-                                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                            <FaMapMarkerAlt className="text-gray-400 text-2xl" />
-                                        </div>
-                                        <p className="text-gray-600 font-semibold mb-2">Location data not available</p>
-                                        <p className="text-gray-500 text-sm">Property location information is missing</p>
-                                    </div>
-                                </div>
-                            )}
-                            {location && !mapError && !map && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                                    <div className="text-center">
-                                        <div className="w-16 h-16 bg-[#E5BE90]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                            <div className="animate-spin rounded-full h-8 w-8 border-4 border-[#E5BE90] border-t-transparent"></div>
-                                        </div>
-                                        <p className="text-gray-600 font-semibold mb-2">Loading interactive map...</p>
-                                        <p className="text-gray-500 text-sm">Preparing location data and nearby points of interest</p>
-                                        {isMapLoading && (
-                                            <div className="mt-4">
-                                                <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-[#E5BE90] rounded-full animate-pulse" style={{ width: '60%' }}></div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+                        <h2 className="text-6xl font-bold mb-4 text-white font-source-serif">Prime Location</h2>
+                        <div className="flex justify-center items-center gap-4">
+                            <div className="flex justify-center items-center gap-4">
+                                <motion.span
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: 120 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="h-0.5 bg-[#E5BE90]"
+                                ></motion.span>
+                                <p className="text-gray-400 tracking-wider">Perfectly positioned for your lifestyle</p>
+                                <motion.span
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: 120 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="h-0.5 bg-[#E5BE90]"
+                                ></motion.span>
+                            </div>
                         </div>
                     </motion.div>
 
-                    {/* Details section: scrollable if content is long */}
-                    <motion.div
-                        variants={container}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={{ once: true }}
-                        className="space-y-4 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto pr-2"
-                    >
-                        {/* Property Address */}
-                        {location && (
-                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
-                                <h3 className="text-2xl font-bold mb-6 text-white">Property Address</h3>
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                                            <FaMapMarkerAlt className="text-[#E5BE90]" />
-                                        </div>
-                                        <div>
-                                            <p className="text-gray-300">{location.address},</p>
-                                            {/* <p className="text-gray-300">{location.city}, {location.state} {location.zipCode}</p> */}
-                                            <p className="text-gray-300">{location.city}</p>
-
-                                            {/* <p className="text-gray-400 text-sm">Coordinates: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}</p> */}
+                    {/* Responsive grid: 3 columns on lg+, stacked on mobile/tablet */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        {/* Map section: sticky on large screens, takes 2 columns */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="lg:col-span-2 bg-gradient-to-br from-[#1A332C] to-[#122620] rounded-3xl overflow-hidden shadow-2xl border border-[#E5BE90]/20 lg:sticky lg:top-32 h-full"
+                        >
+                            <div className="p-4 bg-gradient-to-r from-[#E5BE90]/10 to-transparent border-b border-[#E5BE90]/20">
+                                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                                    <FaMapMarkerAlt className="text-[#E5BE90]" />
+                                    Interactive Location Map
+                                </h3>
+                                <p className="text-gray-400 text-sm mt-1">Explore the property location and nearby amenities</p>
+                            </div>
+                            <div
+                                ref={setMapContainer}
+                                className="w-full h-[400px] bg-gradient-to-br from-gray-50 to-gray-100 relative"
+                                style={{ minHeight: '400px' }}
+                            >
+                                {mapError && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100">
+                                        <div className="text-center">
+                                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <FaMapMarkerAlt className="text-red-500 text-2xl" />
+                                            </div>
+                                            <p className="text-red-600 font-semibold mb-2">Map failed to load</p>
+                                            <p className="text-gray-500 text-sm">Please refresh the page to try again</p>
                                         </div>
                                     </div>
+                                )}
+                                {!location && !mapError && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                                        <div className="text-center">
+                                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <FaMapMarkerAlt className="text-gray-400 text-2xl" />
+                                            </div>
+                                            <p className="text-gray-600 font-semibold mb-2">Location data not available</p>
+                                            <p className="text-gray-500 text-sm">Property location information is missing</p>
+                                        </div>
+                                    </div>
+                                )}
+                                {location && !mapError && !map && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                                        <div className="text-center">
+                                            <div className="w-16 h-16 bg-[#E5BE90]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <div className="animate-spin rounded-full h-8 w-8 border-4 border-[#E5BE90] border-t-transparent"></div>
+                                            </div>
+                                            <p className="text-gray-600 font-semibold mb-2">Loading interactive map...</p>
+                                            <p className="text-gray-500 text-sm">Preparing location data and nearby points of interest</p>
+                                            {isMapLoading && (
+                                                <div className="mt-4">
+                                                    <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-[#E5BE90] rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+
+                        {/* Details section: scrollable if content is long */}
+                        <motion.div
+                            variants={container}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={{ once: true }}
+                            className="space-y-4 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-2 custom-scrollbar"
+                        >
+                            {/* Property Address */}
+                            {location && (
+                                <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
+                                    <h3 className="text-2xl font-bold mb-6 text-[#E5BE90] font-source-serif">Property Address</h3>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                                <FaMapMarkerAlt className="text-[#E5BE90]" />
+                                            </div>
+                                            <div>
+                                                <p className="text-gray-300">{location.address},</p>
+                                                {/* <p className="text-gray-300">{location.city}, {location.state} {location.zipCode}</p> */}
+                                                <p className="text-gray-300">{location.city}</p>
+
+                                                {/* <p className="text-gray-400 text-sm">Coordinates: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}</p> */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Nearby Amenities */}
+                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
+                                <h3 className="text-2xl font-bold mb-6 text-[#E5BE90] font-source-serif">Nearby Amenities</h3>
+                                <div className="space-y-4">
+                                    {locationInfo.nearbyAmenities.map((item, index) => (
+                                        <div key={index} className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                                <item.icon className="text-[#E5BE90]" />
+                                            </div>
+                                            <span className="text-gray-300">{item.text}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </motion.div>
-                        )}
 
-                        {/* Nearby Amenities */}
-                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
-                            <h3 className="text-2xl font-bold mb-6 text-white">Nearby Amenities</h3>
-                            <div className="space-y-4">
-                                {locationInfo.nearbyAmenities.map((item, index) => (
-                                    <div key={index} className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                                            <item.icon className="text-[#E5BE90]" />
+                            {/* Transportation */}
+                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
+                                <h3 className="text-2xl font-bold mb-6 text-[#E5BE90] font-source-serif">Transportation</h3>
+                                <div className="space-y-4">
+                                    {locationInfo.transportation.map((item, index) => (
+                                        <div key={index} className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                                <item.icon className="text-[#E5BE90]" />
+                                            </div>
+                                            <span className="text-gray-300">{item.text}</span>
                                         </div>
-                                        <span className="text-gray-300">{item.text}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
+                                    ))}
+                                </div>
+                            </motion.div>
 
-                        {/* Transportation */}
-                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
-                            <h3 className="text-2xl font-bold mb-6 text-white">Transportation</h3>
-                            <div className="space-y-4">
-                                {locationInfo.transportation.map((item, index) => (
-                                    <div key={index} className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                                            <item.icon className="text-[#E5BE90]" />
+                            {/* Community Features */}
+                            <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
+                                <h3 className="text-2xl font-bold mb-6 text-[#E5BE90] font-source-serif">Community</h3>
+                                <div className="space-y-4">
+                                    {locationInfo.community.map((item, index) => (
+                                        <div key={index} className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
+                                                <item.icon className="text-[#E5BE90]" />
+                                            </div>
+                                            <span className="text-gray-300">{item.text}</span>
                                         </div>
-                                        <span className="text-gray-300">{item.text}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
+                                    ))}
+                                </div>
+                            </motion.div>
 
-                        {/* Community Features */}
-                        <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
-                            <h3 className="text-2xl font-bold mb-6 text-white">Community</h3>
-                            <div className="space-y-4">
-                                {locationInfo.community.map((item, index) => (
-                                    <div key={index} className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-[#E5BE90]/10 rounded-full flex items-center justify-center">
-                                            <item.icon className="text-[#E5BE90]" />
-                                        </div>
-                                        <span className="text-gray-300">{item.text}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-
-                        {/* POI Summary */}
-                        {/* {pois.length > 0 && (
+                            {/* POI Summary */}
+                            {/* {pois.length > 0 && (
                             <motion.div variants={item} className="bg-[#1A332C] rounded-3xl p-8 shadow-xl border border-[#E5BE90]/10">
                                 <h3 className="text-2xl font-bold mb-6 text-white">Location Summary</h3>
                                 <div className="grid grid-cols-3 gap-4 text-center">
@@ -658,10 +706,11 @@ const PropertyLocation = ({ location, pois = [] }) => {
                                 </div>
                             </motion.div>
                         )} */}
-                    </motion.div>
+                        </motion.div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 };
 
