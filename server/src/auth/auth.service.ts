@@ -169,6 +169,16 @@ export class AuthService {
                         isEmailVerified: true,
                     },
                 });
+
+                // Send welcome email with PDF attachment for new users/////////////////This was the email change
+                try {
+                    await this.marketingService.sendWelcomeEmailWithPdf(user.email, user.firstName);
+                    console.log(`Welcome email with PDF sent to new Google user: ${user.email}`);
+                } catch (error) {
+                    // Don't fail OAuth if marketing email fails
+                    console.error('Failed to send welcome email to new Google user:', error);
+                }
+                /////////////////Till here
             } else if (!user.googleId) {
                 // Link existing user with Google
                 user = await this.prisma.user.update({

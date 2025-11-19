@@ -609,7 +609,7 @@ const PropertyListings = () => {
             </div>
 
             {/* Call to Action Section */}
-            <div className="bg-gradient-to-r from-[#122620] to-[#1a342e] py-12 sm:py-16">
+            {/* <div className="bg-gradient-to-r from-[#122620] to-[#1a342e] py-12 sm:py-16">
                 <div className="max-w-4xl mx-auto px-4 text-center">
                     <motion.h2
                         className="text-2xl sm:text-3xl md:text-4xl font-cardo font-bold text-[#D6AD60] mb-4 sm:mb-6"
@@ -644,7 +644,7 @@ const PropertyListings = () => {
                         </button>
                     </motion.div>
                 </div>
-            </div>
+            </div> */}
             <Footer />
         </motion.div>
     )

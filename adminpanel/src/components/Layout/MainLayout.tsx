@@ -189,7 +189,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                             />
                         )}
                         <div className="flex flex-col">
-                            <span className="text-lg font-semibold text-gray-800">Real Estate Admin</span>
+                            <span className="text-lg font-semibold text-gray-800">MG Constructions Admin</span>
                             <span className="text-sm text-gray-500">Property Management Dashboard</span>
                         </div>
                     </div>

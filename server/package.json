@@ -18,8 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "node scripts/setup-env-from-config.js prisma generate",
+    "prisma:migrate": "node scripts/setup-env-from-config.js prisma migrate dev",
+    "prisma:push": "node scripts/setup-env-from-config.js prisma db push",
+    "prisma:studio": "node scripts/setup-env-from-config.js prisma studio",
     "seed:blog": "node seed-blog-data.js"
   },
   "dependencies": {

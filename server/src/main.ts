@@ -1,3 +1,6 @@
+// Setup environment variables from config.js (must be first)
+import './config/env-from-config';
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';

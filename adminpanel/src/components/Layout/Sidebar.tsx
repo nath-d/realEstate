@@ -18,7 +18,9 @@ import {
     CalendarOutlined,
     FilePdfOutlined,
     MailOutlined,
-    TrophyOutlined
+    TrophyOutlined,
+    PhoneOutlined,
+    EyeOutlined
 } from '@ant-design/icons';
 import { FaTrophy } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -40,6 +42,15 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
         { key: 'dashboard', icon: <DashboardOutlined />, label: 'Dashboard' },
         { key: 'properties', icon: <HomeOutlined />, label: 'Properties' },
         {
+            key: 'forms',
+            icon: <PhoneOutlined />,
+            label: 'Contact & Schedule Visits',
+            children: [
+                { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
+                { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Scheduled Visits' },
+            ]
+        },
+        {
             key: 'blog',
             icon: <BookOutlined />,
             label: 'Blog Management',
@@ -53,17 +64,17 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
         { key: 'achievements', icon: <TrophyOutlined />, label: 'Certifications' },
         { key: 'why-choose-us', icon: <TagsOutlined />, label: 'Why Choose Us' },
         { key: 'core-strengths', icon: <BarChartOutlined />, label: 'Core Strengths' },
-        { key: 'future-vision', icon: <BarChartOutlined />, label: 'Future Vision' },
+        { key: 'future-vision', icon: <EyeOutlined />, label: 'Future Vision' },
         { key: 'newsletter', icon: <MailOutlined />, label: 'Newsletter' },
-        {
-            key: 'forms',
-            icon: <FileOutlined />,
-            label: 'Form Submissions',
-            children: [
-                { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
-                { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Schedule Visits' },
-            ]
-        },
+        // {
+        //     key: 'forms',
+        //     icon: <FileOutlined />,
+        //     label: 'Form Submissions',
+        //     children: [
+        //         { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
+        //         { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Schedule Visits' },
+        //     ]
+        // },
         // { key: 'users', icon: <UserOutlined />, label: 'Users' },
         // { key: 'team', icon: <TeamOutlined />, label: 'Team' },
         // { key: 'analytics', icon: <BarChartOutlined />, label: 'Analytics' },
@@ -83,7 +94,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                 ${collapsed ? 'w-[80px] min-w-[80px]' : 'w-[280px] min-w-[80px]'}
                 h-screen
             `}
-            style={{ minWidth: collapsed ? 80 : 280, width: collapsed ? 80 : 280 }}
+            style={{ minWidth: collapsed ? 80 : 300, width: collapsed ? 80 : 300 }}
         >
             {/* Logo/Brand Section */}
             <div className={`h-16 flex items-center justify-between border-b border-[#e2e8f0] flex-shrink-0 ${collapsed ? 'px-2' : 'px-6'}`}>
@@ -93,7 +104,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                             <EnvironmentOutlined className="text-white text-lg" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Real Estate</span>
+                            <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">MG Constructions</span>
                             <span className="text-xs text-gray-500">Admin Panel</span>
                         </div>
                     </div>
@@ -139,7 +150,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                 <div className="p-4 border-t border-[#e2e8f0] flex-shrink-0 bg-[#f8fafc]">
                     <div className="text-center">
                         <span className="text-xs text-gray-500 block">Version 1.0.0</span>
-                        <span className="text-xs text-gray-400 block mt-1">© 2024 Real Estate</span>
+                        <span className="text-xs text-gray-400 block mt-1">© MG Constructions</span>
                     </div>
                 </div>
             )}

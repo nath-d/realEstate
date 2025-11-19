@@ -16,9 +16,9 @@ const ContactMap = ({ officeLocations }) => {
     const [mapError, setMapError] = useState(false);
 
     // Office location coordinates
-    const OFFICE_LATITUDE = 22.481432;
-    const OFFICE_LONGITUDE = 88.307179;
-    const MAP_ZOOM = 16;
+    const OFFICE_LATITUDE = 22.4927694;
+    const OFFICE_LONGITUDE = 88.3039975;
+    const MAP_ZOOM = 15;
 
     useEffect(() => {
         console.log('ContactMap: useEffect triggered', { officeLocations });
