@@ -1,8 +1,16 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import NewsletterForm from './NewsletterForm';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
+    const navigate = useNavigate();
+
+    const handleNavigation = (path) => {
+        navigate(path);
+        window.scrollTo(0, 0);
+    };
+
     return (
         <footer className="relative bg-gradient-to-b from-[#1a3329] to-[#122620] text-white pt-20 pb-8 overflow-hidden">
             {/* Decorative Elements */}
@@ -42,17 +50,51 @@ const Footer = () => {
                     <div>
                         <h3 className="text-3xl font-semibold mb-6 text-[#c9a66b] font-source-serif">Quick Links</h3>
                         <ul className="space-y-4">
-                            {['Home', 'Properties', 'About Us', 'Services', 'Contact'].map((item) => (
-                                <li key={item}>
-                                    <a
-                                        href="#"
-                                        className="text-gray-300 hover:text-[#c9a66b] transition-colors flex items-center group"
-                                    >
-                                        <span className="w-2 h-2 bg-[#c9a66b] rounded-full mr-3 transform group-hover:scale-150 transition-transform"></span>
-                                        {item}
-                                    </a>
-                                </li>
-                            ))}
+                            <li>
+                                <button
+                                    onClick={() => handleNavigation('/')}
+                                    className="text-gray-300 hover:text-[#c9a66b] transition-colors flex items-center group cursor-pointer bg-transparent border-none p-0"
+                                >
+                                    <span className="w-2 h-2 bg-[#c9a66b] rounded-full mr-3 transform group-hover:scale-150 transition-transform"></span>
+                                    Home
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={() => handleNavigation('/properties')}
+                                    className="text-gray-300 hover:text-[#c9a66b] transition-colors flex items-center group cursor-pointer bg-transparent border-none p-0"
+                                >
+                                    <span className="w-2 h-2 bg-[#c9a66b] rounded-full mr-3 transform group-hover:scale-150 transition-transform"></span>
+                                    Properties
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={() => handleNavigation('/about')}
+                                    className="text-gray-300 hover:text-[#c9a66b] transition-colors flex items-center group cursor-pointer bg-transparent border-none p-0"
+                                >
+                                    <span className="w-2 h-2 bg-[#c9a66b] rounded-full mr-3 transform group-hover:scale-150 transition-transform"></span>
+                                    About Us
+                                </button>
+                            </li>
+                            {/* <li>
+                                <button
+                                    onClick={() => handleNavigation('/properties')}
+                                    className="text-gray-300 hover:text-[#c9a66b] transition-colors flex items-center group cursor-pointer bg-transparent border-none p-0"
+                                >
+                                    <span className="w-2 h-2 bg-[#c9a66b] rounded-full mr-3 transform group-hover:scale-150 transition-transform"></span>
+                                    Services
+                                </button>
+                            </li> */}
+                            <li>
+                                <button
+                                    onClick={() => handleNavigation('/contact')}
+                                    className="text-gray-300 hover:text-[#c9a66b] transition-colors flex items-center group cursor-pointer bg-transparent border-none p-0"
+                                >
+                                    <span className="w-2 h-2 bg-[#c9a66b] rounded-full mr-3 transform group-hover:scale-150 transition-transform"></span>
+                                    Contact
+                                </button>
+                            </li>
                         </ul>
                     </div>
 
@@ -98,15 +140,24 @@ const Footer = () => {
                             © {new Date().getFullYear()} MG Constructions. All rights reserved.
                         </p>
                         <div className="flex space-x-8 mt-4 md:mt-0">
-                            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-                                <a
-                                    key={item}
-                                    href="#"
-                                    className="text-gray-400 hover:text-[#c9a66b] text-sm transition-colors"
-                                >
-                                    {item}
-                                </a>
-                            ))}
+                            <button
+                                onClick={() => handleNavigation('/privacy-policy')}
+                                className="text-gray-400 hover:text-[#c9a66b] text-sm transition-colors bg-transparent border-none p-0 cursor-pointer"
+                            >
+                                Privacy Policy
+                            </button>
+                            <button
+                                onClick={() => handleNavigation('/terms-of-service')}
+                                className="text-gray-400 hover:text-[#c9a66b] text-sm transition-colors bg-transparent border-none p-0 cursor-pointer"
+                            >
+                                Terms of Service
+                            </button>
+                            <button
+                                onClick={() => handleNavigation('/cookie-policy')}
+                                className="text-gray-400 hover:text-[#c9a66b] text-sm transition-colors bg-transparent border-none p-0 cursor-pointer"
+                            >
+                                Cookie Policy
+                            </button>
                         </div>
                     </div>
                 </div>

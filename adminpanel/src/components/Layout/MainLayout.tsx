@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNotifications } from '../../context/NotificationContext';
 import { markContactAsRead } from '../../services/notificationService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const { Text } = Typography;
 
@@ -17,6 +18,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
     const { counts, items, loading, refresh } = useNotifications();
+    const { user, logout } = useAuth();
 
     useEffect(() => {
         const checkMobile = () => {
@@ -46,6 +48,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             icon: <LogoutOutlined />, label: 'Logout', danger: true,
         },
     ];
+
+    const onUserMenuClick = ({ key }: { key: string }) => {
+        if (key === 'logout') {
+            logout();
+            navigate('/login');
+        } else if (key === 'profile') {
+            // Handle profile navigation
+            console.log('Profile clicked');
+        } else if (key === 'settings') {
+            // Handle settings navigation
+            console.log('Settings clicked');
+        }
+    };
 
     const notificationMenuItems = useMemo(() => {
         const header = {
@@ -211,19 +226,22 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                             </Badge>
                         </Dropdown>
                         <Dropdown
-                            menu={{ items: userMenuItems }}
+                            menu={{ items: userMenuItems, onClick: onUserMenuClick }}
                             placement="bottomRight"
                             trigger={['click']}
                             overlayClassName="user-dropdown"
                         >
                             <Space className="cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors">
                                 <Avatar
+                                    src={user?.avatar}
                                     icon={<UserOutlined />}
                                     className="bg-gradient-to-r from-blue-500 to-indigo-600"
                                     size="default"
                                 />
                                 <div className="hidden sm:flex flex-col items-start">
-                                    <span className="text-sm font-medium text-gray-700">Admin User</span>
+                                    <span className="text-sm font-medium text-gray-700">
+                                        {user ? `${user.firstName} ${user.lastName}` : 'Admin User'}
+                                    </span>
                                     <span className="text-xs text-gray-500">Administrator</span>
                                 </div>
                             </Space>

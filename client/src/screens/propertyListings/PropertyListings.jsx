@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useState, useLayoutEffect, useRef } from 'react'
 import Navbar from '../homepage/components/Navbar'
 import PropertyListingCard from './components/PropertyListingCard'
 import { Search, MapPin, Home, DollarSign, ArrowDownUp, Filter, Star, Waves, Mountain, Hotel, LandPlot } from 'lucide-react'
@@ -42,6 +42,9 @@ const PropertyListings = () => {
         document.body.style.backgroundColor = '#122620'
         return () => { document.body.style.backgroundColor = '' }
     }, [])
+
+    // Ref for properties section
+    const propertiesSectionRef = useRef(null)
 
     const [listing, setListing] = useState([])
     const [filteredListings, setFilteredListings] = useState([])
@@ -227,6 +230,16 @@ const PropertyListings = () => {
         e.target.src = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg'
     }
 
+    // Scroll to properties section
+    const scrollToProperties = () => {
+        if (propertiesSectionRef.current) {
+            propertiesSectionRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+        }
+    }
+
     return (
         <motion.div
             variants={pageVariants}
@@ -258,7 +271,10 @@ const PropertyListings = () => {
                         Explore our curated collection of luxury homes and investment properties
                     </motion.p>
                     <motion.div variants={itemVariants}>
-                        <button className="px-6 sm:px-8 py-2.5 sm:py-3 bg-[#D6AD60] hover:bg-[#B68D40] text-[#122620] font-medium rounded-full transition-all transform hover:scale-105 shadow-lg text-sm sm:text-base">
+                        <button 
+                            onClick={scrollToProperties}
+                            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-[#D6AD60] hover:bg-[#B68D40] text-[#122620] font-medium rounded-full transition-all transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                        >
                             Get Started
                         </button>
                     </motion.div>
@@ -514,7 +530,7 @@ const PropertyListings = () => {
             </motion.div>
 
             {/* Property Listings Section */}
-            <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+            <div ref={propertiesSectionRef} className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8">
                     <motion.h2
                         className="text-2xl sm:text-3xl md:text-4xl font-cardo font-bold text-[#D6AD60] mb-4 sm:mb-0"
