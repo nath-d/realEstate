@@ -147,3 +147,5 @@ If you encounter issues:
 2. Verify your API key has the correct permissions
 3. Ensure your Place ID is valid
 4. Test the API endpoint directly using curl or Postman
+
+

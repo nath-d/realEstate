@@ -10,3 +10,5 @@ import { PrismaModule } from '../prisma/prisma.module';
   exports: [AboutUsService]
 })
 export class AboutUsModule {}
+
+

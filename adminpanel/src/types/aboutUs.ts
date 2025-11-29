@@ -82,3 +82,5 @@ export interface CreateAboutUsTeamMemberDto {
   order?: number;
   aboutUsInfoId: number;
 }
+
+
