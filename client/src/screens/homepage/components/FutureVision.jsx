@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { getFutureVisionContent, getFutureVisionGoals, getFutureVisionTimeline } from '../../../services/futureVisionService';
+import { Link } from 'react-router-dom';
 
 const FutureVision = () => {
     const sectionRef = useRef(null);
@@ -241,12 +242,12 @@ const FutureVision = () => {
                         }
                     }}
                 >
-                    <a
-                        href="/contact"
-                        className="inline-block bg-[#D6AD60] text-[#122620] font-montserrat font-medium px-10 py-4 rounded-md hover:bg-[#F4EBD0] transition-all duration-500 transform hover:scale-105 shadow-md hover:shadow-lg"
-                    >
-                        Join Our Journey
-                    </a>
+                    <Link
+                                to="/properties"
+                                className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
+                            >
+                                Join Our Journey
+                            </Link>
                 </motion.div>
             </div>
         </section>

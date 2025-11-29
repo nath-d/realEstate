@@ -34,10 +34,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     }, []);
 
     const userMenuItems = [
-        {
-            key: 'profile',
-            icon: <UserOutlined />, label: 'Profile',
-        },
+        // {
+        //     key: 'profile',
+        //     icon: <UserOutlined />, label: 'Profile',
+        // },
         {
             key: 'settings',
             icon: <SettingOutlined />, label: 'Settings',
@@ -54,11 +54,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             logout();
             navigate('/login');
         } else if (key === 'profile') {
-            // Handle profile navigation
-            console.log('Profile clicked');
+            // Navigate to settings page (profile tab)
+            navigate('/settings');
         } else if (key === 'settings') {
-            // Handle settings navigation
-            console.log('Settings clicked');
+            // Navigate to settings page
+            navigate('/settings');
         }
     };
 

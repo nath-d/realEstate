@@ -11,6 +11,8 @@ import {
     MessageOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
+    RightCircleOutlined,
+    LeftCircleOutlined,
     EnvironmentOutlined,
     BookOutlined,
     TagsOutlined,
@@ -46,6 +48,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
             icon: <PhoneOutlined />,
             label: 'Contact & Schedule Visits',
             children: [
+                { key: 'contact-info', icon: <EnvironmentOutlined />, label: 'Contact Information' },
                 { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
                 { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Scheduled Visits' },
             ]
@@ -61,27 +64,13 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
         },
         { key: 'pdfs', icon: <FileOutlined />, label: 'PDF Management' },
         { key: 'about', icon: <BookOutlined />, label: 'Our Story Section' },
+        { key: 'about-us', icon: <TeamOutlined />, label: 'About Us Page' },
         { key: 'achievements', icon: <TrophyOutlined />, label: 'Certifications' },
         { key: 'why-choose-us', icon: <TagsOutlined />, label: 'Why Choose Us' },
         { key: 'core-strengths', icon: <BarChartOutlined />, label: 'Core Strengths' },
         { key: 'future-vision', icon: <EyeOutlined />, label: 'Future Vision' },
         { key: 'newsletter', icon: <MailOutlined />, label: 'Newsletter' },
-        // {
-        //     key: 'forms',
-        //     icon: <FileOutlined />,
-        //     label: 'Form Submissions',
-        //     children: [
-        //         { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
-        //         { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Schedule Visits' },
-        //     ]
-        // },
-        // { key: 'users', icon: <UserOutlined />, label: 'Users' },
-        // { key: 'team', icon: <TeamOutlined />, label: 'Team' },
-        // { key: 'analytics', icon: <BarChartOutlined />, label: 'Analytics' },
-        // { key: 'orders', icon: <ShoppingOutlined />, label: 'Orders' },
-        // { key: 'messages', icon: <MessageOutlined />, label: 'Messages' },
-        // { key: 'files', icon: <FileOutlined />, label: 'Files' },
-        // { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
+        { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
     ];
 
     const currentPath = location.pathname.split('/')[1] || 'dashboard';
@@ -113,15 +102,15 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                         <EnvironmentOutlined className="text-white text-lg" />
                     </div>
                 )}
-                {!collapsed && (
-                    <Button
-                        type="text"
-                        icon={<MenuFoldOutlined />}
-                        onClick={() => onCollapse(true)}
-                        className="text-gray-500 hover:text-blue-500 transition-colors"
-                        size="small"
-                    />
-                )}
+                
+                {/* Toggle button - always visible */}
+                <Button
+                    type="text"
+                    icon={collapsed ? <RightCircleOutlined /> : <LeftCircleOutlined />}
+                    onClick={() => onCollapse(!collapsed)}
+                    className="text-gray-500 hover:text-blue-500 transition-colors"
+                    size="small"
+                />
             </div>
             {/* Navigation Menu */}
             <div className="flex-1 py-4">
@@ -152,18 +141,6 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                         <span className="text-xs text-gray-500 block">Version 1.0.0</span>
                         <span className="text-xs text-gray-400 block mt-1">© MG Constructions</span>
                     </div>
-                </div>
-            )}
-            {/* Collapsed State Toggle Button */}
-            {collapsed && (
-                <div className="p-2 border-t border-[#e2e8f0] flex-shrink-0">
-                    <Button
-                        type="text"
-                        icon={<MenuUnfoldOutlined />}
-                        onClick={() => onCollapse(false)}
-                        className="w-full text-gray-500 hover:text-blue-500 transition-colors"
-                        size="small"
-                    />
                 </div>
             )}
         </aside>

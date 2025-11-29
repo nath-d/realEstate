@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { FaQuoteLeft, FaStar, FaArrowLeft, FaArrowRight, FaSmile, FaUsers, FaRedo, FaHeart } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
 const Testimonials = () => {
     const sectionRef = useRef(null);
     const controls = useAnimation();
@@ -378,13 +378,19 @@ const Testimonials = () => {
                         <p className="text-[#D6AD60] mb-8 max-w-2xl mx-auto">
                             Join thousands of satisfied clients who have found their perfect home with MG Construction & Pacific Realty.
                         </p>
-                        <motion.button
+                        {/* <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-[#D6AD60] text-[#122620] font-bold py-4 px-8 rounded-xl hover:bg-[#E5BE90] transition-all duration-300 shadow-lg"
                         >
                             Start Your Journey Today
-                        </motion.button>
+                        </motion.button> */}
+                        <Link
+                                to="/properties"
+                                className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
+                            >
+                                Start Your Journey Today
+                            </Link>
                     </div>
                 </motion.div>
             </div>

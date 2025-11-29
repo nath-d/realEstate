@@ -372,3 +372,109 @@ model NewsletterSubscriber {
     updatedAt        DateTime  @updatedAt
     tags             String[]  @default([])
 }
+
+// Contact Information Management
+model ContactInfo {
+    id                Int      @id @default(autoincrement())
+    // Contact Cards Data
+    phoneNumbers      String[] @default([])
+    emails            String[] @default([])
+    officeAddress     String?
+    officeCity        String?
+    officeState       String?
+    officeZipCode     String?
+    businessHours     String[] @default([])
+    
+    // Office Location Details
+    locationCity      String?
+    locationAddress   String?
+    locationState     String?
+    locationPhone     String?
+    locationEmail     String?
+    locationImage     String?
+    
+    // Map Coordinates
+    latitude          Float?
+    longitude         Float?
+    
+    // Social Media Links
+    facebookUrl       String?
+    twitterUrl        String?
+    instagramUrl      String?
+    linkedinUrl       String?
+    whatsappUrl       String?
+    
+    // Hero Section
+    heroTitle         String?  @default("Contact Us")
+    heroSubtitle      String?  @default("Get in touch with our team of real estate experts")
+    heroBackgroundUrl String?
+    
+    // Additional Settings
+    isActive          Boolean  @default(true)
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+}
+
+// About Us Page Management
+model AboutUsInfo {
+    id                Int              @id @default(autoincrement())
+    // Hero Section
+    heroTitle         String           @default("About Us")
+    heroSubtitle      String           @default("Building dreams into reality, one home at a time...")
+    heroBackgroundUrl String?
+    
+    // Our Story Section
+    storyTitle        String           @default("Our Story")
+    storyParagraph1   String?          @db.Text
+    storyParagraph2   String?          @db.Text
+    
+    // Values Section
+    valuesTitle       String           @default("Our Values")
+    valuesSubtitle    String           @default("The principles that guide our work")
+    
+    // Team Section
+    teamTitle         String           @default("Our Team")
+    teamDescription   String?          @db.Text
+    
+    // Call to Action Section
+    ctaTitle          String           @default("Ready to Start Your Journey?")
+    ctaDescription    String?          @db.Text
+    ctaButtonText     String           @default("Contact Us Today")
+    ctaButtonLink     String           @default("/contact")
+    
+    // Relations
+    values            AboutUsValue[]
+    teamMembers       AboutUsTeamMember[]
+    
+    // Settings
+    isActive          Boolean          @default(true)
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+}
+
+model AboutUsValue {
+    id            Int         @id @default(autoincrement())
+    title         String
+    description   String      @db.Text
+    icon          String      // Icon name (e.g., "FaHome", "FaUsers", etc.)
+    order         Int         @default(0)
+    aboutUsInfoId Int
+    aboutUsInfo   AboutUsInfo @relation(fields: [aboutUsInfoId], references: [id], onDelete: Cascade)
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+}
+
+model AboutUsTeamMember {
+    id            Int         @id @default(autoincrement())
+    name          String
+    role          String
+    description   String      @db.Text
+    imageUrl      String
+    linkedinUrl   String?
+    twitterUrl    String?
+    order         Int         @default(0)
+    aboutUsInfoId Int
+    aboutUsInfo   AboutUsInfo @relation(fields: [aboutUsInfoId], references: [id], onDelete: Cascade)
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+}

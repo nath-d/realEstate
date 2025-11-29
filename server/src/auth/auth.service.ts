@@ -533,4 +533,88 @@ export class AuthService {
             properties: user.favoriteProperties,
         };
     }
+
+    // Admin management methods
+    async getAdmins() {
+        const admins = await this.prisma.user.findMany({
+            where: { role: 'admin' },
+            select: {
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                role: true,
+                isEmailVerified: true,
+                createdAt: true,
+                lastLoginAt: true,
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        return {
+            success: true,
+            admins,
+        };
+    }
+
+    async createAdmin(createAdminDto: SignupDto) {
+        const { email, password, firstName, lastName } = createAdminDto;
+
+        // Check if user already exists
+        const existingUser = await this.prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (existingUser) {
+            throw new ConflictException('User with this email already exists');
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create admin user
+        const admin = await this.prisma.user.create({
+            data: {
+                email,
+                firstName,
+                lastName,
+                password: hashedPassword,
+                role: 'admin',
+                isEmailVerified: true, // Admin users are pre-verified
+            },
+        });
+
+        return {
+            success: true,
+            message: 'Admin user created successfully',
+            admin: {
+                id: admin.id,
+                email: admin.email,
+                firstName: admin.firstName,
+                lastName: admin.lastName,
+                role: admin.role,
+            },
+        };
+    }
+
+    async deleteAdmin(adminId: number) {
+        // Check if admin exists
+        const admin = await this.prisma.user.findUnique({
+            where: { id: adminId, role: 'admin' },
+        });
+
+        if (!admin) {
+            throw new UnauthorizedException('Admin user not found');
+        }
+
+        // Delete the admin user
+        await this.prisma.user.delete({
+            where: { id: adminId },
+        });
+
+        return {
+            success: true,
+            message: 'Admin user deleted successfully',
+        };
+    }
 } 

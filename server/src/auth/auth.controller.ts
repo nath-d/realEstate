@@ -4,6 +4,7 @@ import {
     Body,
     Get,
     Put,
+    Delete,
     UseGuards,
     Request,
     Param,
@@ -117,6 +118,56 @@ export class AuthController {
         @Param('propertyId') propertyId: string,
     ) {
         return this.authService.removeFromFavorites(req.user.id, parseInt(propertyId));
+    }
+
+    // Admin-only endpoints
+    @UseGuards(JwtAuthGuard)
+    @Get('admins')
+    async getAdmins(@Request() req) {
+        // Check if user is admin
+        if (req.user.role !== 'admin') {
+            throw new UnauthorizedException('Admin access required');
+        }
+        return this.authService.getAdmins();
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('admin/create')
+    async createAdmin(@Request() req, @Body() createAdminDto: SignupDto) {
+        console.log('Create admin request received:', {
+            user: req.user.email,
+            data: createAdminDto
+        });
+        
+        // Check if user is admin
+        if (req.user.role !== 'admin') {
+            throw new UnauthorizedException('Admin access required');
+        }
+        
+        try {
+            const result = await this.authService.createAdmin(createAdminDto);
+            console.log('Admin created successfully:', result);
+            return result;
+        } catch (error) {
+            console.error('Admin creation failed:', error);
+            throw error;
+        }
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('admin/:id')
+    async deleteAdmin(@Request() req, @Param('id') id: string) {
+        // Check if user is admin
+        if (req.user.role !== 'admin') {
+            throw new UnauthorizedException('Admin access required');
+        }
+        
+        const adminId = parseInt(id);
+        if (adminId === req.user.id) {
+            throw new UnauthorizedException('Cannot delete your own account');
+        }
+        
+        return this.authService.deleteAdmin(adminId);
     }
 
     // Google OAuth routes

@@ -54,7 +54,7 @@ const Portfolio = () => {
                     property.livingArea
                 ],
                 // Format price
-                price: `$${property.price?.toLocaleString() || 'Price on request'}`,
+                price: `₹${property.price?.toLocaleString() || 'Price on request'}`,
                 // Format location
                 location: property.location ? `${property.location.city}, ${property.location.state}` : 'Location not specified',
                 // Get first image or fallback
@@ -300,11 +300,7 @@ const Portfolio = () => {
                                                 View All Properties
                                             </button>
                                         )}
-                                        <button className="p-2.5 bg-[#D6AD60]/20 backdrop-blur-sm border border-[#D6AD60]/30 rounded-full text-[#F4EBD0] hover:bg-[#D6AD60]/30 transition-all duration-300 transform hover:scale-105">
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                            </svg>
-                                        </button>
+                            
                                     </div>
                                 </div>
                             </div>

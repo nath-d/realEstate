@@ -1,0 +1,32 @@
+-- CreateTable
+CREATE TABLE "ContactInfo" (
+    "id" SERIAL NOT NULL,
+    "phoneNumbers" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "emails" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "officeAddress" TEXT,
+    "officeCity" TEXT,
+    "officeState" TEXT,
+    "officeZipCode" TEXT,
+    "businessHours" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "locationCity" TEXT,
+    "locationAddress" TEXT,
+    "locationState" TEXT,
+    "locationPhone" TEXT,
+    "locationEmail" TEXT,
+    "locationImage" TEXT,
+    "latitude" DOUBLE PRECISION,
+    "longitude" DOUBLE PRECISION,
+    "facebookUrl" TEXT,
+    "twitterUrl" TEXT,
+    "instagramUrl" TEXT,
+    "linkedinUrl" TEXT,
+    "whatsappUrl" TEXT,
+    "heroTitle" TEXT DEFAULT 'Contact Us',
+    "heroSubtitle" TEXT DEFAULT 'Get in touch with our team of real estate experts',
+    "heroBackgroundUrl" TEXT,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ContactInfo_pkey" PRIMARY KEY ("id")
+);

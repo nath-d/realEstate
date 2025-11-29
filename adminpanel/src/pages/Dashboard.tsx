@@ -346,7 +346,7 @@ const Dashboard: React.FC = () => {
                         <Title level={4} className="mb-4">Average Price</Title>
                         <div className="text-center">
                             <div className="text-3xl font-bold text-blue-600 mb-2">
-                                ${stats.averagePrice.toLocaleString()}
+                                ₹{stats.averagePrice.toLocaleString()}
                             </div>
                             <Text type="secondary">
                                 Per property

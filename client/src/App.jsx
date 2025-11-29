@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { FavoritesProvider } from './contexts/FavoritesContext.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 import Homepage from './screens/homepage/Homepage'
 import PropertyListings from './screens/propertyListings/PropertyListings'
 import RealEstateMap from './screens/realEstateMap/RealEstateMap'
@@ -25,6 +26,7 @@ function App() {
     <>
       <FavoritesProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path='/' element={<Homepage />} />
             <Route path='/properties' element={<PropertyListings />} />

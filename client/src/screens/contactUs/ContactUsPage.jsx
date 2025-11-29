@@ -1,20 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
 import Navbar from '../homepage/components/Navbar';
 import Footer from '../homepage/components/Footer';
 import ContactMap from './components/ContactMap';
 import ContactForm from '../../components/ContactForm';
+import contactInfoService from '../../services/contactInfoService';
 import './styles/fonts.css';
 
 const ContactUsPage = () => {
+    const [contactData, setContactData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContactInfo = async () => {
+            try {
+                const data = await contactInfoService.getContactInfo();
+                setContactData(data);
+            } catch (error) {
+                console.error('Error fetching contact info:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchContactInfo();
+    }, []);
+
+    // Show loading state or use default values
+    if (loading || !contactData) {
+        return (
+            <div className="min-h-screen bg-[#F4EBD0] flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#122620]"></div>
+                    <p className="mt-4 text-[#122620]">Loading contact information...</p>
+                </div>
+            </div>
+        );
+    }
     const contactInfo = [
         {
             icon: <FaPhone className="text-3xl" />,
             title: "Phone",
             details: [
-                "+91 9748853901",
-                "+91 7449664398"
+                ...(contactData.phoneNumbers || ["+91 9748853901", "+91 7449664398"])
             ],
             color: "bg-blue-500"
         },
@@ -22,8 +51,7 @@ const ContactUsPage = () => {
             icon: <FaEnvelope className="text-3xl" />,
             title: "Email",
             details: [
-                " mgconstructions1995@gmail.com",
-                // "support@mgpacificestates.com"
+                ...(contactData.emails || ["mgconstructions1995@gmail.com"])
             ],
             color: "bg-green-500"
         },
@@ -31,8 +59,8 @@ const ContactUsPage = () => {
             icon: <FaMapMarkerAlt className="text-3xl" />,
             title: "Office",
             details: [
-                "285, Gopal Misra Road, Behala",
-                "Kolkata 700034"
+                contactData.officeAddress || "285, Gopal Misra Road, Behala",
+                `${contactData.officeCity || "Kolkata"} ${contactData.officeZipCode || "700034"}`
             ],
             color: "bg-red-500"
         },
@@ -48,20 +76,22 @@ const ContactUsPage = () => {
     ];
 
     const officeLocation = {
-        city: "Kolkata",
-        address: "285, Gopal Misra Road, Behala",
-        state: "Kolkata 700034",
-        phone: "+91 9748853901",
-        email: " mgconstructions1995@gmail.com",
-        image: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        city: contactData.locationCity || "Kolkata",
+        address: contactData.locationAddress || "285, Gopal Misra Road, Behala",
+        state: contactData.locationState || "Kolkata 700034",
+        phone: contactData.locationPhone || "+91 9748853901",
+        email: contactData.locationEmail || "mgconstructions1995@gmail.com",
+        image: contactData.locationImage || "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        latitude: contactData.latitude || 22.4707,
+        longitude: contactData.longitude || 88.3103
     };
 
     const socialLinks = [
-        { icon: <FaFacebook />, href: "#", label: "Facebook" },
-        { icon: <FaTwitter />, href: "#", label: "Twitter" },
-        { icon: <FaInstagram />, href: "#", label: "Instagram" },
-        { icon: <FaLinkedin />, href: "#", label: "LinkedIn" },
-        { icon: <FaWhatsapp />, href: "#", label: "WhatsApp" }
+        { icon: <FaFacebook />, href: contactData.facebookUrl || "#", label: "Facebook" },
+        { icon: <FaTwitter />, href: contactData.twitterUrl || "#", label: "Twitter" },
+        { icon: <FaInstagram />, href: contactData.instagramUrl || "#", label: "Instagram" },
+        { icon: <FaLinkedin />, href: contactData.linkedinUrl || "#", label: "LinkedIn" },
+        { icon: <FaWhatsapp />, href: contactData.whatsappUrl || "#", label: "WhatsApp" }
     ];
 
     return (
@@ -73,7 +103,7 @@ const ContactUsPage = () => {
                 <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{
-                        backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+                        backgroundImage: `url('${contactData.heroBackgroundUrl || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'}')`,
                         filter: "brightness(0.3)"
                     }}
                 ></div>
@@ -86,10 +116,10 @@ const ContactUsPage = () => {
                         className="text-center relative z-10"
                     >
                         <h1 className="heading-primary text-6xl font-bold text-white mb-6">
-                            Contact Us
+                            {contactData.heroTitle || "Contact Us"}
                         </h1>
                         <p className="accent-text text-2xl text-[#D6AD60] max-w-2xl mx-auto">
-                            Get in touch with our team of real estate experts
+                            {contactData.heroSubtitle || "Get in touch with our team of real estate experts"}
                         </p>
                     </motion.div>
                 </div>
@@ -225,7 +255,17 @@ const ContactUsPage = () => {
                                         </div>
                                         <div>
                                             <h4 className="text-white font-semibold mb-1">Business Hours</h4>
-                                            <p className="text-gray-300">Monday - Friday: 9:00 AM - 6:00 PM<br />Saturday: 10:00 AM - 4:00 PM</p>
+                                            <p className="text-gray-300">
+                                                {contactData.businessHours ? 
+                                                    contactData.businessHours.map((hour, index) => (
+                                                        <span key={index}>
+                                                            {hour}
+                                                            {index < contactData.businessHours.length - 1 && <br />}
+                                                        </span>
+                                                    )) : 
+                                                    <>Monday - Friday: 9:00 AM - 6:00 PM<br />Saturday: 10:00 AM - 4:00 PM</>
+                                                }
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="flex items-start space-x-4">

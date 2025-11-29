@@ -541,8 +541,8 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                             >
                                 <InputNumber
                                     placeholder="0"
-                                    min={0}
-                                    step={0.5}
+                                    // min={0}
+                                    // step={0.5}
                                     size="large"
                                     className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"
                                 />

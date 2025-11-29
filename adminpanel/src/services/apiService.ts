@@ -11,6 +11,7 @@ class ApiService {
     const token = this.getAuthToken();
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
+      'x-admin-key': config.admin.apiKey, // Add admin key for all requests
     };
 
     if (token) {
@@ -52,6 +53,25 @@ class ApiService {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
     });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('POST request failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: endpoint,
+        data: data,
+        errorResponse: errorData
+      });
+      
+      try {
+        const parsedError = JSON.parse(errorData);
+        throw new Error(parsedError.message || `Request failed with status ${response.status}`);
+      } catch (parseError) {
+        throw new Error(`Request failed with status ${response.status}: ${errorData}`);
+      }
+    }
+
     return response.json();
   }
 
@@ -82,7 +102,9 @@ class ApiService {
       });
     }
 
-    const headers: HeadersInit = {};
+    const headers: HeadersInit = {
+      'x-admin-key': config.admin.apiKey, // Add admin key for file uploads
+    };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }

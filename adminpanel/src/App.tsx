@@ -3,11 +3,13 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import MainLayout from './components/Layout/MainLayout';
 import Login from './pages/Login';
+import AuthDebug from './components/AuthDebug';
 import Dashboard from './pages/Dashboard';
 import PropertyManagement from './pages/PropertyManagement';
 import BlogManagement from './pages/BlogManagement';
 import AuthorManagement from './pages/AuthorManagement';
 import ContactFormManagement from './pages/ContactFormManagement';
+import ContactInfoManagement from './pages/ContactInfoManagement';
 import ScheduleVisitManagement from './pages/ScheduleVisitManagement';
 import PDFManagement from './pages/PDFManagement';
 import AboutManagement from './pages/AboutManagement';
@@ -16,6 +18,8 @@ import WhyChooseUsManagement from './pages/WhyChooseUsManagement';
 import CoreStrengthsManagement from './pages/CoreStrengthsManagement';
 import FutureVisionManagement from './pages/FutureVisionManagement';
 import NewsletterManagement from './pages/NewsletterManagement';
+import AboutUsManagement from './pages/AboutUsManagement';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -52,6 +56,13 @@ function App() {
             <ProtectedRoute>
               <MainLayout>
                 <AuthorManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/contact-info" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <ContactInfoManagement />
               </MainLayout>
             </ProtectedRoute>
           } />
@@ -118,7 +129,22 @@ function App() {
               </MainLayout>
             </ProtectedRoute>
           } />
+          <Route path="/about-us" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <AboutUsManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Settings />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
         </Routes>
+        {/* <AuthDebug /> */}
       </Router>
     </AuthProvider>
   );
