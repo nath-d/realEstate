@@ -9,6 +9,7 @@ import {
     Param,
     Query,
     Res,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -30,6 +31,21 @@ export class AuthController {
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
         return this.authService.login(loginDto);
+    }
+
+    @Post('admin/login')
+    async adminLogin(@Body() loginDto: LoginDto) {
+        const result = await this.authService.login(loginDto);
+        
+        // Check if user has admin role
+        if (result.user && result.user.role !== 'admin') {
+            throw new UnauthorizedException('Admin access required');
+        }
+
+        return {
+            ...result,
+            message: 'Admin login successful'
+        };
     }
 
     @Post('signup')

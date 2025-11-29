@@ -8,8 +8,8 @@
 const config = {
   // Database Configuration
   database: {
-    url: "postgresql://neondb_owner:npg_S0qJlz6IiRoK@ep-calm-pond-a14r8pw2-pooler.ap-southeast-1.aws.neon.tech/mgconstructions?sslmode=require&channel_binding=require",
-    // url: "postgresql://estatedb_owner:npg_EeCVfBN2q0ht@ep-rough-feather-a1jp0s10-pooler.ap-southeast-1.aws.neon.tech/estatedb?sslmode=require",
+    // url: "postgresql://neondb_owner:npg_S0qJlz6IiRoK@ep-calm-pond-a14r8pw2-pooler.ap-southeast-1.aws.neon.tech/mgconstructions?sslmode=require&channel_binding=require",
+    url: "postgresql://estatedb_owner:npg_EeCVfBN2q0ht@ep-rough-feather-a1jp0s10-pooler.ap-southeast-1.aws.neon.tech/estatedb?sslmode=require",
     // Uncomment if using Prisma < 5.10
     // unpooledUrl: "postgresql://estatedb_owner:npg_EeCVfBN2q0ht@ep-rough-feather-a1jp0s10.ap-southeast-1.aws.neon.tech/estatedb?sslmode=require"
   },
@@ -53,6 +53,12 @@ const config = {
   // Server Configuration
   server: {
     port: 3000
+  },
+
+  // Google Places API Configuration
+  googlePlaces: {
+    apiKey: "YOUR_GOOGLE_PLACES_API_KEY_HERE", // Replace with your actual API key
+    placeId: "YOUR_PLACE_ID_HERE" // Replace with MG Construction & Pacific Realty's Place ID
   },
 
   // Email Service Providers (Currently Commented Out)

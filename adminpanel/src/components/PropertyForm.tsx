@@ -431,7 +431,7 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                                     formatter={value => `₹ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={((value: string | undefined) => {
                                         if (typeof value !== 'string') return 0;
-                                        return Number(value.replace(/\$\s?|(,*)/g, ''));
+                                        return Number(value.replace(/₹\s?|(,*)/g, ''));
                                     }) as any}
                                     size="large"
                                     className="w-full border-[#d1d5db] rounded-lg focus:border-[#3b82f6] focus:ring-2 focus:ring-[#dbeafe]"

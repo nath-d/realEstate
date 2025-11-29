@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import MainLayout from './components/Layout/MainLayout';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PropertyManagement from './pages/PropertyManagement';
 import BlogManagement from './pages/BlogManagement';
@@ -16,27 +19,108 @@ import NewsletterManagement from './pages/NewsletterManagement';
 
 function App() {
   return (
-    <Router>
-      <MainLayout>
+    <AuthProvider>
+      <Router>
         <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          
+          {/* Protected routes */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/properties" element={<PropertyManagement />} />
-          <Route path="/blogs" element={<BlogManagement />} />
-          <Route path="/authors" element={<AuthorManagement />} />
-          <Route path="/contact-forms" element={<ContactFormManagement />} />
-          <Route path="/schedule-visits" element={<ScheduleVisitManagement />} />
-          <Route path="/pdfs" element={<PDFManagement />} />
-          <Route path="/about" element={<AboutManagement />} />
-          <Route path="/achievements" element={<AchievementManagement />} />
-          <Route path="/why-choose-us" element={<WhyChooseUsManagement />} />
-          <Route path="/core-strengths" element={<CoreStrengthsManagement />} />
-          <Route path="/future-vision" element={<FutureVisionManagement />} />
-          <Route path="/newsletter" element={<NewsletterManagement />} />
-          {/* Add more routes here as needed */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/properties" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <PropertyManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/blogs" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <BlogManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/authors" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <AuthorManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/contact-forms" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <ContactFormManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/schedule-visits" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <ScheduleVisitManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/pdfs" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <PDFManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/about" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <AboutManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/achievements" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <AchievementManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/why-choose-us" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <WhyChooseUsManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/core-strengths" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <CoreStrengthsManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/future-vision" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <FutureVisionManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/newsletter" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <NewsletterManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
         </Routes>
-      </MainLayout>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
