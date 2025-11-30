@@ -1,5 +1,5 @@
 import { Avatar, Dropdown, Space, Badge, Button, Typography, Spin } from 'antd';
-import { UserOutlined, BellOutlined, SettingOutlined, LogoutOutlined, MenuOutlined, MailOutlined, CalendarOutlined } from '@ant-design/icons';
+import { UserOutlined, BellOutlined, SettingOutlined, LogoutOutlined, MenuOutlined, MailOutlined, CalendarOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import Sidebar from './Sidebar';
 import { useState, useEffect, useMemo } from 'react';
 import { useNotifications } from '../../context/NotificationContext';
@@ -133,6 +133,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 icon: <CalendarOutlined />,
             },
             {
+                key: 'view-video-chat',
+                label: (
+                    <div className="flex items-center justify-between">
+                        <span>Video Chats</span>
+                        <Badge count={counts.videoChatPending} size="small" />
+                    </div>
+                ),
+                icon: <VideoCameraOutlined />,
+            },
+            {
                 type: 'divider' as const,
             },
             {
@@ -142,7 +152,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         ]
 
         return [header, { type: 'divider' as const }, ...list, ...footer]
-    }, [counts.contactNew, counts.total, counts.visitPending, items, loading])
+    }, [counts.contactNew, counts.total, counts.visitPending, counts.videoChatPending, items, loading])
 
     const onNotificationMenuClick = async ({ key }: { key: string }) => {
         if (key === 'refresh') {
@@ -164,6 +174,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             navigate('/schedule-visits')
             return
         }
+        if (key === 'view-video-chat') {
+            navigate('/video-chats')
+            return
+        }
         if (key.startsWith('contact-')) {
             const id = Number(key.split('-')[1])
             if (!Number.isNaN(id)) {
@@ -182,6 +196,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 navigate('/schedule-visits', { state: { highlight: { type: 'visit', id } } })
             } else {
                 navigate('/schedule-visits')
+            }
+            return
+        }
+        if (key.startsWith('video-chat-')) {
+            const id = Number(key.split('-')[2]) // video-chat-123, so split on '-' gives ['video', 'chat', '123']
+            if (!Number.isNaN(id)) {
+                navigate('/video-chats', { state: { highlight: { type: 'video-chat', id } } })
+            } else {
+                navigate('/video-chats')
             }
             return
         }

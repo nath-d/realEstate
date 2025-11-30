@@ -5,7 +5,7 @@
  * instead of using a traditional .env file.
  */
 
-const config = require('../../config.js');
+const config = require('../../config');
 
 // Set up environment variables from config
 export function setupEnvironmentFromConfig(): void {

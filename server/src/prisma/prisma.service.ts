@@ -5,7 +5,7 @@ const config = require('../../config');
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
     constructor() {
-        // Set DATABASE_URL from config
+        // Set DATABASE_URL from config for Prisma schema
         process.env.DATABASE_URL = config.database.url;
         super();
     }

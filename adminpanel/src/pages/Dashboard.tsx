@@ -55,6 +55,12 @@ interface DashboardStats {
         confirmed: number;
         completed: number;
     };
+    videoChats: {
+        total: number;
+        pending: number;
+        confirmed: number;
+        completed: number;
+    };
 }
 
 const Dashboard: React.FC = () => {
@@ -75,6 +81,12 @@ const Dashboard: React.FC = () => {
             responded: 0
         },
         scheduleVisits: {
+            total: 0,
+            pending: 0,
+            confirmed: 0,
+            completed: 0
+        },
+        videoChats: {
             total: 0,
             pending: 0,
             confirmed: 0,
@@ -109,6 +121,10 @@ const Dashboard: React.FC = () => {
             const scheduleStatsResponse = await fetch(`${config.api.baseUrl}/schedule-visit/stats`);
             const scheduleStats = scheduleStatsResponse.ok ? await scheduleStatsResponse.json() : { total: 0, pending: 0, confirmed: 0, completed: 0 };
 
+            // Fetch video chats stats
+            const videoChatsStatsResponse = await fetch(`${config.api.baseUrl}/schedule-video-chat/stats`);
+            const videoChatsStats = videoChatsStatsResponse.ok ? await videoChatsStatsResponse.json() : { total: 0, pending: 0, confirmed: 0, completed: 0 };
+
             // Calculate statistics
             const totalProperties = properties.length;
             const forSaleProperties = properties.filter(p => p.status === 'for sale').length;
@@ -139,7 +155,8 @@ const Dashboard: React.FC = () => {
                 recentProperties,
                 topProperties,
                 contactForms: contactStats,
-                scheduleVisits: scheduleStats
+                scheduleVisits: scheduleStats,
+                videoChats: videoChatsStats
             });
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
@@ -456,6 +473,59 @@ const Dashboard: React.FC = () => {
                                 </div>
                                 <Progress
                                     percent={stats.scheduleVisits.total > 0 ? (stats.scheduleVisits.completed / stats.scheduleVisits.total) * 100 : 0}
+                                    strokeColor="#10b981"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                        </div>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} lg={12}>
+                    <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)] h-full">
+                        <div className="flex items-center justify-between mb-4">
+                            <Title level={4} className="m-0">Video Chats</Title>
+                            <Button
+                                type="primary"
+                                onClick={() => navigate('/video-chats')}
+                                size="middle"
+                                className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-purple-500 to-indigo-600 border-[#8b5cf6] text-white shadow-[0_2px_4px_rgba(139,92,246,0.2)] hover:from-indigo-600 hover:to-purple-700 hover:border-[#7c3aed] hover:shadow-[0_4px_8px_rgba(139,92,246,0.3)]"
+                            >
+                                View All
+                            </Button>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Pending</Text>
+                                    <Text strong>{stats.videoChats.pending}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.videoChats.total > 0 ? (stats.videoChats.pending / stats.videoChats.total) * 100 : 0}
+                                    strokeColor="#f59e0b"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Confirmed</Text>
+                                    <Text strong>{stats.videoChats.confirmed}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.videoChats.total > 0 ? (stats.videoChats.confirmed / stats.videoChats.total) * 100 : 0}
+                                    strokeColor="#8b5cf6"
+                                    showInfo={false}
+                                    size="small"
+                                />
+                            </div>
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <Text>Completed</Text>
+                                    <Text strong>{stats.videoChats.completed}</Text>
+                                </div>
+                                <Progress
+                                    percent={stats.videoChats.total > 0 ? (stats.videoChats.completed / stats.videoChats.total) * 100 : 0}
                                     strokeColor="#10b981"
                                     showInfo={false}
                                     size="small"

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import config from '../../config';
 import { useNotifications } from '../context/NotificationContext';
 import { Card, Button, message, Modal, Alert, Spin, Table, Tag, Space, Drawer, Descriptions, Typography, Select } from 'antd';
-import { EyeOutlined, DeleteOutlined, CalendarOutlined, UserOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
+import { EyeOutlined, DeleteOutlined, CalendarOutlined, UserOutlined, PhoneOutlined, HomeOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-interface ScheduleVisit {
+interface ScheduleVideoChat {
     id: number;
     name: string;
     email: string;
@@ -17,6 +17,7 @@ interface ScheduleVisit {
     preferredTime: string;
     message?: string;
     preferredContact: string;
+    platform: string;
     propertyId?: number;
     propertyTitle?: string;
     status: string;
@@ -24,47 +25,47 @@ interface ScheduleVisit {
     updatedAt: string;
 }
 
-const ScheduleVisitManagement: React.FC = () => {
+const VideoChatsManagement: React.FC = () => {
     const location = useLocation() as any;
-    const [scheduleVisits, setScheduleVisits] = useState<ScheduleVisit[]>([]);
+    const [videoChats, setVideoChats] = useState<ScheduleVideoChat[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-    const [viewingVisit, setViewingVisit] = useState<ScheduleVisit | null>(null);
+    const [viewingVideoChat, setViewingVideoChat] = useState<ScheduleVideoChat | null>(null);
     const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
-    const [visitToDelete, setVisitToDelete] = useState<ScheduleVisit | null>(null);
+    const [videoChatToDelete, setVideoChatToDelete] = useState<ScheduleVideoChat | null>(null);
     const { refresh } = useNotifications();
     const [highlightId, setHighlightId] = useState<number | null>(null);
 
     useEffect(() => {
-        fetchScheduleVisits();
+        fetchVideoChats();
     }, []);
 
     // pick up highlight from navigation state
     useEffect(() => {
         const hl = location?.state?.highlight;
-        if (hl?.type === 'visit' && typeof hl?.id === 'number') {
+        if (hl?.type === 'video-chat' && typeof hl?.id === 'number') {
             setHighlightId(hl.id);
             const t = setTimeout(() => setHighlightId(null), 4000);
             return () => clearTimeout(t);
         }
     }, [location?.state]);
 
-    const fetchScheduleVisits = async () => {
+    const fetchVideoChats = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            const response = await fetch(`${config.api.baseUrl}/schedule-visit`);
+            const response = await fetch(`${config.api.baseUrl}/schedule-video-chat`);
             if (!response.ok) {
-                throw new Error('Failed to fetch schedule visits');
+                throw new Error('Failed to fetch video chats');
             }
 
             const data = await response.json();
-            setScheduleVisits(data);
+            setVideoChats(data);
         } catch (error) {
-            console.error('Error fetching schedule visits:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Failed to fetch schedule visits';
+            console.error('Error fetching video chats:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Failed to fetch video chats';
             setError(errorMessage);
             message.error(errorMessage);
         } finally {
@@ -72,33 +73,33 @@ const ScheduleVisitManagement: React.FC = () => {
         }
     };
 
-    const handleView = (visit: ScheduleVisit) => {
-        setViewingVisit(visit);
+    const handleView = (videoChat: ScheduleVideoChat) => {
+        setViewingVideoChat(videoChat);
         setIsDrawerVisible(true);
     };
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await fetch(`${config.api.baseUrl}/schedule-visit/${id}`, {
+            const response = await fetch(`${config.api.baseUrl}/schedule-video-chat/${id}`, {
                 method: 'DELETE',
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete schedule visit');
+                throw new Error('Failed to delete video chat');
             }
 
-            setScheduleVisits(scheduleVisits.filter(v => v.id !== id));
-            message.success('Schedule visit deleted successfully');
+            setVideoChats(videoChats.filter(v => v.id !== id));
+            message.success('Video chat deleted successfully');
             refresh();
         } catch (error) {
-            console.error('Error deleting schedule visit:', error);
-            message.error('Failed to delete schedule visit');
+            console.error('Error deleting video chat:', error);
+            message.error('Failed to delete video chat');
         }
     };
 
     const handleStatusUpdate = async (id: number, status: string) => {
         try {
-            const response = await fetch(`${config.api.baseUrl}/schedule-visit/${id}`, {
+            const response = await fetch(`${config.api.baseUrl}/schedule-video-chat/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,7 +111,7 @@ const ScheduleVisitManagement: React.FC = () => {
                 throw new Error('Failed to update status');
             }
 
-            setScheduleVisits(scheduleVisits.map(v =>
+            setVideoChats(videoChats.map(v =>
                 v.id === id ? { ...v, status } : v
             ));
             message.success('Status updated successfully');
@@ -131,12 +132,23 @@ const ScheduleVisitManagement: React.FC = () => {
         return colorMap[status as keyof typeof colorMap] || 'default';
     };
 
+    const getPlatformIcon = (platform: string) => {
+        const platformMap = {
+            'zoom': '📹',
+            'google-meet': '🎥',
+            'microsoft-teams': '💼',
+            'whatsapp': '📱',
+            'facetime': '📞'
+        };
+        return platformMap[platform as keyof typeof platformMap] || '📹';
+    };
+
     const columns = [
         {
             title: 'Visitor Info',
             key: 'visitor',
             width: 250,
-            render: (record: ScheduleVisit) => (
+            render: (record: ScheduleVideoChat) => (
                 <div className="space-y-1">
                     <div className="font-semibold text-gray-900 flex items-center">
                         <UserOutlined className="mr-2 text-blue-500" />
@@ -157,7 +169,7 @@ const ScheduleVisitManagement: React.FC = () => {
             title: 'Property',
             key: 'property',
             width: 200,
-            render: (record: ScheduleVisit) => (
+            render: (record: ScheduleVideoChat) => (
                 <div className="space-y-1">
                     {record.propertyTitle ? (
                         <div className="font-medium text-gray-800 flex items-center">
@@ -174,16 +186,20 @@ const ScheduleVisitManagement: React.FC = () => {
             ),
         },
         {
-            title: 'Visit Details',
-            key: 'visit',
+            title: 'Video Chat Details',
+            key: 'videoChat',
             width: 200,
-            render: (record: ScheduleVisit) => (
+            render: (record: ScheduleVideoChat) => (
                 <div className="space-y-1">
                     <div className="text-sm text-gray-800">
                         <strong>Date:</strong> {new Date(record.preferredDate).toLocaleDateString()}
                     </div>
                     <div className="text-sm text-gray-800">
                         <strong>Time:</strong> {record.preferredTime}
+                    </div>
+                    <div className="text-sm text-gray-800 flex items-center">
+                        <span className="mr-1">{getPlatformIcon(record.platform)}</span>
+                        <strong>Platform:</strong> {record.platform.charAt(0).toUpperCase() + record.platform.slice(1).replace('-', ' ')}
                     </div>
                 </div>
             ),
@@ -193,7 +209,7 @@ const ScheduleVisitManagement: React.FC = () => {
             dataIndex: 'status',
             key: 'status',
             width: 150,
-            render: (status: string, record: ScheduleVisit) => (
+            render: (status: string, record: ScheduleVideoChat) => (
                 <Select
                     value={status}
                     onChange={(value) => handleStatusUpdate(record.id, value)}
@@ -221,7 +237,7 @@ const ScheduleVisitManagement: React.FC = () => {
             title: 'Actions',
             key: 'actions',
             width: 150,
-            render: (record: ScheduleVisit) => (
+            render: (record: ScheduleVideoChat) => (
                 <Space>
                     <Button
                         type="primary"
@@ -235,7 +251,7 @@ const ScheduleVisitManagement: React.FC = () => {
                         danger
                         icon={<DeleteOutlined />}
                         onClick={() => {
-                            setVisitToDelete(record);
+                            setVideoChatToDelete(record);
                             setDeleteConfirmVisible(true);
                         }}
                         size="small"
@@ -254,10 +270,10 @@ const ScheduleVisitManagement: React.FC = () => {
                 <div className="flex justify-between items-start mb-6">
                     <div>
                         <Title level={2} className="mb-2 text-gray-800">
-                            Schedule Visit Management
+                            Video Chat Management
                         </Title>
                         <Text type="secondary" className="text-gray-600">
-                            View and manage property visit scheduling requests
+                            View and manage property video chat scheduling requests
                         </Text>
                     </div>
                 </div>
@@ -282,14 +298,14 @@ const ScheduleVisitManagement: React.FC = () => {
                 <div className="w-full">
                     <Table
                         columns={columns}
-                        dataSource={scheduleVisits}
+                        dataSource={videoChats}
                         rowKey="id"
-                        rowClassName={(record: ScheduleVisit) => record.id === highlightId ? 'row-highlight' : ''}
+                        rowClassName={(record: ScheduleVideoChat) => record.id === highlightId ? 'row-highlight' : ''}
                         pagination={{
                             pageSize: 10,
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} schedule visits`,
+                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} video chats`,
                         }}
                         scroll={{ x: 1200 }}
                         loading={loading}
@@ -298,82 +314,78 @@ const ScheduleVisitManagement: React.FC = () => {
                 </div>
             )}
 
-            {/* Schedule Visit Details Drawer */}
+            {/* Video Chat Details Drawer */}
             <Drawer
                 title={
                     <div className="flex items-center space-x-3">
-                        <CalendarOutlined className="text-blue-600" />
-                        <span className="text-xl font-semibold text-gray-800">Schedule Visit Details</span>
+                        <VideoCameraOutlined className="text-blue-600" />
+                        <span className="text-xl font-semibold text-gray-800">Video Chat Details</span>
                     </div>
                 }
                 placement="right"
                 width={600}
                 onClose={() => {
                     setIsDrawerVisible(false);
-                    setViewingVisit(null);
+                    setViewingVideoChat(null);
                 }}
                 open={isDrawerVisible}
             >
-                {viewingVisit && (
+                {viewingVideoChat && (
                     <div className="space-y-6">
                         <Descriptions title="Visitor Information" column={1} bordered>
-                            <Descriptions.Item label="Name">{viewingVisit.name}</Descriptions.Item>
-                            <Descriptions.Item label="Email">{viewingVisit.email}</Descriptions.Item>
-                            <Descriptions.Item label="Phone">{viewingVisit.phone}</Descriptions.Item>
+                            <Descriptions.Item label="Name">{viewingVideoChat.name}</Descriptions.Item>
+                            <Descriptions.Item label="Email">{viewingVideoChat.email}</Descriptions.Item>
+                            <Descriptions.Item label="Phone">{viewingVideoChat.phone}</Descriptions.Item>
                             <Descriptions.Item label="Preferred Contact">
-                                {viewingVisit.preferredContact}
+                                {viewingVideoChat.preferredContact}
                             </Descriptions.Item>
                             <Descriptions.Item label="Status">
-                                <Tag color={getStatusColor(viewingVisit.status)}>
-                                    {viewingVisit.status.toUpperCase()}
+                                <Tag color={getStatusColor(viewingVideoChat.status)}>
+                                    {viewingVideoChat.status.toUpperCase()}
                                 </Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Requested">
-                                {new Date(viewingVisit.createdAt).toLocaleString()}
+                                {new Date(viewingVideoChat.createdAt).toLocaleString()}
                             </Descriptions.Item>
                         </Descriptions>
 
-                        <Descriptions title="Visit Details" column={1} bordered>
+                        <Descriptions title="Video Chat Details" column={1} bordered>
                             <Descriptions.Item label="Preferred Date">
-                                {new Date(viewingVisit.preferredDate).toLocaleDateString()}
+                                {new Date(viewingVideoChat.preferredDate).toLocaleDateString()}
                             </Descriptions.Item>
                             <Descriptions.Item label="Preferred Time">
-                                {viewingVisit.preferredTime}
+                                {viewingVideoChat.preferredTime}
                             </Descriptions.Item>
-                            {viewingVisit.propertyTitle && (
+                            <Descriptions.Item label="Platform">
+                                <div className="flex items-center">
+                                    <span className="mr-2">{getPlatformIcon(viewingVideoChat.platform)}</span>
+                                    {viewingVideoChat.platform.charAt(0).toUpperCase() + viewingVideoChat.platform.slice(1).replace('-', ' ')}
+                                </div>
+                            </Descriptions.Item>
+                            {viewingVideoChat.propertyTitle && (
                                 <Descriptions.Item label="Property">
-                                    {viewingVisit.propertyTitle}
+                                    {viewingVideoChat.propertyTitle}
                                 </Descriptions.Item>
                             )}
                         </Descriptions>
 
-                        {viewingVisit.message && (
+                        {viewingVideoChat.message && (
                             <div>
                                 <Title level={4}>Additional Message</Title>
                                 <div className="bg-gray-50 p-4 rounded-lg border">
                                     <Text className="text-gray-700 whitespace-pre-wrap">
-                                        {viewingVisit.message}
+                                        {viewingVideoChat.message}
                                     </Text>
                                 </div>
                             </div>
                         )}
 
                         <div className="flex space-x-2 pt-4">
-                            {/* <Button
-                                type="primary"
-                                onClick={() => {
-                                    // Handle confirm action
-                                    message.info('Confirmation functionality to be implemented');
-                                }}
-                                className="flex-1"
-                            >
-                                Confirm Visit
-                            </Button> */}
                             <Button
                                 danger
                                 onClick={() => {
                                     setIsDrawerVisible(false);
-                                    setVisitToDelete(viewingVisit);
+                                    setVideoChatToDelete(viewingVideoChat);
                                     setDeleteConfirmVisible(true);
                                 }}
                                 className="flex-1"
@@ -387,24 +399,24 @@ const ScheduleVisitManagement: React.FC = () => {
 
             {/* Delete Confirmation Modal */}
             <Modal
-                title="Delete Schedule Visit"
+                title="Delete Video Chat"
                 open={deleteConfirmVisible}
                 onCancel={() => {
                     setDeleteConfirmVisible(false);
-                    setVisitToDelete(null);
+                    setVideoChatToDelete(null);
                 }}
                 onOk={() => {
-                    if (visitToDelete) {
-                        handleDelete(visitToDelete.id);
+                    if (videoChatToDelete) {
+                        handleDelete(videoChatToDelete.id);
                     }
                     setDeleteConfirmVisible(false);
-                    setVisitToDelete(null);
+                    setVideoChatToDelete(null);
                 }}
                 okText="Delete"
                 cancelText="Cancel"
                 okType="danger"
             >
-                <p>Are you sure you want to delete this schedule visit request?</p>
+                <p>Are you sure you want to delete this video chat request?</p>
                 <p className="text-gray-600 text-sm mt-2">
                     This action cannot be undone.
                 </p>
@@ -413,4 +425,5 @@ const ScheduleVisitManagement: React.FC = () => {
     );
 };
 
-export default ScheduleVisitManagement; 
+export default VideoChatsManagement;
+

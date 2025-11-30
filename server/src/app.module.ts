@@ -8,6 +8,7 @@ import { UploadModule } from './upload/upload.module';
 import { BlogModule } from './blog/blog.module';
 import { ContactModule } from './contact/contact.module';
 import { ScheduleVisitModule } from './schedule-visit/schedule-visit.module';
+import { VideoChatModule } from './video-chat/video-chat.module';
 import { AuthModule } from './auth/auth.module';
 import { PDFManagementService } from './services/pdf-management.service';
 import { PDFManagementController } from './services/pdf-management.controller';
@@ -22,7 +23,7 @@ import { ContactInfoModule } from './contact-info/contact-info.module';
 import { AboutUsModule } from './about-us/about-us.module';
 
 @Module({
-    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, AuthModule, AboutModule, AchievementModule, WhyChooseUsModule, CoreStrengthsModule, FutureVisionModule, NewsletterModule, ReviewsModule, ContactInfoModule, AboutUsModule],
+    imports: [PrismaModule, PropertyModule, CloudinaryModule, UploadModule, BlogModule, ContactModule, ScheduleVisitModule, VideoChatModule, AuthModule, AboutModule, AchievementModule, WhyChooseUsModule, CoreStrengthsModule, FutureVisionModule, NewsletterModule, ReviewsModule, ContactInfoModule, AboutUsModule],
     controllers: [AppController, PDFManagementController],
     providers: [AppService, PDFManagementService],
 })

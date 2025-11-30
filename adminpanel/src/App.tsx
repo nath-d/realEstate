@@ -11,6 +11,7 @@ import AuthorManagement from './pages/AuthorManagement';
 import ContactFormManagement from './pages/ContactFormManagement';
 import ContactInfoManagement from './pages/ContactInfoManagement';
 import ScheduleVisitManagement from './pages/ScheduleVisitManagement';
+import VideoChatsManagement from './pages/VideoChatsManagement';
 import PDFManagement from './pages/PDFManagement';
 import AboutManagement from './pages/AboutManagement';
 import AchievementManagement from './pages/AchievementManagement';
@@ -77,6 +78,13 @@ function App() {
             <ProtectedRoute>
               <MainLayout>
                 <ScheduleVisitManagement />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/video-chats" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <VideoChatsManagement />
               </MainLayout>
             </ProtectedRoute>
           } />

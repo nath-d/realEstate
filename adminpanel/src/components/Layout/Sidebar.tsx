@@ -1,16 +1,12 @@
-import { Menu, Button, Typography } from 'antd';
+import { Menu, Button } from 'antd';
 import {
     DashboardOutlined,
     HomeOutlined,
-    UserOutlined,
     SettingOutlined,
     FileOutlined,
     TeamOutlined,
     BarChartOutlined,
-    ShoppingOutlined,
     MessageOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
     RightCircleOutlined,
     LeftCircleOutlined,
     EnvironmentOutlined,
@@ -18,17 +14,13 @@ import {
     TagsOutlined,
     UserAddOutlined,
     CalendarOutlined,
-    FilePdfOutlined,
     MailOutlined,
     TrophyOutlined,
     PhoneOutlined,
-    EyeOutlined
+    EyeOutlined,
+    VideoCameraOutlined
 } from '@ant-design/icons';
-import { FaTrophy } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-
-const { Text } = Typography;
 
 interface SidebarProps {
     collapsed: boolean;
@@ -48,9 +40,10 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
             icon: <PhoneOutlined />,
             label: 'Contact & Schedule Visits',
             children: [
-                { key: 'contact-info', icon: <EnvironmentOutlined />, label: 'Contact Information' },
+                // { key: 'contact-info', icon: <EnvironmentOutlined />, label: 'Contact Information' },
                 { key: 'contact-forms', icon: <MessageOutlined />, label: 'Contact Forms' },
                 { key: 'schedule-visits', icon: <CalendarOutlined />, label: 'Scheduled Visits' },
+                { key: 'video-chats', icon: <VideoCameraOutlined />, label: 'Video Chats' },
             ]
         },
         {
@@ -64,6 +57,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
         },
         { key: 'pdfs', icon: <FileOutlined />, label: 'PDF Management' },
         { key: 'about', icon: <BookOutlined />, label: 'Our Story Section' },
+        { key: 'contact-info', icon: <EnvironmentOutlined />, label: 'Contact Information Page' },
         { key: 'about-us', icon: <TeamOutlined />, label: 'About Us Page' },
         { key: 'achievements', icon: <TrophyOutlined />, label: 'Certifications' },
         { key: 'why-choose-us', icon: <TagsOutlined />, label: 'Why Choose Us' },
@@ -102,7 +96,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
                         <EnvironmentOutlined className="text-white text-lg" />
                     </div>
                 )}
-                
+
                 {/* Toggle button - always visible */}
                 <Button
                     type="text"

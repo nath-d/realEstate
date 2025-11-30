@@ -327,7 +327,7 @@ const ContactFormManagement: React.FC = () => {
                         </div>
 
                         <div className="flex space-x-2 pt-4">
-                            <Button
+                            {/* <Button
                                 type="primary"
                                 onClick={() => {
                                     // Handle respond action
@@ -336,7 +336,7 @@ const ContactFormManagement: React.FC = () => {
                                 className="flex-1"
                             >
                                 Respond
-                            </Button>
+                            </Button> */}
                             <Button
                                 danger
                                 onClick={() => {

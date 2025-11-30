@@ -1,6 +1,6 @@
 import config from '../../config';
 
-export type NotificationType = 'contact' | 'visit'
+export type NotificationType = 'contact' | 'visit' | 'video-chat'
 
 export interface NotificationItem {
     id: number
@@ -15,6 +15,7 @@ export interface NotificationCounts {
     total: number
     contactNew: number
     visitPending: number
+    videoChatPending: number
 }
 
 const BASE_URL = config.api.baseUrl;
@@ -22,6 +23,8 @@ const CONTACT_ENDPOINT = `${BASE_URL}/contact`
 const CONTACT_STATS_ENDPOINT = `${BASE_URL}/contact/stats`
 const VISIT_ENDPOINT = `${BASE_URL}/schedule-visit`
 const VISIT_STATS_ENDPOINT = `${BASE_URL}/schedule-visit/stats`
+const VIDEO_CHAT_ENDPOINT = `${BASE_URL}/schedule-video-chat`
+const VIDEO_CHAT_STATS_ENDPOINT = `${BASE_URL}/schedule-video-chat/stats`
 
 async function safeJson<T>(res: Response, fallback: T): Promise<T> {
     try {
@@ -33,9 +36,10 @@ async function safeJson<T>(res: Response, fallback: T): Promise<T> {
 }
 
 export async function fetchNotificationCounts(): Promise<NotificationCounts> {
-    const [contactStatsRes, visitStatsRes] = await Promise.all([
+    const [contactStatsRes, visitStatsRes, videoChatStatsRes] = await Promise.all([
         fetch(CONTACT_STATS_ENDPOINT),
         fetch(VISIT_STATS_ENDPOINT),
+        fetch(VIDEO_CHAT_STATS_ENDPOINT),
     ])
 
     const contactStats = await safeJson(contactStatsRes, {
@@ -50,20 +54,29 @@ export async function fetchNotificationCounts(): Promise<NotificationCounts> {
         confirmed: 0,
         completed: 0,
     })
+    const videoChatStats = await safeJson(videoChatStatsRes, {
+        total: 0,
+        pending: 0,
+        confirmed: 0,
+        completed: 0,
+    })
 
     const contactNew = Number(contactStats?.new || 0)
     const visitPending = Number(visitStats?.pending || 0)
+    const videoChatPending = Number(videoChatStats?.pending || 0)
     return {
-        total: contactNew + visitPending,
+        total: contactNew + visitPending + videoChatPending,
         contactNew,
         visitPending,
+        videoChatPending,
     }
 }
 
 export async function fetchRecentNotifications(limitPerType: number = 5): Promise<NotificationItem[]> {
-    const [contactsRes, visitsRes] = await Promise.all([
+    const [contactsRes, visitsRes, videoChatsRes] = await Promise.all([
         fetch(CONTACT_ENDPOINT),
         fetch(VISIT_ENDPOINT),
+        fetch(VIDEO_CHAT_ENDPOINT),
     ])
 
     type Contact = {
@@ -86,8 +99,20 @@ export async function fetchRecentNotifications(limitPerType: number = 5): Promis
         createdAt: string
     }
 
+    type VideoChat = {
+        id: number
+        name: string
+        propertyTitle?: string
+        preferredDate: string
+        preferredTime: string
+        platform: string
+        status: string
+        createdAt: string
+    }
+
     const contacts = await safeJson<Contact[]>(contactsRes, [])
     const visits = await safeJson<Visit[]>(visitsRes, [])
+    const videoChats = await safeJson<VideoChat[]>(videoChatsRes, [])
 
     const newContacts = contacts
         .filter((c) => c.status === 'new')
@@ -115,7 +140,20 @@ export async function fetchRecentNotifications(limitPerType: number = 5): Promis
             link: '/schedule-visits',
         }))
 
-    const merged = [...newContacts, ...pendingVisits].sort(
+    const pendingVideoChats = videoChats
+        .filter((v) => v.status === 'pending')
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, limitPerType)
+        .map<NotificationItem>((v) => ({
+            id: v.id,
+            type: 'video-chat',
+            title: `Video chat request from ${v.name}`,
+            description: v.propertyTitle ? `Property: ${v.propertyTitle} (${v.platform})` : `Platform: ${v.platform}`,
+            createdAt: v.createdAt,
+            link: '/video-chats',
+        }))
+
+    const merged = [...newContacts, ...pendingVisits, ...pendingVideoChats].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
     return merged

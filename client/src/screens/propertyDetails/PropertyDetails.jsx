@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { FaHeart, FaShare, FaCalculator, FaCalendarAlt, FaMapMarkerAlt, FaHistory, FaBuilding, FaBed, FaBath, FaRuler, FaCar, FaTree, FaSun, FaPhone } from 'react-icons/fa';
+import { FaHeart, FaShare, FaCalculator, FaCalendarAlt, FaMapMarkerAlt, FaHistory, FaBuilding, FaBed, FaBath, FaRuler, FaCar, FaTree, FaSun, FaPhone, FaVideo } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import PropertyHero from './components/PropertyHero';
 import PropertyStats from './components/PropertyStats';
@@ -13,6 +13,7 @@ import MortgageCalculator from './components/MortgageCalculator';
 import VirtualTour from './components/VirtualTour';
 import SimilarProperties from './components/SimilarProperties';
 import ScheduleVisit from './components/ScheduleVisit';
+import ScheduleVideoChat from './components/ScheduleVideoChat';
 import PropertyHistory from './components/PropertyHistory';
 import NeighborhoodInsights from './components/NeighborhoodInsights';
 import MaterialCertifications from './components/MaterialCertifications';
@@ -32,6 +33,7 @@ const PropertyDetails = () => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [showMortgageCalculator, setShowMortgageCalculator] = useState(false);
     const [showScheduleVisit, setShowScheduleVisit] = useState(false);
+    const [showScheduleVideoChat, setShowScheduleVideoChat] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [randomProperties, setRandomProperties] = useState([]);
 
@@ -411,6 +413,17 @@ const PropertyDetails = () => {
                 >
                     <FaPhone className="text-lg sm:text-2xl" />
                 </motion.button>
+
+                <motion.button
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowScheduleVideoChat(true)}
+                    className="bg-[#D4AF37] text-[#122620] p-3 sm:p-4 rounded-full shadow-2xl hover:bg-[#C19B2E] transition-colors"
+                >
+                    <FaVideo className="text-lg sm:text-2xl" />
+                </motion.button>
             </div>
 
             {/* Modals */}
@@ -425,6 +438,13 @@ const PropertyDetails = () => {
                 <ScheduleVisit
                     property={propertyData}
                     onClose={() => setShowScheduleVisit(false)}
+                />
+            )}
+
+            {showScheduleVideoChat && (
+                <ScheduleVideoChat
+                    property={propertyData}
+                    onClose={() => setShowScheduleVideoChat(false)}
                 />
             )}
         </div>
