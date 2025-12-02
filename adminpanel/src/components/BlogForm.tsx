@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Select, Upload, message } from 'antd';
-import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Select, Upload, message, Avatar } from 'antd';
+import { UploadOutlined, LoadingOutlined, UserOutlined } from '@ant-design/icons';
 import { getAuthors } from '../services/blogService';
 import { cloudinaryService } from '../services/cloudinaryService';
 import type { BlogAuthor, CreateBlogData } from '../services/blogTypes';
@@ -196,8 +196,19 @@ const BlogForm: React.FC<BlogFormProps> = ({ initialValues, onSubmit }) => {
                         </Form.Item>
 
                         <Form.Item name="authorId" label="Author" rules={[{ required: true }]}>
-                            <Select size="large">
-                                {authors.map(a => <Option key={a.id} value={a.id}>{a.name}</Option>)}
+                            <Select size="large" placeholder="Select an author">
+                                {authors.map(a => (
+                                    <Option key={a.id} value={a.id}>
+                                        <div className="flex items-center space-x-2">
+                                            <Avatar 
+                                                size={24} 
+                                                src={a.avatar} 
+                                                icon={<UserOutlined />}
+                                            />
+                                            <span>{a.name}</span>
+                                        </div>
+                                    </Option>
+                                ))}
                             </Select>
                         </Form.Item>
 

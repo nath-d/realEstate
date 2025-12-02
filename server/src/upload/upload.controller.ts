@@ -11,13 +11,14 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { multerConfig } from './multer.config';
 
 @Controller('upload')
 export class UploadController {
     constructor(private readonly cloudinaryService: CloudinaryService) { }
 
     @Post('image')
-    @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptor('image', multerConfig))
     async uploadImage(
         @UploadedFile(
             new ParseFilePipe({
@@ -47,7 +48,7 @@ export class UploadController {
     }
 
     @Post('images')
-    @UseInterceptors(FilesInterceptor('images', 10)) // Max 10 images
+    @UseInterceptors(FilesInterceptor('images', 10, multerConfig)) // Max 10 images
     async uploadImages(
         @UploadedFile(
             new ParseFilePipe({

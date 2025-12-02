@@ -127,6 +127,48 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Avatar Upload Styles */
+.avatar-upload .ant-upload-list-picture-card .ant-upload-list-item {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.avatar-upload .ant-upload-list-picture-card .ant-upload-list-item:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}
+
+.avatar-upload .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img {
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-upload .ant-upload.ant-upload-select-picture-card {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed #d9d9d9;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.avatar-upload .ant-upload.ant-upload-select-picture-card:hover {
+  border-color: #1890ff;
+  background: #f0f8ff;
+}
+
+.avatar-upload .ant-upload-list-picture-card .ant-upload-list-item-actions {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+}
+
+.avatar-upload .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon {
+  color: white;
+}
+
 /* Featured Image Upload Styles */
 .featured-image-upload .ant-upload-list-picture-card .ant-upload-list-item {
   width: 100%;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, Modal, Form, Input, message, Popconfirm, Tag } from 'antd';
+import { Card, Button, Table, Modal, message, Popconfirm, Tag, Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { getAuthors, createAuthor, updateAuthor, deleteAuthor } from '../services/blogService';
+import AuthorForm from '../components/AuthorForm';
 import type { BlogAuthor, CreateAuthorData } from '../services/blogTypes';
 
 const AuthorManagement: React.FC = () => {
@@ -66,9 +68,25 @@ const AuthorManagement: React.FC = () => {
     };
 
     const columns = [
+        {
+            title: 'Avatar',
+            key: 'avatar',
+            render: (_: any, record: BlogAuthor) => (
+                <Avatar 
+                    size={40} 
+                    src={record.avatar} 
+                    icon={<UserOutlined />}
+                />
+            )
+        },
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Bio', dataIndex: 'bio', key: 'bio' },
+        { 
+            title: 'Bio', 
+            dataIndex: 'bio', 
+            key: 'bio',
+            render: (bio: string) => bio ? (bio.length > 50 ? `${bio.substring(0, 50)}...` : bio) : '-'
+        },
         {
             title: 'Blogs',
             key: 'blogs',
@@ -106,24 +124,19 @@ const AuthorManagement: React.FC = () => {
     return (
         <Card title="Author Management" extra={<Button type="primary" onClick={handleAdd}>Add Author</Button>}>
             <Table columns={columns} dataSource={authors} rowKey="id" loading={loading} />
-            <Modal open={modalVisible} onCancel={() => setModalVisible(false)} footer={null} destroyOnClose>
-                <Form initialValues={editingAuthor || {}} onFinish={handleFormSubmit} layout="vertical">
-                    <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="bio" label="Bio">
-                        <Input.TextArea rows={2} />
-                    </Form.Item>
-                    <Form.Item name="avatar" label="Avatar URL">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">Save</Button>
-                    </Form.Item>
-                </Form>
+            <Modal 
+                open={modalVisible} 
+                onCancel={() => setModalVisible(false)} 
+                footer={null} 
+                destroyOnClose
+                title={editingAuthor ? 'Edit Author' : 'Add New Author'}
+                width={600}
+            >
+                <AuthorForm
+                    initialValues={editingAuthor || undefined}
+                    onSubmit={handleFormSubmit}
+                    onCancel={() => setModalVisible(false)}
+                />
             </Modal>
         </Card>
     );
