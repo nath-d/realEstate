@@ -391,7 +391,7 @@ const PropertyDetails = () => {
             </div>
 
             {/* Enhanced Floating Contact Buttons */}
-            <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col space-y-3 sm:space-y-4 z-50">
+            <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 flex flex-col space-y-3 sm:space-y-4 z-50">
                 <motion.button
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
