@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { MarketingService } from '../services/marketing.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -153,7 +153,7 @@ export class MarketingController {
     async sendBulkMarketing(
         @Body() body: {
             emails: string[];
-            type: 'property-guide' | 'investment-tips'
+            type: 'property-guide' | 'investment-tips' | 'other'
         }
     ) {
         try {
@@ -167,6 +167,87 @@ export class MarketingController {
             return {
                 success: false,
                 message: 'Failed to send bulk marketing email',
+                error: error.message,
+            };
+        }
+    }
+
+    // One-click send property guide to all users
+    @UseGuards(JwtAuthGuard)
+    @Post('send-property-guide-all')
+    async sendPropertyGuideToAll() {
+        try {
+            await this.marketingService.sendBulkEmailToAllUsers('property-guide');
+
+            return {
+                success: true,
+                message: 'Property guide sent to all users successfully',
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Failed to send property guide to all users',
+                error: error.message,
+            };
+        }
+    }
+
+    // One-click send investment tips to all users
+    @UseGuards(JwtAuthGuard)
+    @Post('send-investment-tips-all')
+    async sendInvestmentTipsToAll() {
+        try {
+            await this.marketingService.sendBulkEmailToAllUsers('investment-tips');
+
+            return {
+                success: true,
+                message: 'Investment tips sent to all users successfully',
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Failed to send investment tips to all users',
+                error: error.message,
+            };
+        }
+    }
+
+    // One-click send other category to all users
+    @UseGuards(JwtAuthGuard)
+    @Post('send-other-all')
+    async sendOtherCategoryToAll() {
+        try {
+            await this.marketingService.sendBulkEmailToAllUsers('other');
+
+            return {
+                success: true,
+                message: 'Other category emails sent to all users successfully',
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Failed to send other category emails to all users',
+                error: error.message,
+            };
+        }
+    }
+
+    // Get user count for bulk operations
+    @UseGuards(JwtAuthGuard)
+    @Get('user-count')
+    async getUserCount() {
+        try {
+            const users = await this.marketingService.getAllUsersForBulkEmail();
+
+            return {
+                success: true,
+                count: users.length,
+                message: `${users.length} users available for bulk email (includes unverified emails)`,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Failed to get user count',
                 error: error.message,
             };
         }

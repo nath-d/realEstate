@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmailService } from '../auth/email.service';
 import { PDFManagementService } from './pdf-management.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class MarketingService {
@@ -9,6 +10,7 @@ export class MarketingService {
     constructor(
         private readonly emailService: EmailService,
         private readonly pdfManagementService: PDFManagementService,
+        private readonly prisma: PrismaService,
     ) { }
 
     // Send welcome email with PDF to new users
@@ -100,7 +102,7 @@ export class MarketingService {
     }
 
     // Send targeted marketing email based on user behavior
-    async sendTargetedMarketingEmail(email: string, firstName: string, type: 'property-guide' | 'investment-tips'): Promise<void> {
+    async sendTargetedMarketingEmail(email: string, firstName: string, type: 'property-guide' | 'investment-tips' | 'other'): Promise<void> {
         try {
             this.logger.log(`Sending targeted marketing email (${type}) to ${email}`);
 
@@ -110,6 +112,9 @@ export class MarketingService {
                     break;
                 case 'investment-tips':
                     await this.sendInvestmentTipsEmail(email, firstName);
+                    break;
+                case 'other':
+                    await this.sendOtherCategoryEmail(email, firstName);
                     break;
                 default:
                     throw new Error(`Unknown marketing email type: ${type}`);
@@ -123,7 +128,7 @@ export class MarketingService {
     }
 
     // Send bulk marketing emails (for future use)
-    async sendBulkMarketingEmail(emails: string[], type: 'property-guide' | 'investment-tips'): Promise<void> {
+    async sendBulkMarketingEmail(emails: string[], type: 'property-guide' | 'investment-tips' | 'other'): Promise<void> {
         try {
             this.logger.log(`Sending bulk marketing email (${type}) to ${emails.length} recipients`);
 
@@ -142,6 +147,83 @@ export class MarketingService {
             this.logger.log(`Bulk marketing email completed for ${emails.length} recipients`);
         } catch (error) {
             this.logger.error(`Failed to send bulk marketing email:`, error);
+            throw error;
+        }
+    }
+
+    // Send other category email
+    async sendOtherCategoryEmail(email: string, firstName: string): Promise<void> {
+        try {
+            this.logger.log(`Sending other category email to ${email}`);
+
+            // Get other category PDFs from database
+            const otherPdfs = await this.pdfManagementService.getPDFsForEmail(['other']);
+
+            if (otherPdfs.length === 0) {
+                this.logger.warn('No other category PDFs found in database, skipping email');
+                return;
+            }
+
+            // Send email with PDF attachments
+            await this.emailService.sendOtherCategoryEmailWithPdfs(email, firstName, otherPdfs);
+
+            this.logger.log(`Other category email sent successfully to ${email}`);
+        } catch (error) {
+            this.logger.error(`Failed to send other category email to ${email}:`, error);
+            throw error;
+        }
+    }
+
+    // Get all users for bulk operations
+    async getAllUsersForBulkEmail(): Promise<{ email: string; firstName: string }[]> {
+        try {
+            const users = await this.prisma.user.findMany({
+                where: {
+                    role: 'user', // Only regular users, not admins
+                    // Removed isEmailVerified filter - send to all users regardless of verification status
+                },
+                select: {
+                    email: true,
+                    firstName: true,
+                },
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            });
+
+            this.logger.log(`Retrieved ${users.length} users for bulk email`);
+            return users;
+        } catch (error) {
+            this.logger.error('Failed to get users for bulk email:', error);
+            throw error;
+        }
+    }
+
+    // Send bulk email to all users with improved user data
+    async sendBulkEmailToAllUsers(type: 'property-guide' | 'investment-tips' | 'other'): Promise<void> {
+        try {
+            this.logger.log(`Starting bulk email campaign (${type}) to all users`);
+
+            const users = await this.getAllUsersForBulkEmail();
+
+            if (users.length === 0) {
+                this.logger.warn('No users found for bulk email');
+                return;
+            }
+
+            const promises = users.map(async (user) => {
+                try {
+                    await this.sendTargetedMarketingEmail(user.email, user.firstName, type);
+                } catch (error) {
+                    this.logger.error(`Failed to send bulk email to ${user.email}:`, error);
+                }
+            });
+
+            await Promise.all(promises);
+
+            this.logger.log(`Bulk marketing email campaign completed for ${users.length} users`);
+        } catch (error) {
+            this.logger.error(`Failed to send bulk marketing email campaign:`, error);
             throw error;
         }
     }

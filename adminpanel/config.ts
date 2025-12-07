@@ -16,6 +16,11 @@ export interface Config {
     baseUrl: string;
   };
 
+  // Client Website Configuration (customer-facing site)
+  client: {
+    baseUrl: string;
+  };
+
   // Admin Configuration
   admin: {
     apiKey: string;
@@ -65,6 +70,11 @@ const config: Config = {
   // Frontend Configuration
   frontend: {
     baseUrl: "http://localhost:5174"
+  },
+
+  // Client Website Configuration (customer-facing site)
+  client: {
+    baseUrl: "http://localhost:5173"
   },
 
   // Admin Configuration

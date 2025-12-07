@@ -91,7 +91,7 @@ export class PdfService {
         // Header
         doc.fontSize(24)
             .fillColor('#2c3e50')
-            .text('🏠 Welcome to Real Estate Platform', { align: 'center' })
+            .text('🏠 Welcome to MG Constructions & Pacific Realty!', { align: 'center' })
             .moveDown();
 
         doc.fontSize(16)
@@ -101,7 +101,7 @@ export class PdfService {
 
         // Welcome message
         doc.fontSize(12)
-            .text('Welcome to our exclusive real estate platform! We\'re thrilled to have you join our community of property enthusiasts and investors.')
+            .text('Welcome to our exclusive MG Constructions & Pacific Realty! We\'re thrilled to have you join our community of property enthusiasts and investors.')
             .moveDown();
 
         doc.text('This guide will help you get started and make the most of our platform.')
@@ -162,7 +162,7 @@ export class PdfService {
         // Footer
         doc.fontSize(10)
             .fillColor('#7f8c8d')
-            .text('Thank you for choosing Real Estate Platform!', { align: 'center' })
+            .text('Thank you for choosing MG Constructions & Pacific Realty !', { align: 'center' })
             .text(`Generated on: ${new Date().toLocaleDateString()}`, { align: 'center' });
     }
 

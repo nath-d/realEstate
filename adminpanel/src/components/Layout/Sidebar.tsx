@@ -56,6 +56,7 @@ const Sidebar = ({ collapsed, onCollapse, isMobile }: SidebarProps) => {
             ]
         },
         { key: 'pdfs', icon: <FileOutlined />, label: 'PDF Management' },
+        { key: 'bulk-email', icon: <MailOutlined />, label: 'Bulk Email Campaigns' },
         { key: 'about', icon: <BookOutlined />, label: 'Our Story Section' },
         { key: 'contact-info', icon: <EnvironmentOutlined />, label: 'Contact Information Page' },
         { key: 'about-us', icon: <TeamOutlined />, label: 'About Us Page' },

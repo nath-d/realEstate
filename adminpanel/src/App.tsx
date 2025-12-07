@@ -21,6 +21,7 @@ import FutureVisionManagement from './pages/FutureVisionManagement';
 import NewsletterManagement from './pages/NewsletterManagement';
 import AboutUsManagement from './pages/AboutUsManagement';
 import Settings from './pages/Settings';
+import BulkEmailManagement from './pages/BulkEmailManagement';
 
 function App() {
   return (
@@ -148,6 +149,13 @@ function App() {
             <ProtectedRoute>
               <MainLayout>
                 <Settings />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/bulk-email" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <BulkEmailManagement />
               </MainLayout>
             </ProtectedRoute>
           } />

@@ -29,12 +29,12 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Verify your email address - Real Estate Platform',
+                subject: 'Verify your email address - MG Constructions & Pacific Realty',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
                             </div>
                             
@@ -63,7 +63,7 @@ export class EmailService {
                             <hr style="border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;">
                             
                             <p style="color: #7f8c8d; font-size: 12px; text-align: center; margin: 0;">
-                                If you didn't create an account with Real Estate Platform, please ignore this email.
+                                If you didn't create an account with MG Constructions & Pacific Realty, please ignore this email.
                             </p>
                         </div>
                     </div>
@@ -83,12 +83,12 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Reset your password - Real Estate Platform',
+                subject: 'Reset your password - MG Constructions & Pacific Realty',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
                             </div>
                             
@@ -152,12 +152,12 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Welcome to Real Estate Platform!',
+                subject: 'Welcome to MG Constructions & Pacific Realty!',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
                             </div>
                             
@@ -224,12 +224,12 @@ export class EmailService {
             await this.transporter.sendMail({
                 from: config.email.user,
                 to: email,
-                subject: `New Properties Matching Your Criteria - Real Estate Platform`,
+                subject: `New Properties Matching Your Criteria - MG Constructions & Pacific Realty`,
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Property Alerts</p>
                             </div>
                             
@@ -277,12 +277,12 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Confirm your subscription - Real Estate Platform',
+                subject: 'Confirm your subscription - MG Constructions & Pacific Realty',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Please confirm your subscription</p>
                             </div>
                             <p style="color: #34495e; line-height: 1.6; margin-bottom: 25px;">
@@ -312,8 +312,8 @@ export class EmailService {
                         ${htmlContent}
                         <hr style="border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;">
                         <p style="color: #95a5a6; font-size: 12px; text-align: center;">
-                            You are receiving this because you subscribed to Real Estate Platform updates.
-                            If you no longer wish to receive these emails, <a href="${unsubscribeUrl}">unsubscribe here</a>.
+                            You are receiving this because you subscribed to MG Constructions & Pacific Realty updates.
+                            If you no longer wish to receive these emails, <a href="${unsubscribeUrl}">Unsubscribe</a>.
                         </p>
                     </div>
                 </div>`;
@@ -339,19 +339,19 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Welcome to Real Estate Platform - Your Free Guide Inside!',
+                subject: 'Welcome to MG Constructions & Pacific Realty - Your Free Guide Inside!',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Welcome to your real estate journey!</p>
                             </div>
                             
                             <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Welcome ${firstName}!</h2>
                             
                             <p style="color: #34495e; line-height: 1.6; margin-bottom: 25px;">
-                                Thank you for joining our exclusive real estate platform! We're excited to help you find your perfect property and make informed investment decisions.
+                                Thank you for joining our exclusive MG Constructions & Pacific Realty! We're excited to help you find your perfect property and make informed investment decisions.
                             </p>
                             
                             <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin: 25px 0;">
@@ -404,12 +404,12 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Your Free Property Investment Guide - Real Estate Platform',
+                subject: 'Your Free Property Investment Guide - MG Constructions & Pacific Realty',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your investment guide is here!</p>
                             </div>
                             
@@ -467,12 +467,12 @@ export class EmailService {
             const mailOptions = {
                 from: config.email.user,
                 to: email,
-                subject: 'Exclusive Investment Tips - Real Estate Platform',
+                subject: 'Exclusive Investment Tips - MG Constructions & Pacific Realty',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">💰 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">💰 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Expert investment tips for you!</p>
                             </div>
                             
@@ -530,12 +530,12 @@ export class EmailService {
             const mailOptions: any = {
                 from: config.email.user,
                 to: email,
-                subject: 'Welcome to Real Estate Platform! 🏠',
+                subject: 'Welcome to MG Constructions & Pacific Realty! 🏠',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
                             </div>
                             
@@ -597,12 +597,12 @@ export class EmailService {
             const mailOptions: any = {
                 from: config.email.user,
                 to: email,
-                subject: 'Your Property Guide - Real Estate Platform 🏠',
+                subject: 'Your Property Guide - MG Constructions & Pacific Realty 🏠',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
                             </div>
                             
@@ -664,12 +664,12 @@ export class EmailService {
             const mailOptions: any = {
                 from: config.email.user,
                 to: email,
-                subject: 'Investment Tips & Strategies - Real Estate Platform 💰',
+                subject: 'Investment Tips & Strategies - MG Constructions & Pacific Realty 💰',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
                         <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 Real Estate Platform</h1>
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
                                 <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
                             </div>
                             
@@ -722,6 +722,65 @@ export class EmailService {
         } catch (error) {
             this.logger.error(`Failed to send investment tips email with PDFs to ${email}:`, error);
             throw error;
+        }
+    }
+
+    // New method for sending other category email with multiple PDFs from database
+    async sendOtherCategoryEmailWithPdfs(email: string, firstName: string, pdfs: { name: string; buffer: Buffer }[]): Promise<void> {
+        try {
+            const mailOptions: any = {
+                from: config.email.user,
+                to: email,
+                subject: 'Special Resources for You - MG Constructions & Pacific Realty 📄',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
+                        <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h1 style="color: #2c3e50; margin: 0; font-size: 28px;">🏠 MG Constructions & Pacific Realty</h1>
+                                <p style="color: #7f8c8d; margin: 10px 0 0 0;">Your trusted partner in real estate</p>
+                            </div>
+                            
+                            <h2 style="color: #2c3e50; text-align: center; margin-bottom: 20px;">Special Resources for ${firstName || 'you'}!</h2>
+                            
+                            <p style="color: #34495e; line-height: 1.6; margin-bottom: 25px;">
+                                We've prepared some special resources that we think you'll find valuable:
+                            </p>
+                            
+                            <div style="background-color: #ecf0f1; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                                <h3 style="color: #2c3e50; margin-top: 0;">📎 Attached Resources:</h3>
+                                <ul style="color: #34495e; line-height: 1.6; margin: 0;">
+                                    ${pdfs.map(pdf => `<li>📄 ${pdf.name}</li>`).join('')}
+                                </ul>
+                            </div>
+                            
+                            <p style="color: #34495e; line-height: 1.6; margin-bottom: 25px;">
+                                These resources include valuable insights and information to help you in your real estate journey.
+                            </p>
+                            
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="${config.urls.frontend}/properties" 
+                                   style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: bold; font-size: 16px;">
+                                    Explore Properties
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `,
+            };
+
+            // Add PDF attachments
+            if (pdfs.length > 0) {
+                mailOptions.attachments = pdfs.map(pdf => ({
+                    filename: `${pdf.name}.pdf`,
+                    content: pdf.buffer,
+                    contentType: 'application/pdf'
+                }));
+            }
+
+            await this.transporter.sendMail(mailOptions);
+            this.logger.log(`Other category email with ${pdfs.length} PDFs sent successfully to ${email}`);
+        } catch (error) {
+            this.logger.error(`Failed to send other category email to ${email}:`, error);
         }
     }
 } 
