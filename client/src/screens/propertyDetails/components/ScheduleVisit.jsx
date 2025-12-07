@@ -219,7 +219,7 @@ const ScheduleVisit = ({ property, onClose }) => {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="flex justify-end">
+                    <div className="flex justify-start">
                         <button
                             type="submit"
                             className="px-6 py-3 bg-[#D6AD60] text-[#122620] rounded-lg font-semibold hover:bg-[#C19B2E] transition-colors"

@@ -11,6 +11,8 @@ const Testimonials = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [reviewsSource, setReviewsSource] = useState('');
+    const [isAutoScrollPaused, setIsAutoScrollPaused] = useState(false);
+    const autoScrollInterval = useRef(null);
 
     useEffect(() => {
         if (isInView) {
@@ -24,11 +26,11 @@ const Testimonials = () => {
             try {
                 setLoading(true);
                 const response = await fetch('http://localhost:3000/reviews/google');
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch reviews');
                 }
-                
+
                 const data = await response.json();
                 setTestimonials(data.reviews || []);
                 setReviewsSource(data.source || 'Unknown');
@@ -47,6 +49,39 @@ const Testimonials = () => {
         fetchReviews();
     }, []);
 
+    // Auto-scroll functionality
+    useEffect(() => {
+        if (!isAutoScrollPaused && testimonials.length > 1) {
+            autoScrollInterval.current = setInterval(() => {
+                setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+            }, 3000); // Change testimonial every 5 seconds
+        }
+
+        return () => {
+            if (autoScrollInterval.current) {
+                clearInterval(autoScrollInterval.current);
+            }
+        };
+    }, [isAutoScrollPaused, testimonials.length, currentTestimonial]);
+
+    // Pause auto-scroll on hover
+    const handleMouseEnter = () => {
+        setIsAutoScrollPaused(true);
+    };
+
+    // Resume auto-scroll when mouse leaves
+    const handleMouseLeave = () => {
+        setIsAutoScrollPaused(false);
+    };
+
+    // Reset auto-scroll timer when manually navigating
+    const resetAutoScroll = () => {
+        if (autoScrollInterval.current) {
+            clearInterval(autoScrollInterval.current);
+        }
+        setIsAutoScrollPaused(false);
+    };
+
     // Static testimonials as fallback
     const staticTestimonials = [
         {
@@ -56,7 +91,7 @@ const Testimonials = () => {
             image: "/person1.jpeg",
             quote: "Finding our dream home was a breeze with MG Construction & Pacific Realty. The team's dedication and attention to detail made the entire process smooth and enjoyable. We couldn't be happier with our new home!",
             rating: 5,
-            location: "Mumbai, Maharashtra"
+            location: "Kolkata, West Bengal"
         },
         {
             id: 2,
@@ -65,7 +100,7 @@ const Testimonials = () => {
             image: "/person2.jpeg",
             quote: "As an investor, I need a platform I can trust. MG Construction & Pacific Realty has consistently delivered quality properties and excellent service. Their market insights have been invaluable for my investment decisions.",
             rating: 5,
-            location: "Delhi, NCR"
+            location: "Kolkata, West Bengal"
         },
         {
             id: 3,
@@ -74,7 +109,7 @@ const Testimonials = () => {
             image: "/person1.jpeg",
             quote: "Being a first-time homebuyer, I was nervous about the process. The team at MG Construction & Pacific Realty guided me through every step, making it less daunting. Their expertise and patience were truly appreciated.",
             rating: 5,
-            location: "Bangalore, Karnataka"
+            location: "Kolkata, West Bengal"
         },
         {
             id: 4,
@@ -83,7 +118,7 @@ const Testimonials = () => {
             image: "/person3.jpeg",
             quote: "Selling my property through MG Construction & Pacific Realty was the best decision. They handled everything professionally and got me a great deal in record time. Highly recommend their services!",
             rating: 5,
-            location: "Pune, Maharashtra"
+            location: "Kolkata, West Bengal"
         },
         {
             id: 5,
@@ -92,8 +127,9 @@ const Testimonials = () => {
             image: "/person1.jpeg",
             quote: "Working with MG Construction & Pacific Realty has been a game-changer for our projects. Their platform has helped us reach the right buyers and streamline our sales process significantly.",
             rating: 5,
-            location: "Hyderabad, Telangana"
+            location: "Kolkata, West Bengal"
         }
+
     ];
 
     const renderStars = (rating) => {
@@ -106,10 +142,12 @@ const Testimonials = () => {
     };
 
     const nextTestimonial = () => {
+        resetAutoScroll();
         setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     };
 
     const prevTestimonial = () => {
+        resetAutoScroll();
         setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
     };
 
@@ -205,13 +243,13 @@ const Testimonials = () => {
                     </div>
                 )}
 
-                {/* Error State */}
-                {error && !loading && (
+                {/* Error State Add Client Google Reviews Later*/}
+                {/* {error && !loading && (
                     <div className="text-center mb-20">
                         <p className="text-red-600 mb-2">Failed to load reviews: {error}</p>
                         <p className="text-[#122620]/60">Showing static testimonials instead.</p>
                     </div>
-                )}
+                )} */}
 
                 {/* Main Testimonial Display */}
                 {!loading && testimonials.length > 0 && (
@@ -226,91 +264,96 @@ const Testimonials = () => {
                                 transition: { duration: 0.8, delay: 0.2 }
                             }
                         }}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     >
-                    <div className="max-w-4xl mx-auto">
-                        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
-                            {/* Background Quote Icon */}
-                            <div className="absolute top-8 right-8 text-[#D6AD60]/10">
-                                <FaQuoteLeft size={80} />
-                            </div>
+                        <div className="max-w-4xl mx-auto">
+                            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+                                {/* Background Quote Icon */}
+                                <div className="absolute top-8 right-8 text-[#D6AD60]/10">
+                                    <FaQuoteLeft size={80} />
+                                </div>
 
-                            {/* Quote Icon */}
-                            <div className="absolute top-8 left-8 text-[#D6AD60]">
-                                <FaQuoteLeft size={24} />
-                            </div>
+                                {/* Quote Icon */}
+                                <div className="absolute top-8 left-8 text-[#D6AD60]">
+                                    <FaQuoteLeft size={24} />
+                                </div>
 
-                            {/* Testimonial Content */}
-                            <div className="relative z-10">
-                                <motion.div
-                                    key={currentTestimonial}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="text-center"
-                                >
-                                    <p className="text-lg md:text-xl text-[#122620]/80 leading-relaxed mb-8 italic">
-                                        "{testimonials[currentTestimonial].quote}"
-                                    </p>
+                                {/* Testimonial Content */}
+                                <div className="relative z-10">
+                                    <motion.div
+                                        key={currentTestimonial}
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="text-center"
+                                    >
+                                        <p className="text-lg md:text-xl text-[#122620]/80 leading-relaxed mb-8 italic">
+                                            "{testimonials[currentTestimonial].quote}"
+                                        </p>
 
-                                    {/* Rating */}
-                                    <div className="flex justify-center mb-6">
-                                        {renderStars(testimonials[currentTestimonial].rating)}
-                                    </div>
+                                        {/* Rating */}
+                                        <div className="flex justify-center mb-6">
+                                            {renderStars(testimonials[currentTestimonial].rating)}
+                                        </div>
 
-                                    {/* Author Info */}
-                                    <div className="flex items-center justify-center space-x-4">
-                                        {/* <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-[#D6AD60]/20">
+                                        {/* Author Info */}
+                                        <div className="flex items-center justify-center space-x-4">
+                                            {/* <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-[#D6AD60]/20">
                                             <img
                                                 src={testimonials[currentTestimonial].image}
                                                 alt={testimonials[currentTestimonial].name}
                                                 className="w-full h-full object-cover"
                                             />
                                         </div> */}
-                                        <div className="text-left">
-                                            <h4 className="text-xl font-bold text-[#122620]">
-                                                {testimonials[currentTestimonial].name}
-                                            </h4>
-                                            <p className="text-[#D6AD60] font-medium">
-                                                {testimonials[currentTestimonial].role}
-                                            </p>
-                                            <p className="text-[#122620]/60 text-sm">
-                                                {testimonials[currentTestimonial].location}
-                                            </p>
+                                            <div className="text-left">
+                                                <h4 className="text-xl font-bold text-[#122620]">
+                                                    {testimonials[currentTestimonial].name}
+                                                </h4>
+                                                {/* <p className="text-[#D6AD60] font-medium">
+                                                    {testimonials[currentTestimonial].role}
+                                                </p> */}
+                                                <p className="text-[#122620]/60 text-sm">
+                                                    {testimonials[currentTestimonial].location}
+                                                </p>
+                                            </div>
                                         </div>
+                                    </motion.div>
+
+                                    {/* Navigation Dots */}
+                                    <div className="flex justify-center mt-8 space-x-2">
+                                        {testimonials.map((_, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => {
+                                                    resetAutoScroll();
+                                                    setCurrentTestimonial(index);
+                                                }}
+                                                className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial
+                                                    ? 'bg-[#D6AD60] w-8'
+                                                    : 'bg-[#D6AD60]/30 hover:bg-[#D6AD60]/50'
+                                                    }`}
+                                            />
+                                        ))}
                                     </div>
-                                </motion.div>
 
-                                {/* Navigation Dots */}
-                                <div className="flex justify-center mt-8 space-x-2">
-                                    {testimonials.map((_, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => setCurrentTestimonial(index)}
-                                            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial
-                                                ? 'bg-[#D6AD60] w-8'
-                                                : 'bg-[#D6AD60]/30 hover:bg-[#D6AD60]/50'
-                                                }`}
-                                        />
-                                    ))}
+                                    {/* Navigation Arrows */}
+                                    <button
+                                        onClick={prevTestimonial}
+                                        className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#D6AD60] hover:bg-[#D6AD60] hover:text-white transition-all duration-300"
+                                    >
+                                        <FaArrowLeft size={16} />
+                                    </button>
+                                    <button
+                                        onClick={nextTestimonial}
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#D6AD60] hover:bg-[#D6AD60] hover:text-white transition-all duration-300"
+                                    >
+                                        <FaArrowRight size={16} />
+                                    </button>
                                 </div>
-
-                                {/* Navigation Arrows */}
-                                <button
-                                    onClick={prevTestimonial}
-                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#D6AD60] hover:bg-[#D6AD60] hover:text-white transition-all duration-300"
-                                >
-                                    <FaArrowLeft size={16} />
-                                </button>
-                                <button
-                                    onClick={nextTestimonial}
-                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#D6AD60] hover:bg-[#D6AD60] hover:text-white transition-all duration-300"
-                                >
-                                    <FaArrowRight size={16} />
-                                </button>
                             </div>
                         </div>
-                    </div>
                     </motion.div>
                 )}
 
@@ -386,11 +429,11 @@ const Testimonials = () => {
                             Start Your Journey Today
                         </motion.button> */}
                         <Link
-                                to="/properties"
-                                className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
-                            >
-                                Start Your Journey Today
-                            </Link>
+                            to="/properties"
+                            className="inline-block bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-8 py-4 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-700 font-montserrat font-semibold tracking-widest text-xs sm:text-sm md:text-base uppercase"
+                        >
+                            Start Your Journey Today
+                        </Link>
                     </div>
                 </motion.div>
             </div>

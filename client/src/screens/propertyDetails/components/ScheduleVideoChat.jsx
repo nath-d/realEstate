@@ -97,8 +97,8 @@ const ScheduleVideoChat = ({ property, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-[#122620] rounded-2xl p-6 w-full max-w-2xl relative border border-[#D6AD60]/20">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start sm:items-center justify-center z-50 p-4 sm:p-6 overflow-y-auto">
+            <div className="bg-[#122620] rounded-2xl p-4 sm:p-6 w-full max-w-2xl relative border border-[#D6AD60]/20 my-4 sm:my-auto max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -106,19 +106,19 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                     <FaTimes size={24} />
                 </button>
 
-                <h2 className="font-source-serif tracking-wide text-3xl font-bold mb-6 text-[#D6AD60] flex items-center">
-                    <FaVideo className="mr-3" />
+                <h2 className="font-source-serif tracking-wide text-xl sm:text-3xl font-bold mb-4 sm:mb-6 text-[#D6AD60] flex items-center">
+                    <FaVideo className="mr-2 sm:mr-3 text-lg sm:text-xl" />
                     Schedule Video Chat
                 </h2>
-                <p className="text-gray-400 mb-6">
+                <p className="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">
                     Schedule a virtual tour and consultation for {property.title}
                 </p>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     {/* Personal Information */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
                                 <FaUser className="inline mr-2" />
                                 Full Name
                             </label>
@@ -128,13 +128,13 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white text-sm sm:text-base"
                                 placeholder="Enter your full name"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
                                 <FaEnvelope className="inline mr-2" />
                                 Email Address
                             </label>
@@ -144,15 +144,15 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white text-sm sm:text-base"
                                 placeholder="Enter your email"
                             />
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
                                 <FaPhone className="inline mr-2" />
                                 Phone Number
                             </label>
@@ -162,20 +162,20 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                                 value={formData.phone}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white text-sm sm:text-base"
                                 placeholder="Enter your phone number"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
                                 Preferred Contact Method
                             </label>
                             <select
                                 name="preferredContact"
                                 value={formData.preferredContact}
                                 onChange={handleInputChange}
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white text-sm sm:text-base"
                             >
                                 <option value="email">Email</option>
                                 <option value="phone">Phone</option>
@@ -184,9 +184,9 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                     </div>
 
                     {/* Date and Time Selection */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
                                 <FaCalendarAlt className="inline mr-2" />
                                 Preferred Date
                             </label>
@@ -197,12 +197,12 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                                 onChange={handleInputChange}
                                 required
                                 min={new Date().toISOString().split('T')[0]}
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white text-sm sm:text-base"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
                                 <FaClock className="inline mr-2" />
                                 Preferred Time
                             </label>
@@ -211,7 +211,7 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                                 value={formData.time}
                                 onChange={handleInputChange}
                                 required
-                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white text-sm sm:text-base"
                             >
                                 <option value="">Select a time</option>
                                 {availableTimeSlots.map(time => (
@@ -258,10 +258,10 @@ const ScheduleVideoChat = ({ property, onClose }) => {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="flex justify-end">
+                    <div className="flex flex-col sm:flex-row sm:justify-end">
                         <button
                             type="submit"
-                            className="px-6 py-3 bg-[#D6AD60] text-[#122620] rounded-lg font-semibold hover:bg-[#C19B2E] transition-colors flex items-center"
+                            className="w-full sm:w-auto px-4 sm:px-6 py-3 bg-[#D6AD60] text-[#122620] rounded-lg font-semibold hover:bg-[#C19B2E] transition-colors flex items-center justify-center text-sm sm:text-base"
                         >
                             <FaVideo className="mr-2" />
                             Schedule Video Chat

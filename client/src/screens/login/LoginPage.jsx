@@ -186,7 +186,7 @@ const LoginPage = () => {
                         </div>
 
                         {/* Social Login Buttons */}
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="">
                             <button
                                 type="button"
                                 onClick={handleGoogleLogin}

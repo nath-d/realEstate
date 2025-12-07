@@ -132,11 +132,11 @@ const PropertyAgent = ({ agent }) => {
                                     viewport={{ once: true }}
                                     className="mb-6 sm:mb-8"
                                 >
-                                    <img
+                                    {/* <img
                                         src={agent.image}
                                         alt={agent.name}
                                         className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full mx-auto lg:mx-0 object-cover border-2 sm:border-4 border-[#E5BE90]/20 shadow-xl"
-                                    />
+                                    /> */}
                                 </motion.div>
 
                                 <motion.div
@@ -151,7 +151,7 @@ const PropertyAgent = ({ agent }) => {
                                         Reach out for exceptional real esate insights and expert advice tailored to your unique needs!
                                     </p>
 
-                                    <div className="flex gap-3 sm:gap-4 justify-center lg:justify-start">
+                                    {/* <div className="flex gap-3 sm:gap-4 justify-center lg:justify-start">
                                         <motion.a
                                             whileHover={{ scale: 1.1 }}
                                             whileTap={{ scale: 0.95 }}
@@ -168,7 +168,7 @@ const PropertyAgent = ({ agent }) => {
                                         >
                                             <FaWhatsapp className="text-sm sm:text-base" />
                                         </motion.a>
-                                    </div>
+                                    </div> */}
                                 </motion.div>
                             </div>
 

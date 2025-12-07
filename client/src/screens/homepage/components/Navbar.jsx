@@ -31,6 +31,32 @@ const Navbar = () => {
         checkAuth();
     }, []);
 
+    // Prevent body scrolling when mobile menu is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.top = '0';
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+        } else {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+        }
+
+        // Cleanup function to reset body styles when component unmounts
+        return () => {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+        };
+    }, [isOpen]);
+
     const handleLogout = () => {
         authService.logout();
         setUser(null);
@@ -116,52 +142,119 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
-                <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
-                    <div className="h-[80vh] px-2 pt-4 pb-3 space-y-1 sm:px-3 bg-[#122620] shadow-lg mt-2 font-source-serif text-lg tracking-wide border-2 border-[#D6AD60]/60">
-                        <Link to="/" className="block px-4 py-3 rounded-md text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-colors duration-200 relative group">
-                            Home
-                            <span className="absolute bottom-0 left-4 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-2rem)]"></span>
-                        </Link>
-                        <Link to="/properties" className="block px-4 py-3 rounded-md text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-colors duration-200 relative group">
-                            Properties
-                            <span className="absolute bottom-0 left-4 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-2rem)]"></span>
-                        </Link>
-                        <Link to="/about" className="block px-4 py-3 rounded-md text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-colors duration-200 relative group">
-                            About
-                            <span className="absolute bottom-0 left-4 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-2rem)]"></span>
-                        </Link>
-                        <Link to="/contact" className="block px-4 py-3 rounded-md text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-colors duration-200 relative group">
-                            Contact
-                            <span className="absolute bottom-0 left-4 w-0 h-[1px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-2rem)]"></span>
-                        </Link>
-                        <div className="px-4 py-3">
-                            {user ? (
-                                <div className="space-y-3">
-                                    <Link to="/favorites" className="block w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
-                                        <FaHeart className="inline mr-1" />
-                                        Favorites
-                                    </Link>
-                                    <Link to="/profile" className="block w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
-                                        {user.firstName}
-                                    </Link>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="w-full text-center px-4 py-3 bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] rounded-md hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-200 font-montserrat font-medium tracking-wide text-lg"
-                                    >
-                                        Logout
-                                    </button>
-                                </div>
-                            ) : (
-                                <Link to="/login">
-                                    <button className="w-full text-center px-4 py-3 bg-[#D6AD60] text-[#122620] rounded-md hover:bg-[#B68D40] transition-all duration-200 font-montserrat font-medium tracking-wide shadow-sm hover:shadow text-lg">
-                                        Sign In
-                                    </button>
+                {/* Mobile Menu Overlay */}
+                {isOpen && (
+                    <div className="md:hidden fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm" onClick={toggleMenu}>
+                        <div
+                            className="fixed inset-y-0 right-0 w-full h-full bg-[#122620] shadow-2xl transform transition-all duration-500 ease-in-out animate-slide-in-right border-l-4 border-[#D6AD60]/60"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{
+                                transform: isOpen ? 'translateX(0)' : 'translateX(100%)'
+                            }}
+                        >
+                            {/* Mobile Menu Header */}
+                            <div className="relative flex justify-center items-center px-6 py-6 border-b-2 border-[#D6AD60]/30 bg-gradient-to-l from-[#122620] to-[#1a3830]">
+                                <Link to="/" onClick={toggleMenu} className="flex justify-center">
+                                    <img src="/logoFinalSvg.svg" alt="MG Constructions" className="h-16 w-auto object-contain" />
                                 </Link>
-                            )}
+                                <button
+                                    onClick={toggleMenu}
+                                    className="absolute right-4 p-2 rounded-full text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] focus:outline-none text-xl transition-all duration-200 hover:scale-110 hover:rotate-90"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            {/* Mobile Menu Content */}
+                            <div className="flex flex-col h-[calc(100vh-5rem)] overflow-hidden">
+                                <div className="flex-1 px-6 py-6 space-y-4 font-source-serif text-xl tracking-wide overflow-y-auto">
+                                    <Link
+                                        to="/"
+                                        onClick={toggleMenu}
+                                        className="block px-6 py-4 rounded-lg text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-all duration-300 relative group border-r-4 border-transparent hover:border-[#D6AD60] text-center"
+                                    >
+                                        Home
+                                        <span className="absolute bottom-2 right-6 w-0 h-[2px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-3rem)]"></span>
+                                    </Link>
+                                    <Link
+                                        to="/properties"
+                                        onClick={toggleMenu}
+                                        className="block px-6 py-4 rounded-lg text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-all duration-300 relative group border-r-4 border-transparent hover:border-[#D6AD60] text-center"
+                                    >
+                                        Properties
+                                        <span className="absolute bottom-2 right-6 w-0 h-[2px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-3rem)]"></span>
+                                    </Link>
+                                    <Link
+                                        to="/about"
+                                        onClick={toggleMenu}
+                                        className="block px-6 py-4 rounded-lg text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-all duration-300 relative group border-r-4 border-transparent hover:border-[#D6AD60] text-center"
+                                    >
+                                        About
+                                        <span className="absolute bottom-2 right-6 w-0 h-[2px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-3rem)]"></span>
+                                    </Link>
+                                    <Link
+                                        to="/contact"
+                                        onClick={toggleMenu}
+                                        className="block px-6 py-4 rounded-lg text-[#D6AD60] hover:text-[#B68D40] hover:bg-[#1a3830] transition-all duration-300 relative group border-r-4 border-transparent hover:border-[#D6AD60] text-center"
+                                    >
+                                        Contact
+                                        <span className="absolute bottom-2 right-6 w-0 h-[2px] bg-[#B68D40] transition-all duration-500 group-hover:w-[calc(100%-3rem)]"></span>
+                                    </Link>
+                                </div>
+
+                                {/* Mobile Menu Footer - Authentication Section */}
+                                <div className="flex-shrink-0 px-6 py-6 border-t-2 border-[#D6AD60]/30 bg-gradient-to-t from-[#0f1e18] to-[#122620]">
+                                    {user ? (
+                                        <div className="space-y-3">
+                                            <Link
+                                                to="/favorites"
+                                                onClick={toggleMenu}
+                                                className="flex items-center justify-center w-full px-6 py-3 bg-[#D6AD60] text-[#122620] rounded-lg hover:bg-[#B68D40] transition-all duration-300 font-montserrat font-semibold tracking-wide shadow-lg hover:shadow-xl text-base hover:scale-105"
+                                            >
+                                                <FaHeart className="mr-2" />
+                                                Favorites
+                                            </Link>
+                                            <Link
+                                                to="/profile"
+                                                onClick={toggleMenu}
+                                                className="block w-full text-center px-6 py-3 bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] rounded-lg hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-300 font-montserrat font-semibold tracking-wide text-base hover:scale-105"
+                                            >
+                                                Profile ({user.firstName})
+                                            </Link>
+                                            <button
+                                                onClick={() => {
+                                                    handleLogout();
+                                                    toggleMenu();
+                                                }}
+                                                className="w-full text-center px-6 py-3 bg-transparent border-2 border-red-400 text-red-400 rounded-lg hover:bg-red-400 hover:text-white transition-all duration-300 font-montserrat font-semibold tracking-wide text-base hover:scale-105"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            <Link to="/login" onClick={toggleMenu} className="block w-full">
+                                                {/* <button className="mb-12 w-full text-center px-6 py-3 bg-[#D6AD60] text-[#122620] rounded-lg hover:bg-[#B68D40] transition-all duration-300 font-montserrat font-semibold tracking-wide shadow-lg hover:shadow-xl text-base hover:scale-105">
+                                                    Sign In
+                                                </button> */}
+                                                <button
+                                                    className="uppercase mb-12 w-full text-center px-6 py-3 bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-300 font-montserrat font-semibold tracking-wide text-base hover:scale-105"
+                                                >
+                                                    Sign In
+                                                </button>
+                                            </Link>
+                                            {/* <Link to="/register" onClick={toggleMenu} className="block w-full">
+                                                <button className="w-full text-center px-6 py-3 bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] rounded-lg hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-300 font-montserrat font-semibold tracking-wide text-base hover:scale-105">
+                                                    Sign Up
+                                                </button>
+                                            </Link> */}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
         </nav>
     );
