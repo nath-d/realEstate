@@ -47,8 +47,9 @@ export class ResetPasswordDto {
 }
 
 export class ChangePasswordDto {
+    @IsOptional()
     @IsString()
-    currentPassword: string;
+    currentPassword?: string;
 
     @IsString()
     @MinLength(8)

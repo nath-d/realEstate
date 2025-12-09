@@ -28,8 +28,8 @@ const config = {
 
   // Google OAuth Configuration
   google: {
-    clientId: "1089405619133-ttkuop80vujua43jq55sok7rmprrh5tu.apps.googleusercontent.com",
-    clientSecret: "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",
+    clientId: "700750813328-9iri9mafdprggli1nglgiep9dvp134h1.apps.googleusercontent.com",
+    clientSecret: "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",
     callbackUrl: "http://localhost:3000/auth/google/callback"
   },
 
@@ -41,8 +41,8 @@ const config = {
 
   // Email Configuration (Gmail SMTP)
   email: {
-    user: "rishicyka@gmail.com",
-    password: "yhfh cnrg lpcx nhzr"
+    user: "mgconstructions1995@gmail.com",
+    password: "ruva kehb ldmz btwt"
   },
 
   // Admin API Configuration

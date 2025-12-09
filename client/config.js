@@ -26,7 +26,8 @@ const config = {
 
     // Google Configuration (for client-side OAuth)
     google: {
-        clientId: "1089405619133-ttkuop80vujua43jq55sok7rmprrh5tu.apps.googleusercontent.com"
+        // clientId: "1089405619133-ttkuop80vujua43jq55sok7rmprrh5tu.apps.googleusercontent.com"
+        clientId: "700750813328-9iri9mafdprggli1nglgiep9dvp134h1.apps.googleusercontent.com"
         // Note: Client secret is not included as it should only be on server
     },
 

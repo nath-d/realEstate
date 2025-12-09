@@ -298,9 +298,16 @@ export class AuthService {
             throw new UnauthorizedException('Invalid credentials');
         }
 
-        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
-        if (!isPasswordValid) {
-            throw new UnauthorizedException('Current password is incorrect');
+        // For admin users, current password validation is optional
+        // For regular users, current password is required
+        if (currentPassword && user.role !== 'admin') {
+            const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+            if (!isPasswordValid) {
+                throw new UnauthorizedException('Current password is incorrect');
+            }
+        } else if (!currentPassword && user.role !== 'admin') {
+            // Non-admin users must provide current password
+            throw new UnauthorizedException('Current password is required');
         }
 
         // Hash new password

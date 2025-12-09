@@ -398,6 +398,16 @@ export const PropertyForm: React.FC<PropertyFormProps> = ({ onSubmit, initialDat
                 }}
                 className="space-y-8"
             >
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={isSubmitting}
+                    size="large"
+                    icon={<DollarOutlined />}
+                    className="rounded-[8px] font-medium h-10 px-4 flex items-center justify-center gap-2 border border-transparent bg-gradient-to-r from-blue-500 to-indigo-600 border-[#3b82f6] text-white shadow-[0_2px_4px_rgba(59,130,246,0.2)] hover:from-indigo-600 hover:to-blue-700 hover:border-[#2563eb] hover:shadow-[0_4px_8px_rgba(59,130,246,0.3)]"
+                >
+                    {isSubmitting ? 'Submitting...' : 'Submit Property'}
+                </Button>
                 {/* Basic Information Section */}
                 <Card className="bg-white rounded-[12px] border border-[#e2e8f0] shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_0_rgba(0,0,0,0.06)]">
                     <SectionHeader

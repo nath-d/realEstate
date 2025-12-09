@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import authService from '../../../services/authService';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaUser } from 'react-icons/fa';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -105,12 +105,12 @@ const Navbar = () => {
 
                         {user ? (
                             <div className="flex items-center space-x-4">
-                                <Link to="/favorites" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 font-montserrat text-sm">
+                                {/* <Link to="/favorites" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 font-montserrat text-sm">
                                     <FaHeart className="inline mr-1" />
                                     Favorites
-                                </Link>
+                                </Link> */}
                                 <Link to="/profile" className="text-[#D6AD60] hover:text-[#B68D40] transition-colors duration-200 font-montserrat text-sm">
-                                    {user.firstName}
+                                    <FaUser className="inline mr-1" />{user.firstName}
                                 </Link>
                                 <button
                                     onClick={handleLogout}

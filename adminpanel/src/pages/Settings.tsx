@@ -24,7 +24,7 @@ export default function Settings() {
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [adminsLoading, setAdminsLoading] = useState(false);
   const [addAdminModalVisible, setAddAdminModalVisible] = useState(false);
-  
+
   // Forms
   const [profileForm] = Form.useForm();
   const [passwordForm] = Form.useForm();
@@ -74,14 +74,13 @@ export default function Settings() {
   const handlePasswordChange = async (values: any) => {
     try {
       setLoading(true);
-      
-      // Only send the fields expected by the ChangePasswordDto
+
+      // Only send the new password since current password is not required for admin
       const passwordData = {
-        currentPassword: values.currentPassword,
         newPassword: values.newPassword,
         // Don't send confirmPassword - it's only for frontend validation
       };
-      
+
       await apiService.post('/auth/change-password', passwordData);
       message.success('Password changed successfully');
       passwordForm.resetFields();
@@ -96,7 +95,7 @@ export default function Settings() {
   const handleAddAdmin = async (values: any) => {
     try {
       setLoading(true);
-      
+
       // Only send the fields expected by the SignupDto
       const adminData = {
         firstName: values.firstName,
@@ -105,12 +104,12 @@ export default function Settings() {
         password: values.password,
         // Don't send confirmPassword - it's only for frontend validation
       };
-      
+
       console.log('Sending admin data:', adminData);
-      
+
       const response = await apiService.post('/auth/admin/create', adminData);
       console.log('Admin creation response:', response);
-      
+
       message.success('Admin user created successfully');
       setAddAdminModalVisible(false);
       addAdminForm.resetFields();
@@ -167,9 +166,8 @@ export default function Settings() {
       key: 'status',
       render: (record: AdminUser) => (
         <div>
-          <div className={`inline-block px-2 py-1 rounded text-xs ${
-            record.isEmailVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-          }`}>
+          <div className={`inline-block px-2 py-1 rounded text-xs ${record.isEmailVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+            }`}>
             {record.isEmailVerified ? 'Verified' : 'Unverified'}
           </div>
         </div>
@@ -180,7 +178,7 @@ export default function Settings() {
       key: 'lastLogin',
       render: (record: AdminUser) => (
         <div className="text-sm">
-          {record.lastLoginAt 
+          {record.lastLoginAt
             ? new Date(record.lastLoginAt).toLocaleDateString()
             : 'Never'
           }
@@ -290,14 +288,6 @@ export default function Settings() {
                 onFinish={handlePasswordChange}
               >
                 <Form.Item
-                  name="currentPassword"
-                  label="Current Password"
-                  rules={[{ required: true, message: 'Please enter your current password' }]}
-                >
-                  <Input.Password placeholder="Enter current password" />
-                </Form.Item>
-
-                <Form.Item
                   name="newPassword"
                   label="New Password"
                   rules={[
@@ -338,11 +328,11 @@ export default function Settings() {
         </TabPane>
 
         <TabPane tab={<span><TeamOutlined />Admin Users</span>} key="admins">
-          <Card 
-            title="Admin Users" 
+          <Card
+            title="Admin Users"
             extra={
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 icon={<PlusOutlined />}
                 onClick={() => setAddAdminModalVisible(true)}
               >

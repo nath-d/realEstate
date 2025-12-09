@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import authService from '../../services/authService';
 import config from '../../../config.js';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -180,13 +181,13 @@ const ProfilePage = () => {
                     <div className="flex items-center justify-between">
                         <Link to="/" className="flex items-center space-x-3">
                             <img src="/logoFinalSvg.svg" alt="MG Constructions" className="h-12 w-auto" />
-                            <span className="text-[#D6AD60] font-source-serif text-xl">Profile</span>
+                            <span className="text-[#D6AD60] font-source-serif text-xl">Home</span>
                         </Link>
                         <button
                             onClick={handleLogout}
                             className="bg-transparent border-2 border-[#D6AD60] text-[#D6AD60] px-4 py-2 rounded-none hover:bg-[#D6AD60] hover:text-[#122620] transition-all duration-300 font-montserrat text-sm tracking-wide"
                         >
-                            Logout
+                            <FaSignOutAlt className="inline mr-1" />Logout
                         </button>
                     </div>
                 </div>
@@ -243,8 +244,8 @@ const ProfilePage = () => {
                     {[
                         { id: 'profile', label: 'Profile' },
                         { id: 'favorites', label: 'Favorite Properties' },
-                        { id: 'contacts', label: 'Contact Forms' },
-                        { id: 'visits', label: 'Scheduled Visits' },
+                        // { id: 'contacts', label: 'Contact Forms' },
+                        // { id: 'visits', label: 'Scheduled Visits' },
                     ].map((tab) => (
                         <button
                             key={tab.id}
@@ -480,7 +481,7 @@ const ProfilePage = () => {
                                                 )}
                                             </div>
                                             <h3 className="text-lg font-source-serif text-[#D6AD60] mb-2">{property.title}</h3>
-                                            <p className="text-white font-montserrat text-sm mb-2">${property.price.toLocaleString()}</p>
+                                            <p className="text-white font-montserrat text-sm mb-2"> ₹ {property.price.toLocaleString()}</p>
                                             <p className="text-[#D6AD60]/80 font-montserrat text-sm mb-4">
                                                 {property.bedrooms} beds • {property.bathrooms} baths • {property.type}
                                             </p>
