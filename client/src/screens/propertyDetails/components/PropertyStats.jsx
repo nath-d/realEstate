@@ -148,9 +148,9 @@ const PropertyStats = ({ details }) => {
     const stats = [
         { icon: FaBed, label: 'Bedrooms', value: details.bedrooms },
         { icon: FaBath, label: 'Bathrooms', value: details.bathrooms },
-        { icon: FaRuler, label: 'Living Area', value: details.livingArea },
+        { icon: FaRuler, label: 'Living Area', value: `${details.livingArea} sq ft` },
         { icon: FaCar, label: 'Garage', value: `${details.garage} Cars` },
-        { icon: FaHome, label: 'Lot Size', value: details.lotSize },
+        { icon: FaHome, label: 'Lot Size', value: `${details.lotSize} sq ft` },
         { icon: FaCalendarAlt, label: 'Year Built', value: details.yearBuilt }
     ];
 

@@ -16,9 +16,13 @@ const config = {
 
   // Cloudinary Configuration
   cloudinary: {
-    cloudName: "dfvqmlm0g",
-    apiKey: "733726791335692",
-    apiSecret: "SdJECabVYut8aCHv109BlxIhVjo"
+    // cloudName: "dfvqmlm0g",
+    cloudName: "dw5hn6dyg",
+    // apiKey: "733726791335692",
+    apiKey: "654736388164264",
+    // apiSecret: "SdJECabVYut8aCHv109BlxIhVjo"
+    apiSecret: "02_1-tDZJqLqRk00c0mLuQiRnwk"
+
   },
 
   // JWT Configuration

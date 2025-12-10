@@ -90,7 +90,8 @@ const config: Config = {
 
   // Cloudinary Configuration
   cloudinary: {
-    cloudName: "dfvqmlm0g" // Public cloud name, safe for client-side
+    // cloudName: "dfvqmlm0g" // Public cloud name, safe for client-side
+    cloudName: "dw5hn6dyg"
   },
 
   // Feature Flags

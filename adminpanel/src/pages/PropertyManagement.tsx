@@ -503,13 +503,13 @@ const PropertyManagement: React.FC = () => {
                     <div className="text-sm bg-gray-50 p-2 rounded-lg">
                         <div className="flex justify-between items-center">
                             <span className="text-gray-600 font-medium">Lot:</span>
-                            <span className="font-semibold text-gray-800">{record.lotSize}</span>
+                            <span className="font-semibold text-gray-800">{record.lotSize} sq ft</span>
                         </div>
                     </div>
                     <div className="text-sm bg-blue-50 p-2 rounded-lg">
                         <div className="flex justify-between items-center">
                             <span className="text-gray-600 font-medium">Living:</span>
-                            <span className="font-semibold text-gray-800">{record.livingArea}</span>
+                            <span className="font-semibold text-gray-800">{record.livingArea} sq ft</span>
                         </div>
                     </div>
                 </div>
